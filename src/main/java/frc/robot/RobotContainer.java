@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -30,6 +32,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIOMotor;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -41,6 +46,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Elevator elevator;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -53,6 +59,7 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
+        this.elevator = new Elevator(new ElevatorIOMotor());
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -63,6 +70,7 @@ public class RobotContainer {
         break;
 
       case SIM:
+        this.elevator = new Elevator(new ElevatorIOSim());
         // Sim robot, instantiate physics sim IO implementations
         drive =
             new Drive(
@@ -74,6 +82,7 @@ public class RobotContainer {
         break;
 
       default:
+        this.elevator = new Elevator(new ElevatorIOSim());
         // Replayed robot, disable IO implementations
         drive =
             new Drive(
@@ -146,6 +155,11 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    controller
+        .y()
+        .whileTrue(elevator.setSetpoint(Inches.of(50)))
+        .onFalse(elevator.setSetpoint(Inches.of(0)));
   }
 
   /**
