@@ -37,7 +37,7 @@ public class ElevatorIOSim implements ElevatorIO {
     Distance currentHeight = Meters.of(sim.getPositionMeters());
 
     Voltage controllerVoltage =
-        Volts.of(controller.calculate(currentHeight.in(Inches), position.in(Meters)));
+        Volts.of(controller.calculate(currentHeight.in(Inches), position.in(Inches)));
 
     runVolts(controllerVoltage);
   }

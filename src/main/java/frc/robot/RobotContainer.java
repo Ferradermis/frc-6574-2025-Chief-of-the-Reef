@@ -33,7 +33,6 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorIOMotor;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -59,7 +58,8 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        this.elevator = new Elevator(new ElevatorIOMotor());
+        // this.elevator = new Elevator(new ElevatorIOMotor());
+        this.elevator = new Elevator(new ElevatorIOSim());
         drive =
             new Drive(
                 new GyroIOPigeon2(),
