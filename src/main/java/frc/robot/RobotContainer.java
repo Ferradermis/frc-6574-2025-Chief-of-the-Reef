@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.generated.TunerConstants;
+import frc.robot.generated.TunerConstantsOld;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -63,10 +63,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                new ModuleIOTalonFX(TunerConstants.BackRight));
+                new ModuleIOTalonFX(TunerConstantsOld.FrontLeft),
+                new ModuleIOTalonFX(TunerConstantsOld.FrontRight),
+                new ModuleIOTalonFX(TunerConstantsOld.BackLeft),
+                new ModuleIOTalonFX(TunerConstantsOld.BackRight));
         break;
 
       case SIM:
@@ -75,10 +75,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIOSim(TunerConstants.FrontLeft),
-                new ModuleIOSim(TunerConstants.FrontRight),
-                new ModuleIOSim(TunerConstants.BackLeft),
-                new ModuleIOSim(TunerConstants.BackRight));
+                new ModuleIOSim(TunerConstantsOld.FrontLeft),
+                new ModuleIOSim(TunerConstantsOld.FrontRight),
+                new ModuleIOSim(TunerConstantsOld.BackLeft),
+                new ModuleIOSim(TunerConstantsOld.BackRight));
         break;
 
       default:

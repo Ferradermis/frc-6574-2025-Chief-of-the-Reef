@@ -33,12 +33,12 @@ public class ElevatorVisualizer {
             new MechanismLigament2d(
                 "Elevator", Inches.of(0).in(Meters), 45, 10, new Color8Bit(color)));
 
-    Logger.recordOutput("Elevator/Mechanism2d/" + key, this.panel);
+    // Logger.recordOutput("Elevator/Mechanism2d/" + key, this.panel);
   }
 
   public void update(Distance position) {
     elevator.setLength(position.in(Meters));
-    Logger.recordOutput("Elevator/Mechanism2d/" + key, this.panel);
+    // Logger.recordOutput("Elevator/Mechanism2d/" + key, this.panel);
 
     Distance elevatorX = position.times(ElevatorXModifier);
     Distance elevatorZ = position.times(ElevatorZModifier);
