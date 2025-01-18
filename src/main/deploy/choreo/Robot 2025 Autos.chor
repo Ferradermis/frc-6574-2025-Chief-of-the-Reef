@@ -1,5 +1,5 @@
 {
- "name":"TestAuto",
+ "name":"Robot 2025 Autos",
  "version":1,
  "type":"Swerve",
  "variables":{
@@ -9,22 +9,22 @@
  "config":{
   "frontLeft":{
    "x":{
-    "exp":"10 in",
-    "val":0.254
+    "exp":"11 in",
+    "val":0.2794
    },
    "y":{
-    "exp":"10 in",
-    "val":0.254
+    "exp":"11 in",
+    "val":0.2794
    }
   },
   "backLeft":{
    "x":{
-    "exp":"-10 in",
-    "val":-0.254
+    "exp":"-11 in",
+    "val":-0.2794
    },
    "y":{
-    "exp":"10 in",
-    "val":0.254
+    "exp":"11 in",
+    "val":0.2794
    }
   },
   "mass":{
@@ -48,12 +48,12 @@
    "val":628.3185307179587
   },
   "tmax":{
-   "exp":"7 N * m",
-   "val":7.0
+   "exp":"7.09 N * m",
+   "val":7.09
   },
   "cof":{
-   "exp":"1.48",
-   "val":1.48
+   "exp":"1.495",
+   "val":1.495
   },
   "bumper":{
    "front":{
