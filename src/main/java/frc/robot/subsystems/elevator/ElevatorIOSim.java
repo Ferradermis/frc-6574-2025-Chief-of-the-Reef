@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 public class ElevatorIOSim implements ElevatorIO {
   private final ElevatorSim sim =
       new ElevatorSim(
-          DCMotor.getKrakenX60(1),
+          DCMotor.getNEO(2),
           4,
           Pounds.of(9.8).in(Kilograms),
           Inches.of(2).in(Meters),
