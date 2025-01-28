@@ -1,3 +1,3 @@
 package frc.robot.subsystems.endEffector;
 
-public class EndEffectorIOSim {}
+public class EndEffectorConstants {}

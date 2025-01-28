@@ -3,7 +3,7 @@ package frc.robot.subsystems.elevator;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 
-public class ElevatorIOMotor implements ElevatorIO {
+public class ElevatorIONEO implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {

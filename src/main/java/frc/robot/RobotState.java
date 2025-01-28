@@ -9,6 +9,7 @@ public class RobotState {
   public static RobotState instance = new RobotState();
   public MutDistance elevatorPosition;
   public MutAngle armPosition;
+  private MutAngle wristTwist = Degrees.mutable(0);
 
   private RobotState() {
     elevatorPosition = Inches.mutable(0);
@@ -21,5 +22,9 @@ public class RobotState {
 
   public void updateArmPosition(MutAngle position) {
     armPosition.mut_replace(position);
+  }
+
+  public void setPivotSource(MutAngle pivotTwist) {
+    this.wristTwist = pivotTwist;
   }
 }

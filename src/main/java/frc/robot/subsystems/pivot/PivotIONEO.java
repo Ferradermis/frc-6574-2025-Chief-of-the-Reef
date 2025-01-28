@@ -1,5 +1,3 @@
 package frc.robot.subsystems.pivot;
 
-public class PivotIONEO {
-    
-}
+public class PivotIONEO {}

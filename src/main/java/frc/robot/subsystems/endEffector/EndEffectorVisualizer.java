@@ -1,5 +1,3 @@
 package frc.robot.subsystems.endEffector;
 
-public class EndEffectorVisualizer {
-    
-}
+public class EndEffectorVisualizer {}
