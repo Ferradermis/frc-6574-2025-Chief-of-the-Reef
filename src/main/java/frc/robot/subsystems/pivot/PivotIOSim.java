@@ -15,18 +15,17 @@ public class PivotIOSim implements PivotIO {
 
   private Voltage appliedVoltage = Volts.mutable(0);
 
-  private final ProfiledPIDController controller = new ProfiledPIDController(0, 0, 0, new Constraints(0, 0));
+  private final ProfiledPIDController controller =
+      new ProfiledPIDController(0, 0, 0, new Constraints(0, 0));
 
   private final FlywheelSim sim;
-  
+
   public PivotIOSim() {
-    sim = new FlywheelSim(LinearSystemId.createFlywheelSystem(
-        DCMotor.getKrakenX60Foc(1), 
-        0.0028616, 
-        1),
-        DCMotor.getKrakenX60Foc(1),
-        new double[] {0.001}
-        );
+    sim =
+        new FlywheelSim(
+            LinearSystemId.createFlywheelSystem(DCMotor.getKrakenX60Foc(1), 0.0028616, 1),
+            DCMotor.getKrakenX60Foc(1),
+            new double[] {0.001});
   }
 
   @Override
@@ -35,11 +34,11 @@ public class PivotIOSim implements PivotIO {
   }
 
   private void updateVoltageSetpoint() {
-    //FlywheelSim needs position
+    // FlywheelSim needs position
     Angle currentAngle = Radians.of(sim.getOutput(0));
 
     Voltage controllerVoltage = Volts.of(controller.calculate(currentAngle.in(Degrees)));
-  
+
     Voltage effort = controllerVoltage;
 
     runVolts(effort);
