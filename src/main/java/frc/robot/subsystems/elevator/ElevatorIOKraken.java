@@ -3,7 +3,7 @@ package frc.robot.subsystems.elevator;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 
-public class ElevatorIONEO implements ElevatorIO {
+public class ElevatorIOKraken implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
@@ -12,15 +12,9 @@ public class ElevatorIONEO implements ElevatorIO {
   }
 
   @Override
-  public void runVolts(Voltage volts) {
+  public void setTarget(Distance meters) {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'runVolts'");
-  }
-
-  @Override
-  public void runSetpoint(Distance position) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'runSetpoint'");
+    throw new UnsupportedOperationException("Unimplemented method 'setTarget'");
   }
 
   @Override

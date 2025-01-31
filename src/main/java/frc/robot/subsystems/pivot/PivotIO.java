@@ -1,7 +1,5 @@
 package frc.robot.subsystems.pivot;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;

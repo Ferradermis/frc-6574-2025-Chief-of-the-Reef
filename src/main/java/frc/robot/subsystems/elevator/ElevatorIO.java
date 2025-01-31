@@ -14,20 +14,17 @@ public interface ElevatorIO {
 
   @AutoLog
   class ElevatorIOInputs {
-    public MutDistance position = Inches.mutable(0);
-    public MutLinearVelocity velocity = InchesPerSecond.mutable(0);
-
-    public MutVoltage appliedVolts = Volts.mutable(0);
-
-    public MutCurrent supplyCurrent = Amps.mutable(0);
-    public MutCurrent torqueCurrent = Amps.mutable(0);
+    public MutDistance distance;
+    public MutLinearVelocity velocity;
+    public MutDistance setpoint;
+    public MutVoltage voltageSetpoint;
+    public MutCurrent supplyCurrent;
+    public MutCurrent torqueCurrent;
   }
 
-  void updateInputs(ElevatorIOInputs inputs);
+  public void updateInputs(ElevatorIOInputs inputs);
 
-  void runVolts(Voltage volts);
+  public void setTarget(Distance target);
 
-  void runSetpoint(Distance position);
-
-  void stop();
+  public void stop();
 }

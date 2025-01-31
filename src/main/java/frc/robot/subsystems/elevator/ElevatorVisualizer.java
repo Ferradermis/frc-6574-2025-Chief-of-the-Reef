@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
 
+//TODO: Move this to RobotState.java along with the other visualizers
 public class ElevatorVisualizer {
   private final String key;
   private final Mechanism2d panel;
