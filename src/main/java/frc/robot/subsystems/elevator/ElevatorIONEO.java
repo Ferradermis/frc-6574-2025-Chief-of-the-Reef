@@ -14,7 +14,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-import frc.robot.subsystems.pivot.PivotIO.PivotInputs;
 
 public class ElevatorIONEO implements ElevatorIO {
     public SparkMax m_leftMotor;

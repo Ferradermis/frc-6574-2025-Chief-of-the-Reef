@@ -30,6 +30,7 @@ public class ElevatorIOSim implements ElevatorIO {
             30, // TODO: some random number until I can look at the CAD
             true,
             0, // TODO: starting at zero until I can look at the CAD
+            0.001,
             0.001);
   }
 
