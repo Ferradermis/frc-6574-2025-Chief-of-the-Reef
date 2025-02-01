@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ElevatorIO {
 
   @AutoLog
-  class ElevatorIOInputs {
+  class ElevatorInputs {
     public MutDistance distance;
     public MutLinearVelocity velocity;
     public MutDistance setpoint;
@@ -21,7 +21,7 @@ public interface ElevatorIO {
     public MutCurrent torqueCurrent;
   }
 
-  public void updateInputs(ElevatorIOInputs inputs);
+  public void updateInputs(ElevatorInputs inputs);
 
   public void setTarget(Distance target);
 

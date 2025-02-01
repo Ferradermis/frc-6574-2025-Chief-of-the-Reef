@@ -1,5 +1,3 @@
 package frc.robot.subsystems.rotate;
 
-public class RotateConstants {
-    
-}
+public class RotateConstants {}

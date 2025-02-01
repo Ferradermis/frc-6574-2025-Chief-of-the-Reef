@@ -10,6 +10,7 @@ public class RobotState {
   public MutDistance elevatorPosition;
   public MutAngle armPosition;
   private MutAngle pivotTwist = Degrees.mutable(0);
+  private MutAngle climberTwist = Degrees.mutable(0);
 
   private RobotState() {
     elevatorPosition = Inches.mutable(0);
@@ -25,6 +26,10 @@ public class RobotState {
   }
 
   public void setPivotSource(MutAngle pivottwist) {
-    pivotTwist = pivotTwist;
+    pivotTwist = pivottwist;
+  }
+
+  public void setClimberSource(MutAngle climbertwist) {
+    climberTwist = climbertwist;
   }
 }

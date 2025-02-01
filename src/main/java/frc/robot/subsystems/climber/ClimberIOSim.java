@@ -1,4 +1,4 @@
-package frc.robot.subsystems.pivot;
+package frc.robot.subsystems.climber;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -10,11 +10,12 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.robot.util.LoggedTunableNumber;
 
-//TODO: redo this class to use SingleJointedArmSim instead of FlywheelSim among other changes
-public class PivotIOSim implements PivotIO {
+public class ClimberIOSim implements ClimberIO {
 
   private Voltage appliedVoltage = Volts.mutable(0);
+  private LoggedTunableNumber servoSim;
 
   private final ProfiledPIDController controller =
       new ProfiledPIDController(
@@ -22,16 +23,17 @@ public class PivotIOSim implements PivotIO {
 
   private final FlywheelSim sim;
 
-  public PivotIOSim() {
+  public ClimberIOSim() {
     sim =
         new FlywheelSim(
             LinearSystemId.createFlywheelSystem(DCMotor.getKrakenX60Foc(1), 0.0028616, 1),
             DCMotor.getKrakenX60Foc(1),
             new double[] {0.001});
+    servoSim = new LoggedTunableNumber("RobotState/Climber/ServoInput", 0);
   }
 
   @Override
-  public void setTarget(Angle target) {
+  public void setClimberTarget(Angle target) {
     controller.setGoal(new State(target.in(Degrees), 0));
   }
 
@@ -50,14 +52,14 @@ public class PivotIOSim implements PivotIO {
     this.appliedVoltage = volts;
   }
 
-  /* TODO: fix units so that they line up with the units in PivotIONEO.java so it is easier to understand (I think??) */
+  //TODO: fix units so that they line up with the units in ClimberIOREV.java so it is easier to understand (I think??)
   @Override
-  public void updateInputs(PivotInputs input) {
-    input.pivotAngle.mut_replace(Degrees.convertFrom(sim.getOutput(0), Radians), Degrees);
-    input.pivotAngularVelocity.mut_replace(
+  public void updateInputs(ClimberInputs input) {
+    input.climberAngle.mut_replace(Degrees.convertFrom(sim.getOutput(0), Radians), Degrees);
+    input.climberAngularVelocity.mut_replace(
         DegreesPerSecond.convertFrom(sim.getAngularVelocityRadPerSec(), RadiansPerSecond),
         DegreesPerSecond);
-    input.pivotSetPoint.mut_replace(controller.getGoal().position, Degrees);
+    input.climberSetPoint.mut_replace(controller.getGoal().position, Degrees);
     input.supplyCurrent.mut_replace(sim.getCurrentDrawAmps(), Amps);
     input.torqueCurrent.mut_replace(input.supplyCurrent.in(Amps), Amps);
     input.voltageSetPoint.mut_replace(appliedVoltage);

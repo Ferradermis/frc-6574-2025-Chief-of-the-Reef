@@ -1,5 +1,3 @@
 package frc.robot.subsystems.rotate;
 
-public class RotateIOSim {
-    
-}
+public class RotateIOSim {}
