@@ -48,7 +48,8 @@ public class PivotIOSim implements PivotIO {
     this.appliedVoltage = volts;
   }
 
-  //TODO: fix units so that they line up with the units in PivotIONEO.java so it is easier to understand (I think??)
+  // TODO: fix units so that they line up with the units in PivotIONEO.java so it is easier to
+  // understand (I think??)
   @Override
   public void updateInputs(PivotInputs input) {
     input.pivotAngle.mut_replace(Degrees.convertFrom(sim.getOutput(0), Radians), Degrees);

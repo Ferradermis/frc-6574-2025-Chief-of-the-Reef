@@ -2,27 +2,35 @@ package frc.robot.subsystems.elevator;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class ElevatorIOSim implements ElevatorIO {
   private ElevatorFeedforward ff = new ElevatorFeedforward(0, 0, 0, 0);
-  private final ProfiledPIDController controller = new ProfiledPIDController(0, 0, 0, new Constraints(0, 0));
+  private final ProfiledPIDController controller =
+      new ProfiledPIDController( // TODO: all defaulted to zero until I can play with the simulator
+          0, 0, 0, new Constraints(0, 0));
   private final ElevatorSim sim;
 
   private Voltage appliedVoltage = Volts.mutable(0);
 
-  public ElevatorIOSim(int motorId, ElevatorSim elevatorSim) {
-    sim = elevatorSim;
+  public ElevatorIOSim() {
+    sim =
+        new ElevatorSim(
+            0.5, // TODO: some random number until I figure out how simulators work
+            0.2, // TODO: some random number until I figure out how simulators work
+            DCMotor.getNEO(2),
+            0, // TODO: starting at zero until I can look at the CAD
+            30, // TODO: some random number until I can look at the CAD
+            true,
+            0, // TODO: starting at zero until I can look at the CAD
+            0.001);
   }
 
   @Override
@@ -33,7 +41,9 @@ public class ElevatorIOSim implements ElevatorIO {
   private void updateVoltageSetpoint() {
     Distance currentDistance = Meters.of(sim.getPositionMeters());
     Voltage controllerVoltage = Volts.of(controller.calculate(currentDistance.in(Meters)));
-    Voltage feedforwardVoltage = Volts.of(ff.calculate(controller.getSetpoint().position, controller.getSetpoint().velocity));
+    Voltage feedforwardVoltage =
+        Volts.of(
+            ff.calculate(controller.getSetpoint().position, controller.getSetpoint().velocity));
     Voltage effort = controllerVoltage.plus(feedforwardVoltage);
 
     runVolts(effort);
@@ -52,7 +62,7 @@ public class ElevatorIOSim implements ElevatorIO {
     inputs.torqueCurrent.mut_replace(inputs.supplyCurrent.in(Amps), Amps);
     inputs.voltageSetpoint.mut_replace(appliedVoltage);
 
-    //Periodic
+    // Periodic
     updateVoltageSetpoint();
     sim.setInputVoltage(appliedVoltage.in(Volts));
     sim.update(0.02);

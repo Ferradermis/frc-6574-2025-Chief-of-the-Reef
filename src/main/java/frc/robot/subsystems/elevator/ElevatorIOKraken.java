@@ -1,10 +1,12 @@
 package frc.robot.subsystems.elevator;
 
+import com.ctre.phoenix6.controls.VoltageOut;
+
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Voltage;
 
+//TODO: Unused for now until we get the parts to put Krakens on the elevator
 public class ElevatorIOKraken implements ElevatorIO {
-
+  
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     // TODO Auto-generated method stub
