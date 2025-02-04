@@ -2,10 +2,14 @@ package frc.robot.subsystems.arm;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Arm extends SubsystemBase {
     private ArmIO armIO;
@@ -35,5 +39,23 @@ public class Arm extends SubsystemBase {
                 setAngle(Degrees.of(i));
             },
             this);
+    }
+
+    public Trigger getNewAngleTrigger(Angle angle, Angle tolerance) {
+        return new Trigger(() -> {
+            return MathUtil.isNear(angle.baseUnitMagnitude(), loggedArm.angle.baseUnitMagnitude(), tolerance.baseUnitMagnitude());
+        });
+    }
+
+    public Trigger getNewSetpointTrigger(Angle angle, Angle tolerance) {
+        return new Trigger(() -> {
+            return MathUtil.isNear(loggedArm.setpoint.baseUnitMagnitude(), loggedArm.angle.baseUnitMagnitude(), Degrees.of(0.25).baseUnitMagnitude());
+        });
+    }
+
+    @Override
+    public void periodic() {
+        armIO.updateInputs(loggedArm);
+        Logger.processInputs("RobotState/" + armConstants.loggedName, loggedArm);
     }
 }

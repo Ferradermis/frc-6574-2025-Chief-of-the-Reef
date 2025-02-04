@@ -29,6 +29,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmConstants;
+import frc.robot.subsystems.arm.ArmIONEO;
+import frc.robot.subsystems.arm.ArmIOSim;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIOMotors;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -36,6 +43,7 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIONEO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -56,6 +64,8 @@ public class RobotContainer {
   private final Vision vision;
   private final Drive drive;
   private final Elevator elevator;
+  private final Arm arm;
+  private final Climber climber;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -69,7 +79,9 @@ public class RobotContainer {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         // this.elevator = new Elevator(new ElevatorIOMotor());
-        this.elevator = new Elevator(new ElevatorIOSim());
+        elevator = new Elevator(new ElevatorIONEO(17, 18));
+        arm = new Arm(new ArmIONEO(19));
+        climber = new Climber(new ClimberIOMotors(20, 21));
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -90,7 +102,9 @@ public class RobotContainer {
         break;
 
       case SIM:
-        this.elevator = new Elevator(new ElevatorIOSim());
+        elevator = new Elevator(new ElevatorIOSim());
+        arm = new Arm(new ArmIOSim(new ArmConstants()));
+        climber = new Climber(new ClimberIOSim());
         // Sim robot, instantiate physics sim IO implementations
         drive =
             new Drive(
@@ -107,7 +121,9 @@ public class RobotContainer {
         break;
 
       default:
-        this.elevator = new Elevator(new ElevatorIOSim());
+        elevator = new Elevator(new ElevatorIOSim());
+        arm = new Arm(new ArmIOSim(new ArmConstants()));
+        climber = new Climber(new ClimberIOSim());
         // Replayed robot, disable IO implementations
         drive =
             new Drive(
