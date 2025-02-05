@@ -12,10 +12,10 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class ElevatorIOSim implements ElevatorIO {
-  private ElevatorFeedforward ff = new ElevatorFeedforward(0, 0, 0, 0);
+  private ElevatorFeedforward ff = new ElevatorFeedforward(0.0, 0, 0, 0);
   private final ProfiledPIDController controller =
       new ProfiledPIDController( // TODO: all defaulted to zero until I can play with the simulator
-          0, 0, 0, new Constraints(0, 0));
+          0.4, 0, 0, new Constraints(100000, 361));
   private final ElevatorSim sim;
 
   private Voltage appliedVoltage = Volts.mutable(0);
@@ -23,12 +23,12 @@ public class ElevatorIOSim implements ElevatorIO {
   public ElevatorIOSim() {
     sim =
         new ElevatorSim(
-            0.5, // TODO: some random number until I figure out how simulators work
-            0.2, // TODO: some random number until I figure out how simulators work
+            1, // TODO: some random number until I figure out how simulators work
+            1, // TODO: some random number until I figure out how simulators work
             DCMotor.getNEO(2),
             0, // TODO: starting at zero until I can look at the CAD
             30, // TODO: some random number until I can look at the CAD
-            true,
+            false,
             0, // TODO: starting at zero until I can look at the CAD
             0.001,
             0.001);
@@ -36,7 +36,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
   @Override
   public void setTarget(Distance target) {
-    controller.setGoal(new State(target.in(Meters), 0));
+    controller.setGoal(new State(target.in(Meters), 1));
   }
 
   private void updateVoltageSetpoint() {

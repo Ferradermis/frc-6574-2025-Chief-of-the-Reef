@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -49,6 +50,8 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.util.LoggedTunableNumber;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 //TODO: go back and actually document all classes in the project (putting this here cuz we'll see this the most)
@@ -72,6 +75,9 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  final LoggedTunableNumber setElevator = new LoggedTunableNumber("RobotState/Elevator/setElevator", 100);
+  final LoggedTunableNumber returnToZero = new LoggedTunableNumber("RobotState/Elevator/returnToZero", 0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -197,6 +203,10 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    controller.b().onTrue(elevator.getNewSetDistanceCommand(setElevator)).onFalse(elevator.getNewSetDistanceCommand(returnToZero));
+    controller.povUp().onTrue(climber.getNewPivotTurnCommand(57)).onFalse(climber.getNewPivotTurnCommand(90));
+    controller.povDown().onTrue(arm.getNewSetAngleCommand(57)).onFalse(arm.getNewSetAngleCommand(0));
   }
 
   /**

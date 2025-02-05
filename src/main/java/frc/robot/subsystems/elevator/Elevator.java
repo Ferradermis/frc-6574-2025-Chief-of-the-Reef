@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotState;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
@@ -24,6 +25,8 @@ public class Elevator extends SubsystemBase {
     loggedElevator.supplyCurrent = Amps.mutable(0);
     loggedElevator.torqueCurrent = Amps.mutable(0);
     loggedElevator.voltageSetpoint = Volts.mutable(0);
+
+    RobotState.getInstance().setElevatorSource(loggedElevator.distance);
   }
 
   public void setDistance(Distance target) {
@@ -36,16 +39,6 @@ public class Elevator extends SubsystemBase {
           setDistance(Meter.of((Meters.convertFrom(distance.get(), Inches))));
         },
         this);
-  }
-
-  public Trigger getNewAtAngleTrigger(Distance dist, Distance tolerance) {
-    return new Trigger(
-        () -> {
-          return MathUtil.isNear(
-              dist.baseUnitMagnitude(),
-              loggedElevator.distance.baseUnitMagnitude(),
-              tolerance.baseUnitMagnitude());
-        });
   }
 
   @Override

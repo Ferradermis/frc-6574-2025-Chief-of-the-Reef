@@ -19,7 +19,7 @@ public class ClimberIOSim implements ClimberIO {
 
   private final ProfiledPIDController controller =
       new ProfiledPIDController(
-          0, 0, 0, new Constraints(0, 0)); // TODO: Find correct values, defaulted at 0 for now :)
+          0.1, 0, 0, new Constraints(100000, 361)); // TODO: Find correct values, defaulted at 0 for now :)
 
   private final FlywheelSim sim;
 

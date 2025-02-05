@@ -33,33 +33,33 @@ public class RobotState extends VirtualSubsystem {
   private final MechanismRoot2d primaryMechanismRoot2d;
   private final MechanismLigament2d armLigament2d;
   private final MechanismLigament2d elevatorLigament2d;
-  
-  private final MechanismRoot2d climberRoot2d;
+  private final MechanismLigament2d climberMount2d;
+  private final MechanismRoot2d climberMountRoot2d;
   private final MechanismLigament2d climberLigament2d;
 
   private final MechanismRoot2d robotBaseRoot;
-  private final MechanismLigament2d robotBaseLigament2d = new MechanismLigament2d("RobotBase", 100, 0, 10, new Color8Bit(0, 0, 0));
+  private final MechanismLigament2d robotBaseLigament2d = new MechanismLigament2d("RobotBase", 100, 0, 10, new Color8Bit(255, 0, 0));
 
   private final String key;
 
   private RobotState(String k) {
     key = k;
 
-    
-
     primaryMechanism2d = new Mechanism2d(500, 500);
-    elevatorLigament2d = new MechanismLigament2d("ElevatorLigament", elevatorPosition.in(Centimeters), 90);
-    armLigament2d = new MechanismLigament2d("ArmLigament", Centimeters.convertFrom(10, Inches), armPosition.in(Degrees));
-    climberLigament2d = new MechanismLigament2d("ClimberLigament", Centimeters.convertFrom(10, Inches), climberTwist.in(Degrees));
+    elevatorLigament2d = new MechanismLigament2d("ElevatorLigament", elevatorPosition.in(Centimeters), 90, 10, new Color8Bit(255, 0, 255));
+    armLigament2d = new MechanismLigament2d("ArmLigament", Centimeters.convertFrom(10, Inches), armPosition.in(Degrees), 10, new Color8Bit(0, 255, 0));
+    climberLigament2d = new MechanismLigament2d("ClimberLigament", Centimeters.convertFrom(10, Inches), climberTwist.in(Degrees), 10, new Color8Bit(0, 225, 255));
+    climberMount2d = new MechanismLigament2d("ClimberMount2d", Centimeters.convertFrom(5, Inches), 90, 10, new Color8Bit(255, 255, 255));
 
-    primaryMechanismRoot2d = primaryMechanism2d.getRoot("Primary2d", 300, 20);
+    primaryMechanismRoot2d = primaryMechanism2d.getRoot("Primary2d", 150, 13);
     primaryMechanismRoot2d.append(elevatorLigament2d);
     elevatorLigament2d.append(armLigament2d);
 
-    climberRoot2d = primaryMechanism2d.getRoot("Climber2d", 30, 20);
-    climberRoot2d.append(climberLigament2d);
+    climberMountRoot2d = primaryMechanism2d.getRoot("ClimberMount2d", 105, 15);
+    climberMountRoot2d.append(climberMount2d);
+    climberMount2d.append(climberLigament2d);
 
-    robotBaseRoot = primaryMechanism2d.getRoot("RobotBase2d", 100, 100);
+    robotBaseRoot = primaryMechanism2d.getRoot("RobotBase2d", 100, 5);
     robotBaseRoot.append(robotBaseLigament2d);
 
     SmartDashboard.putData(key, primaryMechanism2d);
@@ -74,7 +74,7 @@ public class RobotState extends VirtualSubsystem {
 
   @Override
   public void periodic() {
-    //visualize();
+    visualize();
   }
 
   public Distance getElevatorPosition() {
@@ -131,7 +131,7 @@ public class RobotState extends VirtualSubsystem {
       .transformBy(
         new Transform3d(
           new Translation3d(
-            Meters.zero(), Meters.zero(), elevatorPosition), 
+            Meters.zero(), elevatorPosition, Meters.zero()), 
             new Rotation3d())
     );
 
