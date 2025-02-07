@@ -23,7 +23,7 @@ public class Climber extends SubsystemBase {
     loggedClimber.torqueCurrent = Amps.mutable(0);
     loggedClimber.voltageSetPoint = Volts.mutable(0);
 
-    RobotState.instance.setClimberSource(loggedClimber.climberAngle);
+   RobotState.getInstance().setClimberSource(loggedClimber.climberAngle);
   }
 
   public void setAngle(Angle angle) {
