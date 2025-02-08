@@ -13,11 +13,12 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
 import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
-
+import static edu.wpi.first.units.Units.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -64,10 +66,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  private final Vision vision;
+  //private final Vision vision;
   private final Drive drive;
-  private final Elevator elevator;
-  private final Arm arm;
+  //private final Elevator elevator;
+  //private final Arm arm;
   private final Climber climber;
 
   // Controller
@@ -76,8 +78,8 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  final LoggedTunableNumber setElevator = new LoggedTunableNumber("RobotState/Elevator/setElevator", 100);
-  final LoggedTunableNumber returnToZero = new LoggedTunableNumber("RobotState/Elevator/returnToZero", 0);
+  final LoggedTunableNumber setElevator = new LoggedTunableNumber("RobotState/Elevator/setElevator", 30);
+  final LoggedTunableNumber returnToZero = new LoggedTunableNumber("RobotState/Elevator/returnToZero", 10);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -85,9 +87,9 @@ public class RobotContainer {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         // this.elevator = new Elevator(new ElevatorIOMotor());
-        elevator = new Elevator(new ElevatorIONEO(17, 18));
-        arm = new Arm(new ArmIONEO(19));
-        climber = new Climber(new ClimberIOMotors(20, 21));
+        //elevator = new Elevator(new ElevatorIONEO(17, 18));
+        //arm = new Arm(new ArmIONEO(19));
+        climber = new Climber(new ClimberIOMotors(15));
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -95,11 +97,11 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOLimelight(camera0Name, drive::getRotation),
-                new VisionIOLimelight(camera1Name, drive::getRotation));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOLimelight(camera0Name, drive::getRotation),
+        //         new VisionIOLimelight(camera1Name, drive::getRotation));
         // vision =
         //     new Vision(
         //         demoDrive::addVisionMeasurement,
@@ -108,8 +110,8 @@ public class RobotContainer {
         break;
 
       case SIM:
-        elevator = new Elevator(new ElevatorIOSim());
-        arm = new Arm(new ArmIOSim(new ArmConstants()));
+        // elevator = new Elevator(new ElevatorIOSim());
+        // arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
         // Sim robot, instantiate physics sim IO implementations
         drive =
@@ -119,16 +121,16 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+        //         new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         break;
 
       default:
-        elevator = new Elevator(new ElevatorIOSim());
-        arm = new Arm(new ArmIOSim(new ArmConstants()));
+        // elevator = new Elevator(new ElevatorIOSim());
+        // arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
         // Replayed robot, disable IO implementations
         drive =
@@ -138,7 +140,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        // vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
     }
 
@@ -171,7 +173,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureButtonBindings() { // TODO: create commands and button bindings (last thing before code is mostly finished :D )
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -204,9 +206,15 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    controller.b().onTrue(elevator.getNewSetDistanceCommand(setElevator)).onFalse(elevator.getNewSetDistanceCommand(returnToZero));
-    controller.povUp().onTrue(climber.getNewPivotTurnCommand(57)).onFalse(climber.getNewPivotTurnCommand(90));
-    controller.povDown().onTrue(arm.getNewSetAngleCommand(57)).onFalse(arm.getNewSetAngleCommand(0));
+    // controller.povUp().onTrue(elevator.getNewSetDistanceCommand(setElevator));//.onFalse(elevator.getNewSetDistanceCommand(returnToZero));
+    // controller.povDown().onTrue(elevator.getNewSetDistanceCommand(returnToZero));
+    // //controller.povUp().onTrue(climber.getNewPivotTurnCommand(57)).onFalse(climber.getNewPivotTurnCommand(90));
+    // controller.povLeft().onTrue(arm.getNewSetAngleCommand(57));//.onFalse(arm.getNewSetAngleCommand(0));
+    // controller.povRight().onTrue(arm.getNewSetAngleCommand(180));
+    // controller.rightBumper().onTrue(climber.getNewPivotTurnCommand(37));
+    // controller.leftBumper().onTrue(climber.getNewPivotTurnCommand(90));
+
+    controller.povUp().whileTrue(climber.getNewPivotTurnCommand(Degrees.of(30)));
   }
 
   /**

@@ -25,5 +25,7 @@ public interface ClimberIO {
 
   public void setClimberTarget(Angle target);
 
+  public void stop();
+
   public void updateInputs(ClimberInputs inputs);
 }

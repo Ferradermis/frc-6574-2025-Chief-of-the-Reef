@@ -55,7 +55,7 @@ public class RobotState extends VirtualSubsystem {
     primaryMechanismRoot2d.append(elevatorLigament2d);
     elevatorLigament2d.append(armLigament2d);
 
-    climberMountRoot2d = primaryMechanism2d.getRoot("ClimberMount2d", 105, 15);
+    climberMountRoot2d = primaryMechanism2d.getRoot("ClimberMount2d", 105, 10);
     climberMountRoot2d.append(climberMount2d);
     climberMount2d.append(climberLigament2d);
 

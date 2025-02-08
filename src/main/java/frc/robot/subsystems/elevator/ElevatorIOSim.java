@@ -27,7 +27,7 @@ public class ElevatorIOSim implements ElevatorIO {
             1, // TODO: some random number until I figure out how simulators work
             DCMotor.getNEO(2),
             0, // TODO: starting at zero until I can look at the CAD
-            30, // TODO: some random number until I can look at the CAD
+            10, // TODO: some random number until I can look at the CAD
             false,
             0, // TODO: starting at zero until I can look at the CAD
             0.001,
