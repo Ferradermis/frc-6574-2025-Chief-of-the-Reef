@@ -6,7 +6,6 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
@@ -32,10 +31,10 @@ public class ClimberIOMotors implements ClimberIO {
     }
 
     /** Configures the NEO motor */
-    public void configureNEO() { //STOP AUTO FORMATTING PLEASE I LIKE MY CODE THE WAY IT IS
+    public void configureNEO() {
         m_climberConfig.inverted(false).idleMode(IdleMode.kBrake);
         m_climberConfig.encoder
-            .positionConversionFactor(1) // TODO: Find correct conversion factor - defaulted at 1 for now :)
+            .positionConversionFactor(0.01) // TODO: Find correct conversion factor - defaulted at 1 for now :)
             .velocityConversionFactor(1); // TODO: Find correct conversion factor - defaulted at 1 for now :)
         m_climberConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
@@ -45,10 +44,12 @@ public class ClimberIOMotors implements ClimberIO {
                 .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
                 .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
+        m_climberConfig.smartCurrentLimit(40);
+
         m_climberConfig
             .softLimit
-            .forwardSoftLimit(1)
-            .reverseSoftLimit(-1); // TODO: Find correct soft limits - both set to zero for now :)
+            .forwardSoftLimit(20000)
+            .reverseSoftLimit(-20000); // TODO: Find correct soft limits - both set to zero for now :)
 
         m_climberMotor.configure(
             m_climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -72,14 +73,19 @@ public class ClimberIOMotors implements ClimberIO {
         m_climberMotor.stopMotor();
     }
 
+    @Override
+    public void setVoltage(double voltage) {
+        m_climberMotor.setVoltage(voltage);
+    }
+
     // TODO: I DO NOT KNOW IF THESE UNIT CONVERSIONS ARE DONE CORRECTLY! PLEASE VERIFY! thank :)
     @Override
     public void updateInputs(ClimberInputs inputs) {
-        inputs.climberAngle.mut_replace(Rotations.of(m_climberMotor.getEncoder().getPosition()));
+        inputs.climberAngle.mut_replace(Rotations.of(m_climberMotor.getEncoder().getPosition()).times(0.01));
         inputs.climberAngularVelocity.mut_replace(
             RotationsPerSecond.of(m_climberMotor.getEncoder().getVelocity()));
         inputs.climberSetPoint.mut_replace(
-            Angle.ofRelativeUnits(m_climberMotor.getAppliedOutput(), Rotations));
+            Degrees.of(m_climberMotor.getAppliedOutput()));
         inputs.supplyCurrent.mut_replace(m_climberMotor.getOutputCurrent(), Amps);
     }
 }

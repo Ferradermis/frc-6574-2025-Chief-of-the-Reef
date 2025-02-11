@@ -63,6 +63,11 @@ public class ClimberIOSim implements ClimberIO {
       runVolts(Volts.of(0));
   }
 
+  @Override
+  public void setVoltage(double voltage) {
+    runVolts(Volts.of(voltage));
+  }
+
   //TODO: fix units so that they line up with the units in ClimberIOREV.java so it is easier to understand (I think??)
   @Override
   public void updateInputs(ClimberInputs input) {

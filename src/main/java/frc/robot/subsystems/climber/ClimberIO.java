@@ -27,5 +27,7 @@ public interface ClimberIO {
 
   public void stop();
 
+  public void setVoltage(double voltage);
+
   public void updateInputs(ClimberInputs inputs);
 }

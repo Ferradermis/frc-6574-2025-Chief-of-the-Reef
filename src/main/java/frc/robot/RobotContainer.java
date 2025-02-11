@@ -66,10 +66,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  //private final Vision vision;
+  private final Vision vision;
   private final Drive drive;
-  //private final Elevator elevator;
-  //private final Arm arm;
+  private final Elevator elevator;
+  private final Arm arm;
   private final Climber climber;
 
   // Controller
@@ -86,9 +86,8 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        // this.elevator = new Elevator(new ElevatorIOMotor());
-        //elevator = new Elevator(new ElevatorIONEO(17, 18));
-        //arm = new Arm(new ArmIONEO(19));
+        elevator = new Elevator(new ElevatorIONEO(17, 18));
+        arm = new Arm(new ArmIONEO(19));
         climber = new Climber(new ClimberIOMotors(15));
         drive =
             new Drive(
@@ -97,23 +96,23 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOLimelight(camera0Name, drive::getRotation),
-        //         new VisionIOLimelight(camera1Name, drive::getRotation));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOLimelight(camera0Name, drive::getRotation),
+                new VisionIOLimelight(camera1Name, drive::getRotation));
         // vision =
         //     new Vision(
         //         demoDrive::addVisionMeasurement,
         //         new VisionIOPhotonVision(camera0Name, robotToCamera0),
-        //
+        
         break;
 
       case SIM:
-        // elevator = new Elevator(new ElevatorIOSim());
-        // arm = new Arm(new ArmIOSim(new ArmConstants()));
-        climber = new Climber(new ClimberIOSim());
         // Sim robot, instantiate physics sim IO implementations
+        elevator = new Elevator(new ElevatorIOSim());
+        arm = new Arm(new ArmIOSim(new ArmConstants()));
+        climber = new Climber(new ClimberIOSim());
         drive =
             new Drive(
                 new GyroIO() {},
@@ -121,18 +120,18 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-        //         new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         break;
 
       default:
-        // elevator = new Elevator(new ElevatorIOSim());
-        // arm = new Arm(new ArmIOSim(new ArmConstants()));
+      // Replayed robot, disable IO implementations
+        elevator = new Elevator(new ElevatorIOSim());
+        arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
-        // Replayed robot, disable IO implementations
         drive =
             new Drive(
                 new GyroIO() {},
@@ -140,7 +139,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        // vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
     }
 
@@ -208,13 +207,16 @@ public class RobotContainer {
 
     // controller.povUp().onTrue(elevator.getNewSetDistanceCommand(setElevator));//.onFalse(elevator.getNewSetDistanceCommand(returnToZero));
     // controller.povDown().onTrue(elevator.getNewSetDistanceCommand(returnToZero));
-    // //controller.povUp().onTrue(climber.getNewPivotTurnCommand(57)).onFalse(climber.getNewPivotTurnCommand(90));
-    // controller.povLeft().onTrue(arm.getNewSetAngleCommand(57));//.onFalse(arm.getNewSetAngleCommand(0));
-    // controller.povRight().onTrue(arm.getNewSetAngleCommand(180));
-    // controller.rightBumper().onTrue(climber.getNewPivotTurnCommand(37));
-    // controller.leftBumper().onTrue(climber.getNewPivotTurnCommand(90));
+    //controller.povUp().onTrue(climber.getNewPivotTurnCommand(57)).onFalse(climber.getNewPivotTurnCommand(90));
+    controller.povLeft().onTrue(arm.getNewSetAngleCommand(57));//.onFalse(arm.getNewSetAngleCommand(0));
+    controller.povRight().onTrue(arm.getNewSetAngleCommand(180));
+    // controller.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37)));
+    // controller.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90)));
 
-    controller.povUp().whileTrue(climber.getNewPivotTurnCommand(Degrees.of(30)));
+    controller.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
+
+    // controller.povUp().whileTrue(climber.setVoltageTest(4)).onFalse(climber.setVoltageTest(0));
+    // controller.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
   }
 
   /**

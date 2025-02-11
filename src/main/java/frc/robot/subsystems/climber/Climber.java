@@ -33,6 +33,7 @@ public class Climber extends SubsystemBase {
 
   public void setAngle(Angle angle) {
     climberIO.setClimberTarget(angle);
+    System.out.println("Setting Climber Target");
   }
 
   public Command getNewPivotTurnCommand(Angle i) {
@@ -43,9 +44,19 @@ public class Climber extends SubsystemBase {
         this);
   }
 
+  public Command setVoltageTest(double voltage) {
+    System.out.println("Setting Climber Voltage");
+    return new InstantCommand(
+        () -> {
+          climberIO.setVoltage(voltage);
+        },
+        this);
+  }
+
   @Override
   public void periodic() {
     climberIO.updateInputs(loggedClimber);
     Logger.processInputs("RobotState/Climber", loggedClimber);
+    SmartDashboard.putNumber("Climber Angle", loggedClimber.climberAngle.in(Degrees));
   }
 }

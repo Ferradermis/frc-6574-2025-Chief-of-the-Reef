@@ -83,10 +83,11 @@ public class Robot extends LoggedRobot {
         break;
     }
 
+    Logger.registerURCL(URCL.startExternal());
+
     // Start AdvantageKit logger
     Logger.start();
     DataLogManager.start();
-    URCL.start();
 
     // Check for valid swerve config
     var modules =
