@@ -33,10 +33,10 @@ public class Elevator extends SubsystemBase {
     elevatorIO.setTarget(target);
   }
 
-  public Command getNewSetDistanceCommand(LoggedTunableNumber distance) {
+  public Command getNewSetDistanceCommand(int distance) {
     return new InstantCommand(
         () -> {
-          setDistance(Meter.of((Meters.convertFrom(distance.get(), Inches))));
+          setDistance(Meters.of(distance));
         },
         this);
   }

@@ -45,7 +45,6 @@ public class Climber extends SubsystemBase {
   }
 
   public Command setVoltageTest(double voltage) {
-    System.out.println("Setting Climber Voltage");
     return new InstantCommand(
         () -> {
           climberIO.setVoltage(voltage);

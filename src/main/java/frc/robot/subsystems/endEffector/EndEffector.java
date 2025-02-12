@@ -27,14 +27,6 @@ public class EndEffector extends SubsystemBase {
     endEffectorIO.setTarget(setpoint);
   }
 
-  public Command getNewSetVoltsCommand(LoggedTunableNumber volts) {
-    return new InstantCommand(
-        () -> {
-          setTarget(Volts.of((volts.get())));
-        },
-        this);
-  }
-
   public Command getNewSetVoltsCommand(double i) {
     return new InstantCommand(
         () -> {

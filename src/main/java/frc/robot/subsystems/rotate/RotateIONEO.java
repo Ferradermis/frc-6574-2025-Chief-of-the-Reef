@@ -20,8 +20,8 @@ public class RotateIONEO implements RotateIO {
     public SparkMaxConfig m_motorConfig;
     public RotateConstants rotateConstants;
     
-    public RotateIONEO(int leftMotorId) {
-        m_motor = new SparkMax(leftMotorId, SparkMax.MotorType.kBrushless);
+    public RotateIONEO(int motorId) {
+        m_motor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
         m_motorController = m_motor.getClosedLoopController();
         m_motorConfig = new SparkMaxConfig();
     }

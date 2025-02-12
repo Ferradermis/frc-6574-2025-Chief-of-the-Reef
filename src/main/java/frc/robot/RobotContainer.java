@@ -13,7 +13,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
 import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
@@ -31,6 +30,18 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.Intake;
+import frc.robot.commands.Release;
+import frc.robot.commands.FullTeleopSystemCommands.GrabAlgae;
+import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
+import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
+import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
+import frc.robot.commands.FullTeleopSystemCommands.ReturnToHome;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelFour;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelOne;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
@@ -48,6 +59,12 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIONEO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.endEffector.EndEffectorIOKraken;
+import frc.robot.subsystems.endEffector.EndEffectorIOSim;
+import frc.robot.subsystems.rotate.Rotate;
+import frc.robot.subsystems.rotate.RotateIONEO;
+import frc.robot.subsystems.rotate.RotateIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -66,14 +83,17 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  private final Vision vision;
-  private final Drive drive;
-  private final Elevator elevator;
-  private final Arm arm;
-  private final Climber climber;
+  public static Vision vision;
+  public static Drive drive;
+  public static Elevator elevator;
+  public static Arm arm;
+  public static Climber climber;
+  public static EndEffector endEffector;
+  public static Rotate rotate;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -89,6 +109,8 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIONEO(17, 18));
         arm = new Arm(new ArmIONEO(19));
         climber = new Climber(new ClimberIOMotors(15));
+        endEffector = new EndEffector(new EndEffectorIOKraken(0));
+        rotate = new Rotate(new RotateIONEO(0));
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -113,6 +135,8 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIOSim());
         arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
+        endEffector = new EndEffector(new EndEffectorIOSim());
+        rotate = new Rotate(new RotateIOSim());
         drive =
             new Drive(
                 new GyroIO() {},
@@ -132,6 +156,8 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIOSim());
         arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
+        endEffector = new EndEffector(new EndEffectorIOSim());
+        rotate = new Rotate(new RotateIOSim());
         drive =
             new Drive(
                 new GyroIO() {},
@@ -173,29 +199,31 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() { // TODO: create commands and button bindings (last thing before code is mostly finished :D )
+
+    // Driver buttons
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
 
     // Lock to 0° when A button is held
-    controller
+    driverController
         .a()
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    // Reset gyro to 0° when B button is pressed
-    controller
+    // Reset gyro to 0° when Y button is pressed
+    driverController
         .y()
         .onTrue(
             Commands.runOnce(
@@ -205,18 +233,35 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    // controller.povUp().onTrue(elevator.getNewSetDistanceCommand(setElevator));//.onFalse(elevator.getNewSetDistanceCommand(returnToZero));
-    // controller.povDown().onTrue(elevator.getNewSetDistanceCommand(returnToZero));
-    //controller.povUp().onTrue(climber.getNewPivotTurnCommand(57)).onFalse(climber.getNewPivotTurnCommand(90));
-    controller.povLeft().onTrue(arm.getNewSetAngleCommand(57));//.onFalse(arm.getNewSetAngleCommand(0));
-    controller.povRight().onTrue(arm.getNewSetAngleCommand(180));
-    // controller.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37)));
-    // controller.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90)));
+    driverController.x().onTrue(new ReturnToHome());
+    driverController.rightBumper().whileTrue(new Intake());
+    driverController.leftBumper().whileTrue(new Release());
 
-    controller.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
+    // Operator buttons
+    operatorController.a().onTrue(new ScoreLevelOne());
+    operatorController.b().onTrue(new ScoreLevelTwo());
+    operatorController.x().onTrue(new ScoreLevelThree());
+    operatorController.y().onTrue(new ScoreLevelFour());
+    operatorController.povUp().onTrue(new PickupAlgaeFromGround());
+    operatorController.povDown().onTrue(new ScoreProcessor());
+    operatorController.povLeft().onTrue(new PickupCoralFromGround());
+    operatorController.povRight().onTrue(new PickupCoralFromChute());
+    operatorController.rightBumper().onTrue(new GrabAlgae());
+    operatorController.leftBumper().onTrue(new ReturnToHome());
 
-    // controller.povUp().whileTrue(climber.setVoltageTest(4)).onFalse(climber.setVoltageTest(0));
-    // controller.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
+    // Test buttons
+    // driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(setElevator));//.onFalse(elevator.getNewSetDistanceCommand(returnToZero));
+    // driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(returnToZero));
+    //driverController.povUp().onTrue(climber.getNewPivotTurnCommand(57)).onFalse(climber.getNewPivotTurnCommand(90));
+    driverController.povLeft().onTrue(arm.getNewSetAngleCommand(57));//.onFalse(arm.getNewSetAngleCommand(0));
+    driverController.povRight().onTrue(arm.getNewSetAngleCommand(180));
+    // driverController.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37)));
+    // driverController.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90)));
+
+    driverController.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
+
+    // driverController.povUp().whileTrue(climber.setVoltageTest(4)).onFalse(climber.setVoltageTest(0));
+    // driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
   }
 
   /**

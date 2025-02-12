@@ -65,6 +65,7 @@ public class ClimberIOSim implements ClimberIO {
 
   @Override
   public void setVoltage(double voltage) {
+    System.out.println("Setting Climber Voltage");
     runVolts(Volts.of(voltage));
   }
 
