@@ -61,6 +61,7 @@ import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIOKraken;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.rotate.Rotate;
+import frc.robot.subsystems.rotate.RotateConstants;
 import frc.robot.subsystems.rotate.RotateIONEO;
 import frc.robot.subsystems.rotate.RotateIOSim;
 import frc.robot.subsystems.vision.Vision;
@@ -134,7 +135,7 @@ public class RobotContainer {
         arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
-        rotate = new Rotate(new RotateIOSim());
+        rotate = new Rotate(new RotateIOSim(new RotateConstants()));
         drive =
             new Drive(
                 new GyroIO() {},
@@ -155,7 +156,7 @@ public class RobotContainer {
         arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
-        rotate = new Rotate(new RotateIOSim());
+        rotate = new Rotate(new RotateIOSim(new RotateConstants()));
         drive =
             new Drive(
                 new GyroIO() {},
