@@ -18,6 +18,8 @@ public class ArmIONEO implements ArmIO {
     public SparkMaxConfig m_motorConfig;
     public ArmConstants armConstants;
     
+    // Create a new instance of the ArmIONEO subsystem
+    // Creates a new spark max using the provided motor id and creates a new motor controller and config
     public ArmIONEO(int leftMotorId) {
         m_motor = new SparkMax(leftMotorId, SparkMax.MotorType.kBrushless);
         m_motorController = m_motor.getClosedLoopController();
@@ -48,11 +50,13 @@ public class ArmIONEO implements ArmIO {
             m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+    // Sets the target angle of the arm
     @Override
     public void setTarget(Angle target) {
         m_motorController.setReference(target.magnitude(), ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
+    // Updates the inputs of the arm
     @Override
     public void updateInputs(ArmInputs inputs) {
         inputs.angle.mut_replace(
@@ -67,11 +71,13 @@ public class ArmIONEO implements ArmIO {
         inputs.voltageSetpoint.mut_replace(m_motor.getBusVoltage(), Volts);
     }
 
+    // Stops the motor of the arm
     @Override
     public void stop() {
         m_motor.stopMotor();
     }
 
+    // Gets the constants of the arm
     @Override
     public ArmConstants getConstants() {
         return armConstants;

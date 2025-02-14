@@ -20,6 +20,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
   private Voltage appliedVoltage = Volts.mutable(0);
 
+  // Create a new instance of the elevator simulator
   public ElevatorIOSim() {
     sim =
         new ElevatorSim(
@@ -34,11 +35,13 @@ public class ElevatorIOSim implements ElevatorIO {
             0.001);
   }
 
+  // Sets the target distance of the simulated elevator
   @Override
   public void setTarget(Distance target) {
     controller.setGoal(new State(target.in(Meters), 1));
   }
 
+  // Updates the voltage setpoint of the simulated elevator
   private void updateVoltageSetpoint() {
     Distance currentDistance = Meters.of(sim.getPositionMeters());
     Voltage controllerVoltage = Volts.of(controller.calculate(currentDistance.in(Meters)));
@@ -50,10 +53,12 @@ public class ElevatorIOSim implements ElevatorIO {
     runVolts(effort);
   }
 
+  // Sets the target voltage of the simulated elevator
   private void runVolts(Voltage volts) {
     this.appliedVoltage = volts;
   }
 
+  // Updates the inputs of the simulated elevator
   @Override
   public void updateInputs(ElevatorInputs inputs) {
     inputs.distance.mut_replace(Distance.ofRelativeUnits(sim.getPositionMeters(), Meters));
@@ -63,12 +68,14 @@ public class ElevatorIOSim implements ElevatorIO {
     inputs.torqueCurrent.mut_replace(inputs.supplyCurrent.in(Amps), Amps);
     inputs.voltageSetpoint.mut_replace(appliedVoltage);
 
-    // Periodic
+    // Periodically set the input voltage
+    // Update the simulator every 0.02 seconds
     updateVoltageSetpoint();
     sim.setInputVoltage(appliedVoltage.in(Volts));
     sim.update(0.02);
   }
 
+  // Stops the motors of the simulated elevator
   @Override
   public void stop() {
     Distance currentDistance = Distance.ofRelativeUnits(0, Meters);

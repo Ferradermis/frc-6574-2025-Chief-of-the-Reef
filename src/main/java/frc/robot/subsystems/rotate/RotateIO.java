@@ -8,6 +8,8 @@ import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutVoltage;
 
+// Interface for the Rotate subsystem IO
+// Instantiates the RotateInputs class with the necessary inputs for the different IO layers
 public interface RotateIO {
     @AutoLog
     public static class RotateInputs {

@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 public class EndEffectorIOSim implements EndEffectorIO {
   /** J3_KP makes the joint motor know what speed to run at */
   public final double J3_KP = 1.0;
-
   public final double J3_KD = 1.0;
   public final double J3_GEARING = 1.0;
 
@@ -29,15 +28,18 @@ public class EndEffectorIOSim implements EndEffectorIO {
   private final LinearSystem<N2, N1, N2> flywheelPlant =
       LinearSystemId.createDCMotorSystem(flywheelkV, flywheelkA);
 
+  // Create a new instance of the end effector simulator
   public EndEffectorIOSim() {
     sim = new DCMotorSim(flywheelPlant, gearbox, 0.1, 0.1);
   }
 
+  // Sets the target voltage of the simulated end effector
   @Override
   public void setTarget(Voltage setpoint) {
     appliedVoltage = setpoint;
   }
 
+  // Updates the inputs of the simulated end effector
   @Override
   public void updateInputs(EndEffectorInputs inputs) {
     inputs.angularVelocity.mut_replace(
@@ -48,7 +50,8 @@ public class EndEffectorIOSim implements EndEffectorIO {
     inputs.voltageSetpoint.mut_replace(appliedVoltage);
     inputs.voltage.mut_replace(Volts.of(sim.getInputVoltage()));
 
-    // Periodic
+    // Periodically set the input voltage
+    // Update the simulator every 0.02 seconds
     sim.setInputVoltage(appliedVoltage.in(Volts));
     sim.update(0.02);
   }

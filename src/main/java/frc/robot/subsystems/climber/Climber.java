@@ -12,9 +12,10 @@ import org.littletonrobotics.junction.Logger;
 
 public class Climber extends SubsystemBase {
   private ClimberIO climberIO;
-
   ClimberInputsAutoLogged loggedClimber = new ClimberInputsAutoLogged();
 
+  // Create a new instance of the Climber subsystem
+  // Grabs the IO layer for the Climber subsystem, could be a simulation or real hardware
   public Climber(ClimberIO io) {
     climberIO = io;
     loggedClimber.climberAngle = Degrees.mutable(0);
@@ -23,19 +24,18 @@ public class Climber extends SubsystemBase {
     loggedClimber.supplyCurrent = Amps.mutable(0);
     loggedClimber.torqueCurrent = Amps.mutable(0);
     loggedClimber.voltageSetPoint = Volts.mutable(0);
-    /* Potential Issues:
-    * RobotState.getInstance().setClimberSource(loggedClimber.climberAngle);
-    * FlywheelSim vs SingleJointedArmSim -- why can't the climber be a SingleJointedArmSim
-    * Create the rotate subsystem
-    */
+    
+    // Set the climber source in the visualizer
     RobotState.getInstance().setClimberTwist(loggedClimber.climberAngle);
   }
 
+  // Set the angle of the climber
   public void setAngle(Angle angle) {
     climberIO.setClimberTarget(angle);
     System.out.println("Setting Climber Target");
   }
 
+  // Create a new command to set the angle of the climber
   public Command getNewPivotTurnCommand(Angle i) {
     return new InstantCommand(
         () -> {
@@ -44,6 +44,7 @@ public class Climber extends SubsystemBase {
         this);
   }
 
+  // Set the voltage of the climber - test command (will probably be used at Sussex)
   public Command setVoltageTest(double voltage) {
     return new InstantCommand(
         () -> {
@@ -52,6 +53,7 @@ public class Climber extends SubsystemBase {
         this);
   }
 
+  // Called periodically to update the Climber subsystem with the new inputs and log them
   @Override
   public void periodic() {
     climberIO.updateInputs(loggedClimber);

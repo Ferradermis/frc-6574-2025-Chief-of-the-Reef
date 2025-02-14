@@ -9,8 +9,9 @@ import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutVoltage;
 
+// Interface for the Arm subsystem IO
+// Instantiates the ArmInputs class with the necessary inputs for the different IO layers
 public interface ArmIO {
-    
     @AutoLog
     public static class ArmInputs {
         public MutAngle angle;

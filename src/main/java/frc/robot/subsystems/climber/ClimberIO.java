@@ -7,9 +7,9 @@ import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutVoltage;
 import org.littletonrobotics.junction.AutoLog;
 
+// Interface for the Climber subsystem IO
+// Instantiates the ClimberInputs class with the necessary inputs for the different IO layers
 public interface ClimberIO {
-
-  /** The time in seconds from the FPGA start and the creation of this set of inputs */
   @AutoLog
   public static class ClimberInputs {
 

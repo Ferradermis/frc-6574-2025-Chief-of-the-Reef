@@ -14,7 +14,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Servo;
 
-//TODO: Most likely does not work (untested), please verify and fix (I am trying my best to code without a bot qwq)
 //TODO: also add servo implementation
 public class ClimberIOMotors implements ClimberIO {
     public SparkMax m_climberMotor;
@@ -22,6 +21,8 @@ public class ClimberIOMotors implements ClimberIO {
     public SparkMaxConfig m_climberConfig;
     public Servo m_lockingServo;
 
+    // Create a new instance of the RotateIONEO subsystem
+    // Creates a new spark max using the provided motor id and creates a new motor controller and config, also creates a new servo using the provided servo channel
     //public ClimberIOMotors(int motorId, int servoChannel) {
     public ClimberIOMotors(int motorId) {
         m_climberMotor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
@@ -55,29 +56,35 @@ public class ClimberIOMotors implements ClimberIO {
             m_climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+    // Gets the encoder position of the NEO motor
     public double getEncoder() {
         return m_climberMotor.getEncoder().getPosition();
     }
 
+    // Sets the target angle of the climber
     @Override
     public void setClimberTarget(Angle target) {
         m_controller.setReference(target.in(Rotations), ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
+    // Sets the target angle of the servo
     public void setServoTarget(Angle target) {
         m_lockingServo.set(target.in(Degrees));
     }
 
+    // Stops the motor of the climber
     @Override
     public void stop() {
         m_climberMotor.stopMotor();
     }
 
+    // Sets the voltage of the climber
     @Override
     public void setVoltage(double voltage) {
         m_climberMotor.setVoltage(voltage);
     }
 
+    // Updates the inputs of the climber
     // TODO: I DO NOT KNOW IF THESE UNIT CONVERSIONS ARE DONE CORRECTLY! PLEASE VERIFY! thank :)
     @Override
     public void updateInputs(ClimberInputs inputs) {

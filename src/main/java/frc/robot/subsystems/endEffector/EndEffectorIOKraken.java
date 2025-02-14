@@ -14,6 +14,8 @@ public class EndEffectorIOKraken implements EndEffectorIO {
   public VoltageOut request;
   public TalonFX motor;
 
+  // Create a new instance of the EndEffectorIOKraken subsystem
+  // Creates a new TalonFX motor controller for the end effector and a new voltage output request
   public EndEffectorIOKraken(int motorId) {
     motor = new TalonFX(motorId);
     request = new VoltageOut(0.0);
@@ -22,6 +24,7 @@ public class EndEffectorIOKraken implements EndEffectorIO {
     configureTalons();
   }
 
+  // Configures the TalonFX motor controller
   private void configureTalons() {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -32,6 +35,7 @@ public class EndEffectorIOKraken implements EndEffectorIO {
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
   }
 
+  // Updates the inputs of the EndEffectorIOKraken subsystem
   @Override
   public void updateInputs(EndEffectorInputs inputs) {
     inputs.angularVelocity.mut_replace(motor.getVelocity().getValue());
@@ -41,12 +45,14 @@ public class EndEffectorIOKraken implements EndEffectorIO {
     inputs.supplyCurrent.mut_replace(motor.getStatorCurrent().getValue());
   }
 
+  // Sets the target voltage of the end effector
   @Override
   public void setTarget(Voltage target) {
     request = request.withOutput(target);
     motor.setControl(request);
   }
 
+  // Stops the motor of the end effector
   @Override
   public void stop() {
     motor.setControl(new StaticBrake());

@@ -23,6 +23,7 @@ public class ClimberIOSim implements ClimberIO {
 
   private final SingleJointedArmSim sim;
 
+  // Create a new instance of the climber simulator
   public ClimberIOSim() {
     sim = new SingleJointedArmSim(
             DCMotor.getNEO(1), 
@@ -39,11 +40,13 @@ public class ClimberIOSim implements ClimberIO {
     servoSim = new LoggedTunableNumber("RobotState/Climber/ServoInput", 0);
   }
 
+  // Sets the target angle of the simulated climber
   @Override
   public void setClimberTarget(Angle target) {
     controller.setGoal(new State(target.in(Degrees), 0));
   }
 
+  // Updates the voltage setpoint of the simulated climber
   private void updateVoltageSetpoint() {
     Angle currentAngle = Radians.of(sim.getAngleRads());
     Voltage controllerVoltage = Volts.of(controller.calculate(currentAngle.in(Degrees)));
@@ -52,10 +55,12 @@ public class ClimberIOSim implements ClimberIO {
     runVolts(effort);
   }
 
+  // Sets the target voltage of the simulated climber
   private void runVolts(Voltage volts) {
     this.appliedVoltage = volts;
   }
 
+  // Stops the simulated climber
   @Override
   public void stop() {
       Angle currentAngle = Radians.of(sim.getAngleRads());
@@ -63,12 +68,14 @@ public class ClimberIOSim implements ClimberIO {
       runVolts(Volts.of(0));
   }
 
+  // Sets the voltage of the simulated climber
   @Override
   public void setVoltage(double voltage) {
     System.out.println("Setting Climber Voltage");
     runVolts(Volts.of(voltage));
   }
 
+  // Updates the inputs of the simulated climber
   //TODO: fix units so that they line up with the units in ClimberIOREV.java so it is easier to understand (I think??)
   @Override
   public void updateInputs(ClimberInputs input) {
@@ -81,7 +88,8 @@ public class ClimberIOSim implements ClimberIO {
     input.torqueCurrent.mut_replace(input.supplyCurrent.in(Amps), Amps);
     input.voltageSetPoint.mut_replace(appliedVoltage);
 
-    // Periodic
+    // Periodically set the input voltage
+    // Update the simulator every 0.02 seconds
     updateVoltageSetpoint();
     sim.setInputVoltage(appliedVoltage.in(Volts));
     sim.update(0.02);

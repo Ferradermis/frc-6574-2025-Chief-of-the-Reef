@@ -11,8 +11,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.Angle;
-import frc.robot.subsystems.arm.ArmConstants;
-import frc.robot.subsystems.arm.ArmIO.ArmInputs;
 
 public class RotateIONEO implements RotateIO {
     public SparkMax m_motor;
@@ -20,6 +18,8 @@ public class RotateIONEO implements RotateIO {
     public SparkMaxConfig m_motorConfig;
     public RotateConstants rotateConstants;
     
+    // Create a new instance of the RotateIONEO subsystem
+    // Creates a new spark max using the provided motor id and creates a new motor controller and config
     public RotateIONEO(int motorId) {
         m_motor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
         m_motorController = m_motor.getClosedLoopController();
@@ -50,11 +50,13 @@ public class RotateIONEO implements RotateIO {
             m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+    // Sets the target angle of the rotate subsystem
     @Override
     public void setTarget(Angle target) {
         m_motorController.setReference(target.magnitude(), ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
+    // Updates the inputs of the rotate subsystem
     @Override
     public void updateInputs(RotateInputs inputs) {
         inputs.angle.mut_replace(
@@ -69,11 +71,13 @@ public class RotateIONEO implements RotateIO {
         inputs.voltageSetpoint.mut_replace(m_motor.getBusVoltage(), Volts);
     }
 
+    // Stops the motor of the rotate subsystem
     @Override
     public void stop() {
         m_motor.stopMotor();
     }
 
+    // Returns the rotate constants
     @Override
     public RotateConstants getConstants() {
         return rotateConstants;

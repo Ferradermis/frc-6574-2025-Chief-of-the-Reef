@@ -6,8 +6,9 @@ import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 
+// Interface for the EndEffector subsystem IO
+// Instantiates the EndEffectorInputs class with the necessary inputs for the different IO layers
 public interface EndEffectorIO {
-
   @AutoLog
   public static class EndEffectorInputs {
     public MutAngularVelocity angularVelocity;

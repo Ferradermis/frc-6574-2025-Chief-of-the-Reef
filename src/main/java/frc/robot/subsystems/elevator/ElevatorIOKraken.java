@@ -10,20 +10,25 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.util.PhoenixUtil;
 
-// TODO: Unused for now until we get the parts to put Krakens on the elevator
 public class ElevatorIOKraken implements ElevatorIO {
 
-  public static final double sppolRadius = 0; //TODO: defaulted to 0 until I can look at the robot/CAD
+  public static final double spoolRadius = 0; //TODO: defaulted to 0 until I can look at the robot/CAD
   public PositionVoltage request;
-  public TalonFX motor;
+  public TalonFX leftMotor;
+  public TalonFX rightMotor;
 
-  public ElevatorIOKraken(int motorId) {
-    motor = new TalonFX(motorId);
+  // Create a new instance of the ElevatorIOKraken subsystem
+  // Creates two new TalonFX motor controllers for the elevator and a new voltage output request
+  public ElevatorIOKraken(int leftMotorId, int rightMotorId) {
+    leftMotor = new TalonFX(leftMotorId);
+    rightMotor = new TalonFX(rightMotorId);
     request = new PositionVoltage(0);
-    motor.setControl(request);
+    leftMotor.setControl(request);
+    rightMotor.setControl(request);
     configureTalons();
   }
 
+  // Configures the TalonFX motor controllers
   private void configureTalons() {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -34,27 +39,33 @@ public class ElevatorIOKraken implements ElevatorIO {
     config.CurrentLimits.SupplyCurrentLimit = 0; //TODO: find value
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     config.Slot0.kP = 1.0;
-    PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
+    PhoenixUtil.tryUntilOk(5, () -> leftMotor.getConfigurator().apply(config));
+    PhoenixUtil.tryUntilOk(5, () -> rightMotor.getConfigurator().apply(config));
   }
   
+  // Updates the inputs of the elevator
   @Override
   public void updateInputs(ElevatorInputs inputs) {
-    inputs.distance.mut_replace(Meters.of(motor.getPosition().getValue().in(Degrees) * 2 * Math.PI * sppolRadius));
-    inputs.velocity.mut_replace(MetersPerSecond.of(motor.getVelocity().getValue().in(DegreesPerSecond) * 2 * Math.PI * sppolRadius));
+    inputs.distance.mut_replace(Meters.of(leftMotor.getPosition().getValue().in(Degrees) * 2 * Math.PI * spoolRadius));
+    inputs.velocity.mut_replace(MetersPerSecond.of(leftMotor.getVelocity().getValue().in(DegreesPerSecond) * 2 * Math.PI * spoolRadius));
     inputs.setpoint.mut_replace(
         Distance.ofRelativeUnits(
-            ((MotionMagicVoltage) motor.getAppliedControl()).Position, Meters));
-    inputs.supplyCurrent.mut_replace(motor.getStatorCurrent().getValue());
+            ((MotionMagicVoltage) leftMotor.getAppliedControl()).Position, Meters));
+    inputs.supplyCurrent.mut_replace(leftMotor.getStatorCurrent().getValue());
   }
 
+  // Sets the target distance of the elevator
   @Override
   public void setTarget(Distance meters) {
-    request = request.withPosition(meters.in(Meters)/(2 * Math.PI * sppolRadius));
-    motor.setControl(request);
+    request = request.withPosition(meters.in(Meters)/(2 * Math.PI * spoolRadius));
+    leftMotor.setControl(request);
+    rightMotor.setControl(request);
   }
 
+  // Stops the motors of the elevator
   @Override
   public void stop() {
-    motor.setControl(new StaticBrake());
+    leftMotor.setControl(new StaticBrake());
+    rightMotor.setControl(new StaticBrake());
   }
 }
