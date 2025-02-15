@@ -105,11 +105,11 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        elevator = new Elevator(new ElevatorIOKraken(17, 18));
-        arm = new Arm(new ArmIONEO(19));
+        elevator = new Elevator(new ElevatorIOKraken(16, 17));
+        arm = new Arm(new ArmIONEO(18));
         climber = new Climber(new ClimberIOMotors(15));
-        endEffector = new EndEffector(new EndEffectorIOKraken(0));
-        rotate = new Rotate(new RotateIONEO(0));
+        endEffector = new EndEffector(new EndEffectorIOKraken(20));
+        rotate = new Rotate(new RotateIONEO(19));
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -241,9 +241,9 @@ public class RobotContainer {
     operatorController.b().onTrue(new ScoreLevelTwo());
     operatorController.x().onTrue(new ScoreLevelThree());
     operatorController.y().onTrue(new ScoreLevelFour());
-    operatorController.povUp().onTrue(new PickupAlgaeFromGround());
+    operatorController.povUp().onTrue(new PickupAlgaeFromGround()); // Could be moved to driver instead (with an auto intake added)
     operatorController.povDown().onTrue(new ScoreProcessor());
-    operatorController.povLeft().onTrue(new PickupCoralFromGround());
+    operatorController.povLeft().onTrue(new PickupCoralFromGround()); // Could be moved to driver instead (with an auto intake added)
     operatorController.povRight().onTrue(new PickupCoralFromChute());
     operatorController.rightBumper().onTrue(new GrabAlgae());
     operatorController.leftBumper().onTrue(new ReturnToHome());

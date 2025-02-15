@@ -2,7 +2,6 @@ package frc.robot.subsystems.rotate;
 
 import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
