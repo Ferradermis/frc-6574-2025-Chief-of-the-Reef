@@ -18,7 +18,7 @@ public class ReturnToHome extends SequentialCommandGroup {
             new SetElevatorPosition(0),
             new SetArmAngle(0),
             new SetRotateAngle(0),
-            new SetClimberAngle(Degrees.of(0))
+            new SetClimberAngle(Degrees.of(0), Degrees.of(0))
         ),
         new Intake()
     );

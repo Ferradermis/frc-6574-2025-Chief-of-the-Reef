@@ -44,6 +44,14 @@ public class Arm extends SubsystemBase {
             this);
     }
 
+    public Command setVoltageTest(double voltage) {
+        return new InstantCommand(
+            () -> {
+              armIO.setVoltage(voltage);
+            },
+            this);
+      }
+
     // Called periodically to update the Arm subsystem with the new inputs and log them
     @Override
     public void periodic() {

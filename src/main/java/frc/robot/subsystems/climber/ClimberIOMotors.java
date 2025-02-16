@@ -23,16 +23,17 @@ public class ClimberIOMotors implements ClimberIO {
 
     // Create a new instance of the RotateIONEO subsystem
     // Creates a new spark max using the provided motor id and creates a new motor controller and config, also creates a new servo using the provided servo channel
-    //public ClimberIOMotors(int motorId, int servoChannel) {
-    public ClimberIOMotors(int motorId) {
+    public ClimberIOMotors(int motorId, int servoChannel) {
         m_climberMotor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
         m_controller = m_climberMotor.getClosedLoopController();
         m_climberConfig = new SparkMaxConfig();
-        //m_lockingServo = new Servo(servoChannel);
+        m_lockingServo = new Servo(servoChannel);
     }
 
     /** Configures the NEO motor */
     public void configureNEO() {
+        m_climberMotor.configure(
+            m_climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_climberConfig.inverted(false).idleMode(IdleMode.kBrake);
         m_climberConfig.encoder
             .positionConversionFactor(0.01) // TODO: Find correct conversion factor - defaulted at 1 for now :)
@@ -51,9 +52,6 @@ public class ClimberIOMotors implements ClimberIO {
             .softLimit
             .forwardSoftLimit(20000)
             .reverseSoftLimit(-20000); // TODO: Find correct soft limits - both set to zero for now :)
-
-        m_climberMotor.configure(
-            m_climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     // Gets the encoder position of the NEO motor
@@ -63,13 +61,9 @@ public class ClimberIOMotors implements ClimberIO {
 
     // Sets the target angle of the climber
     @Override
-    public void setClimberTarget(Angle target) {
+    public void setClimberTarget(Angle target, Angle servoAngle) {
         m_controller.setReference(target.in(Rotations), ControlType.kPosition, ClosedLoopSlot.kSlot1);
-    }
-
-    // Sets the target angle of the servo
-    public void setServoTarget(Angle target) {
-        m_lockingServo.set(target.in(Degrees));
+        m_lockingServo.set(servoAngle.in(Degrees));
     }
 
     // Stops the motor of the climber
@@ -80,8 +74,9 @@ public class ClimberIOMotors implements ClimberIO {
 
     // Sets the voltage of the climber
     @Override
-    public void setVoltage(double voltage) {
+    public void setVoltage(double voltage, double sAngle) {
         m_climberMotor.setVoltage(voltage);
+        //m_lockingServo.set(sAngle);
     }
 
     // Updates the inputs of the climber

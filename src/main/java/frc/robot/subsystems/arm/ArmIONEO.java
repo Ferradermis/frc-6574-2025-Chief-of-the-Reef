@@ -24,6 +24,7 @@ public class ArmIONEO implements ArmIO {
         m_motor = new SparkMax(leftMotorId, SparkMax.MotorType.kBrushless);
         m_motorController = m_motor.getClosedLoopController();
         m_motorConfig = new SparkMaxConfig();
+        armConstants = new ArmConstants();
     }
 
     /** Configures the NEO motor */
@@ -34,7 +35,7 @@ public class ArmIONEO implements ArmIO {
             .positionConversionFactor(1) // TODO: Find correct conversion factor - defaulted at 1 for now :)
             .velocityConversionFactor(1); // TODO: Find correct conversion factor - defaulted at 1 for now :) 
         m_motorConfig.closedLoop
-                .feedbackSensor(FeedbackSensor.kPrimaryEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
+                .feedbackSensor(FeedbackSensor.kAbsoluteEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
                 .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
                 .outputRange(-1, 1) // same thing here, will probably not use this
                 .pid(0, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
@@ -43,8 +44,8 @@ public class ArmIONEO implements ArmIO {
 
         m_motorConfig
             .softLimit
-            .forwardSoftLimit(0)
-            .reverseSoftLimit(0); // TODO: Find correct soft limits - both set to zero for now :)
+            .forwardSoftLimit(1)
+            .reverseSoftLimit(-1); // TODO: Find correct soft limits - both set to zero for now :)
 
         m_motor.configure(
             m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -53,14 +54,20 @@ public class ArmIONEO implements ArmIO {
     // Sets the target angle of the arm
     @Override
     public void setTarget(Angle target) {
-        m_motorController.setReference(target.magnitude(), ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        m_motorController.setReference(target.in(Rotations), ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    }
+
+    // Sets the voltage of the arm
+    @Override
+    public void setVoltage(double voltage) {
+        m_motor.setVoltage(voltage);
     }
 
     // Updates the inputs of the arm
     @Override
     public void updateInputs(ArmInputs inputs) {
         inputs.angle.mut_replace(
-            Degrees.convertFrom(m_motor.getEncoder().getPosition(), Radians), 
+            Degrees.convertFrom(m_motor.getEncoder().getPosition(), Rotations), 
             Degrees);
         inputs.angularVelocity.mut_replace(
             DegreesPerSecond.convertFrom(m_motor.getEncoder().getVelocity(), RadiansPerSecond),

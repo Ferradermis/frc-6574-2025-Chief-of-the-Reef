@@ -5,17 +5,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 public class SetClimberAngle extends Command {
-    Angle angle;
-    public SetClimberAngle(Angle a) {
+    Angle climberAngle;
+    Angle servoAngle;
+    public SetClimberAngle(Angle a, Angle sA) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(RobotContainer.climber);
-        angle = a;
+        climberAngle = a;
+        servoAngle = sA;
     }
 
     @Override
     public void initialize() {
         // Called when the command is initially scheduled.
-        RobotContainer.climber.getNewPivotTurnCommand(angle); // TODO: test command, defaulted to 0
+        RobotContainer.climber.getNewPivotTurnCommand(climberAngle, servoAngle); // TODO: test command, defaulted to 0
     }
 
     @Override

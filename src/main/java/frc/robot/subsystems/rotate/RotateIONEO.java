@@ -24,6 +24,7 @@ public class RotateIONEO implements RotateIO {
         m_motor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
         m_motorController = m_motor.getClosedLoopController();
         m_motorConfig = new SparkMaxConfig();
+        rotateConstants = new RotateConstants();
     }
 
     /** Configures the NEO motor */
@@ -34,7 +35,7 @@ public class RotateIONEO implements RotateIO {
             .positionConversionFactor(1) // TODO: Find correct conversion factor - defaulted at 1 for now :)
             .velocityConversionFactor(1); // TODO: Find correct conversion factor - defaulted at 1 for now :) 
         m_motorConfig.closedLoop
-                .feedbackSensor(FeedbackSensor.kPrimaryEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
+                .feedbackSensor(FeedbackSensor.kAbsoluteEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
                 .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
                 .outputRange(-1, 1) // same thing here, will probably not use this
                 .pid(0, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
@@ -56,11 +57,17 @@ public class RotateIONEO implements RotateIO {
         m_motorController.setReference(target.magnitude(), ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
+    // Sets the voltage of the arm
+    @Override
+    public void setVoltage(double voltage) {
+        m_motor.setVoltage(voltage);
+    }
+
     // Updates the inputs of the rotate subsystem
     @Override
     public void updateInputs(RotateInputs inputs) {
         inputs.angle.mut_replace(
-            Degrees.convertFrom(m_motor.getEncoder().getPosition(), Radians), 
+            Degrees.convertFrom(m_motor.getEncoder().getPosition(), Rotations), 
             Degrees);
         inputs.angularVelocity.mut_replace(
             DegreesPerSecond.convertFrom(m_motor.getEncoder().getVelocity(), RadiansPerSecond),

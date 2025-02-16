@@ -1,5 +1,6 @@
 package frc.robot.subsystems.climber;
 
+import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
@@ -12,22 +13,19 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ClimberIO {
   @AutoLog
   public static class ClimberInputs {
-
-    public double timestamp;
-
-    public MutAngle climberAngle;
-    public MutAngularVelocity climberAngularVelocity;
-    public MutAngle climberSetPoint;
-    public MutVoltage voltageSetPoint;
-    public MutCurrent supplyCurrent;
-    public MutCurrent torqueCurrent;
+    public MutAngle climberAngle = Degrees.mutable(0);
+    public MutAngularVelocity climberAngularVelocity = DegreesPerSecond.mutable(0);
+    public MutAngle climberSetPoint = Degrees.mutable(0);
+    public MutVoltage voltageSetPoint = Volts.mutable(0);
+    public MutCurrent supplyCurrent = Amps.mutable(0);
+    public MutCurrent torqueCurrent = Amps.mutable(0);
   }
 
-  public void setClimberTarget(Angle target);
+  public default void setClimberTarget(Angle target, Angle servoAngle) {}
 
-  public void stop();
+  public default void stop() {}
 
-  public void setVoltage(double voltage);
+  public default void setVoltage(double voltage, double sAngle) {}
 
-  public void updateInputs(ClimberInputs inputs);
+  public default void updateInputs(ClimberInputs inputs) {}
 }

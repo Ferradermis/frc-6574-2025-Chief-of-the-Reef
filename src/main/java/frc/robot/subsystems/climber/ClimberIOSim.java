@@ -40,9 +40,9 @@ public class ClimberIOSim implements ClimberIO {
     servoSim = new LoggedTunableNumber("RobotState/Climber/ServoInput", 0);
   }
 
-  // Sets the target angle of the simulated climber
+  // Sets the target angle of the simulated climber -  not using servo angle in sim (at least for now)
   @Override
-  public void setClimberTarget(Angle target) {
+  public void setClimberTarget(Angle target, Angle servoAngle) {
     controller.setGoal(new State(target.in(Degrees), 0));
   }
 
@@ -70,7 +70,7 @@ public class ClimberIOSim implements ClimberIO {
 
   // Sets the voltage of the simulated climber
   @Override
-  public void setVoltage(double voltage) {
+  public void setVoltage(double voltage, double sAngle) {
     System.out.println("Setting Climber Voltage");
     runVolts(Volts.of(voltage));
   }

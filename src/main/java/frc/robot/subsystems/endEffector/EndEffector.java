@@ -41,6 +41,6 @@ public class EndEffector extends SubsystemBase {
   @Override
   public void periodic() {
     endEffectorIO.updateInputs(loggedEndEffector);
-    Logger.processInputs("RobotState/Intake", loggedEndEffector);
+    Logger.processInputs("RobotState/EndEffector", loggedEndEffector);
   }
 }

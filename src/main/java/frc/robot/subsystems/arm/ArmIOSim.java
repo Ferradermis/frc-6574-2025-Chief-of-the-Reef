@@ -50,6 +50,13 @@ public class ArmIOSim implements ArmIO {
         controller.setGoal(new State(target.in(Degrees), 0));
     }
 
+    // Sets the voltage of the simulated climber
+    @Override
+    public void setVoltage(double voltage) {
+        System.out.println("Setting Climber Voltage");
+        runVolts(Volts.of(voltage));
+    }
+
     // Updates the voltage setpoint of the simulated arm
     private void updateVoltageSetpoint() {
         Angle currentAngle = Radians.of(simulator.getAngleRads());

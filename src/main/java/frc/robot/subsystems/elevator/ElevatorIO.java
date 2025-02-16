@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.MutCurrent;
 import edu.wpi.first.units.measure.MutDistance;
@@ -11,18 +12,19 @@ import org.littletonrobotics.junction.AutoLog;
 // Instantiates the ElevatorInputs class with the necessary inputs for the different IO layers
 public interface ElevatorIO {
   @AutoLog
-  class ElevatorInputs {
-    public MutDistance distance;
-    public MutLinearVelocity velocity;
-    public MutDistance setpoint;
-    public MutVoltage voltageSetpoint;
-    public MutCurrent supplyCurrent;
-    public MutCurrent torqueCurrent;
+  public static class ElevatorInputs {
+    public MutDistance distance = Meters.mutable(0);
+    public MutLinearVelocity velocity = MetersPerSecond.mutable(0);
+    public MutDistance setpoint = Meters.mutable(0);
+    public MutVoltage voltageSetpoint = Volts.mutable(0);
+    public MutCurrent supplyCurrent = Amps.mutable(0);
+    public MutCurrent torqueCurrent = Amps.mutable(0);
+    public MutDistance rightDist = Meters.mutable(0);
   }
 
-  public void updateInputs(ElevatorInputs inputs);
+  public default void updateInputs(ElevatorInputs inputs) {}
 
-  public void setTarget(Distance target);
+  public default void setTarget(Distance target) {}
 
-  public void stop();
+  public default void stop() {}
 }

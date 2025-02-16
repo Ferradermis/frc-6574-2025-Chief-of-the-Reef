@@ -41,6 +41,14 @@ public class Rotate extends SubsystemBase{
             this);
     }
 
+    public Command setVoltageTest(double voltage) {
+        return new InstantCommand(
+            () -> {
+              rotateIO.setVoltage(voltage);
+            },
+            this);
+      }
+
     // Called periodically to update the Rotate subsystem with the new inputs and log them
     @Override
     public void periodic() {

@@ -20,7 +20,7 @@ import frc.robot.util.VirtualSubsystem;
 public class RobotState extends VirtualSubsystem {
   public static RobotState instance;
   private MutDistance elevatorPosition = Inches.mutable(0);
-  private MutAngle armAngle = Degrees.mutable(0);
+  private MutAngle armAngle = Degrees.mutable(90);
   private MutAngle climberAngle = Degrees.mutable(0);
   public MutAngle rotateTwist = Degrees.mutable(0);
 
@@ -152,7 +152,7 @@ public class RobotState extends VirtualSubsystem {
       .transformBy(
         new Transform3d(
           new Translation3d(
-            Meters.zero(), elevatorPosition, Meters.zero()), 
+            Meters.zero(), Meters.zero(), elevatorPosition), 
             new Rotation3d())
     );
 
@@ -164,13 +164,13 @@ public class RobotState extends VirtualSubsystem {
         new Transform3d(
           new Translation3d(), 
             new Rotation3d(
-              armAngle, Degrees.zero(), Degrees.zero())))
+              Degrees.zero(), armAngle, rotateTwist)))
       .transformBy(armPivotOffset.inverse()
       );
     
     // Creates a new pose3d to change the angle of the climber in the 3d visualizer
     Pose3d climberPose =
-    armPose
+    new Pose3d(climberAttachOffset.getTranslation(), climberAttachOffset.getRotation())
       .transformBy(climberAttachOffset)
       .transformBy(
         new Transform3d(
@@ -215,14 +215,14 @@ public class RobotState extends VirtualSubsystem {
   // Set the initial position of the climber attach point in the 3d visualizer
   private static final Transform3d climberAttachOffset =
     new Transform3d(
-      new Translation3d(Inches.of(-1), Inches.of(-0.5), Inches.of(20)),
+      new Translation3d(Inches.of(-10), Inches.of(0), Inches.of(0)),
       new Rotation3d(Degrees.of(0), Degrees.of(0), Degrees.of(0))
     );
   
   // Set the initial position of the climber pivot point in the 3d visualizer
   private static final Transform3d climberPivotOffset =
     new Transform3d(
-      new Translation3d(Inches.of(-1), Inches.of(-0.5), Inches.of(20)),
+      new Translation3d(Inches.of(-10), Inches.of(0), Inches.of(0)),
       new Rotation3d(Degrees.of(0), Degrees.of(0), Degrees.of(0))
     );
 }

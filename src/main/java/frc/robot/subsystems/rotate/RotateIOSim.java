@@ -48,6 +48,13 @@ public class RotateIOSim implements RotateIO{
         controller.setGoal(new State(target.in(Degrees), 0));
     }
 
+    // Sets the voltage of the simulated climber
+    @Override
+    public void setVoltage(double voltage) {
+        System.out.println("Setting Climber Voltage");
+        runVolts(Volts.of(voltage));
+    }
+
     // Updates the inputs of the simulated rotate
     @Override
     public void updateInputs(RotateInputs inputs) {

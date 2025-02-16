@@ -28,9 +28,9 @@ public class EndEffectorIOKraken implements EndEffectorIO {
   private void configureTalons() {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config.CurrentLimits.StatorCurrentLimit = 0;
+    config.CurrentLimits.StatorCurrentLimit = 120;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
-    config.CurrentLimits.SupplyCurrentLimit = 0;
+    config.CurrentLimits.SupplyCurrentLimit = 80;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
   }

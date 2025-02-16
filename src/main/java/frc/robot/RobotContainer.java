@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
 import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
@@ -43,9 +44,11 @@ import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
+import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONEO;
 import frc.robot.subsystems.arm.ArmIOSim;
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOMotors;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.Drive;
@@ -55,13 +58,16 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOKraken;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOKraken;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.rotate.Rotate;
 import frc.robot.subsystems.rotate.RotateConstants;
+import frc.robot.subsystems.rotate.RotateIO;
 import frc.robot.subsystems.rotate.RotateIONEO;
 import frc.robot.subsystems.rotate.RotateIOSim;
 import frc.robot.subsystems.vision.Vision;
@@ -105,9 +111,9 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        elevator = new Elevator(new ElevatorIOKraken(16, 17));
+        //elevator = new Elevator(new ElevatorIOKraken(16, 17));
         arm = new Arm(new ArmIONEO(18));
-        climber = new Climber(new ClimberIOMotors(15));
+        climber = new Climber(new ClimberIOMotors(15, 1));
         endEffector = new EndEffector(new EndEffectorIOKraken(20));
         rotate = new Rotate(new RotateIONEO(19));
         drive =
@@ -135,7 +141,7 @@ public class RobotContainer {
         arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
-        rotate = new Rotate(new RotateIOSim(new RotateConstants()));
+        //rotate = new Rotate(new RotateIOSim(new RotateConstants()));
         drive =
             new Drive(
                 new GyroIO() {},
@@ -152,11 +158,11 @@ public class RobotContainer {
 
       default:
       // Replayed robot, disable IO implementations
-        elevator = new Elevator(new ElevatorIOSim());
-        arm = new Arm(new ArmIOSim(new ArmConstants()));
-        climber = new Climber(new ClimberIOSim());
-        endEffector = new EndEffector(new EndEffectorIOSim());
-        rotate = new Rotate(new RotateIOSim(new RotateConstants()));
+        elevator = new Elevator(new ElevatorIO() {});
+        arm = new Arm(new ArmIO() {});
+        climber = new Climber(new ClimberIO() {});
+        endEffector = new EndEffector(new EndEffectorIO() {});
+        rotate = new Rotate(new RotateIO() {});
         drive =
             new Drive(
                 new GyroIO() {},
@@ -232,35 +238,39 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    driverController.x().onTrue(new ReturnToHome());
-    driverController.rightBumper().whileTrue(new Intake());
-    driverController.leftBumper().whileTrue(new Release());
+    // driverController.x().onTrue(new ReturnToHome());
+    // driverController.rightBumper().whileTrue(new Intake());
+    // driverController.leftBumper().whileTrue(new Release());
 
     // Operator buttons
-    operatorController.a().onTrue(new ScoreLevelOne());
-    operatorController.b().onTrue(new ScoreLevelTwo());
-    operatorController.x().onTrue(new ScoreLevelThree());
-    operatorController.y().onTrue(new ScoreLevelFour());
-    operatorController.povUp().onTrue(new PickupAlgaeFromGround()); // Could be moved to driver instead (with an auto intake added)
-    operatorController.povDown().onTrue(new ScoreProcessor());
-    operatorController.povLeft().onTrue(new PickupCoralFromGround()); // Could be moved to driver instead (with an auto intake added)
-    operatorController.povRight().onTrue(new PickupCoralFromChute());
-    operatorController.rightBumper().onTrue(new GrabAlgae());
-    operatorController.leftBumper().onTrue(new ReturnToHome());
+    // operatorController.a().onTrue(new ScoreLevelOne());
+    // operatorController.b().onTrue(new ScoreLevelTwo());
+    // operatorController.x().onTrue(new ScoreLevelThree());
+    // operatorController.y().onTrue(new ScoreLevelFour());
+    // operatorController.povUp().onTrue(new PickupAlgaeFromGround()); // Could be moved to driver instead (with an auto intake added)
+    // operatorController.povDown().onTrue(new ScoreProcessor());
+    // operatorController.povLeft().onTrue(new PickupCoralFromGround()); // Could be moved to driver instead (with an auto intake added)
+    // operatorController.povRight().onTrue(new PickupCoralFromChute());
+    // operatorController.rightBumper().onTrue(new GrabAlgae());
+    // operatorController.leftBumper().onTrue(new ReturnToHome());
 
     // Test buttons
-    // driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(setElevator));//.onFalse(elevator.getNewSetDistanceCommand(returnToZero));
-    // driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(returnToZero));
-    //driverController.povUp().onTrue(climber.getNewPivotTurnCommand(57)).onFalse(climber.getNewPivotTurnCommand(90));
-    driverController.povLeft().onTrue(arm.getNewSetAngleCommand(57));//.onFalse(arm.getNewSetAngleCommand(0));
-    driverController.povRight().onTrue(arm.getNewSetAngleCommand(180));
-    // driverController.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37)));
-    // driverController.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90)));
+    //driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(5)).onFalse(elevator.stopMotors());
+    //driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(0));
+    driverController.povUp().whileTrue(rotate.setVoltageTest(0.5)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
+    driverController.povDown().whileTrue(rotate.setVoltageTest(-0.5)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
+    driverController.povLeft().whileTrue(arm.setVoltageTest(1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
+    driverController.povRight().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
+    driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    // driverController.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37), Degrees.of(0)));
+    // driverController.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90), Degrees.of(0)));
 
-    driverController.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
+    //driverController.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
 
-    // driverController.povUp().whileTrue(climber.setVoltageTest(4)).onFalse(climber.setVoltageTest(0));
-    // driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
+    driverController.rightTrigger().whileTrue(climber.setVoltageTest(2, 0)).onFalse(climber.setVoltageTest(0, 0));
+    driverController.leftTrigger().whileTrue(climber.setVoltageTest(-2, 0)).onFalse(climber.setVoltageTest(0, 0));
+    driverController.b().onTrue(climber.setVoltageTest(0, 90));
   }
 
   /**

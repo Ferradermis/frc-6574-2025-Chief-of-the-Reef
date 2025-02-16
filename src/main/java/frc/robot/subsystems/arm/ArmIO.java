@@ -1,7 +1,9 @@
 package frc.robot.subsystems.arm;
 
-import org.littletonrobotics.junction.AutoLog;
+import static edu.wpi.first.units.Units.Degrees;
 
+import org.littletonrobotics.junction.AutoLog;
+import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
@@ -13,19 +15,23 @@ import edu.wpi.first.units.measure.MutVoltage;
 public interface ArmIO {
     @AutoLog
     public static class ArmInputs {
-        public MutAngle angle;
-        public MutAngularVelocity angularVelocity;
-        public MutAngle setpoint;
-        public MutVoltage voltageSetpoint;
-        public MutCurrent supplyCurrent;
-        public MutCurrent torqueCurrent;
+        public MutAngle angle = Degrees.mutable(0);
+        public MutAngularVelocity angularVelocity = DegreesPerSecond.mutable(0);
+        public MutAngle setpoint = Degrees.mutable(0);
+        public MutVoltage voltageSetpoint = Volts.mutable(0);
+        public MutCurrent supplyCurrent = Amps.mutable(0);
+        public MutCurrent torqueCurrent = Amps.mutable(0);
     }
 
-    public void setTarget(Angle target);
+    public default void setTarget(Angle target) {}
 
-    public void updateInputs(ArmInputs inputs);
+    public default void updateInputs(ArmInputs inputs) {}
 
-    public void stop();
+    public default void stop() {}
 
-    public ArmConstants getConstants();
+    public default void setVoltage(double voltage) {}
+
+    public default ArmConstants getConstants() {
+        return new ArmConstants();
+    }
 }
