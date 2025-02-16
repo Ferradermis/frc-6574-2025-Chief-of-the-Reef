@@ -7,17 +7,17 @@ import frc.robot.RobotContainer;
 public class SetClimberAngle extends Command {
     Angle climberAngle;
     Angle servoAngle;
-    public SetClimberAngle(Angle a, Angle sA) {
+    public SetClimberAngle(Angle a) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(RobotContainer.climber);
         climberAngle = a;
-        servoAngle = sA;
+        //servoAngle = sA;
     }
 
     @Override
     public void initialize() {
         // Called when the command is initially scheduled.
-        RobotContainer.climber.getNewPivotTurnCommand(climberAngle, servoAngle); // TODO: test command, defaulted to 0
+        RobotContainer.climber.getNewPivotTurnCommand(climberAngle); // TODO: test command, defaulted to 0
     }
 
     @Override

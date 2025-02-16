@@ -42,6 +42,7 @@ import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.LockingServo;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmIO;
@@ -95,6 +96,7 @@ public class RobotContainer {
   public static Climber climber;
   public static EndEffector endEffector;
   public static Rotate rotate;
+  //public static LockingServo servo;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -113,9 +115,10 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         //elevator = new Elevator(new ElevatorIOKraken(16, 17));
         arm = new Arm(new ArmIONEO(18));
-        climber = new Climber(new ClimberIOMotors(15, 1));
+        climber = new Climber(new ClimberIOMotors(15)); // servo channel 1
         endEffector = new EndEffector(new EndEffectorIOKraken(20));
         rotate = new Rotate(new RotateIONEO(19));
+        //servo = new LockingServo(1);
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -257,10 +260,10 @@ public class RobotContainer {
     // Test buttons
     //driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(5)).onFalse(elevator.stopMotors());
     //driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(0));
-    driverController.povUp().whileTrue(rotate.setVoltageTest(0.5)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
-    driverController.povDown().whileTrue(rotate.setVoltageTest(-0.5)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
-    driverController.povLeft().whileTrue(arm.setVoltageTest(1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
-    driverController.povRight().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
+    operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
+    operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
+    operatorController.povUp().whileTrue(arm.setVoltageTest(2)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
+    operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
     driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
     // driverController.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37), Degrees.of(0)));
@@ -268,9 +271,9 @@ public class RobotContainer {
 
     //driverController.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
 
-    driverController.rightTrigger().whileTrue(climber.setVoltageTest(2, 0)).onFalse(climber.setVoltageTest(0, 0));
-    driverController.leftTrigger().whileTrue(climber.setVoltageTest(-2, 0)).onFalse(climber.setVoltageTest(0, 0));
-    driverController.b().onTrue(climber.setVoltageTest(0, 90));
+    operatorController.rightTrigger().whileTrue(climber.setVoltageTest(4)).onFalse(climber.setVoltageTest(0));
+    operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
+    //operatorController.b().onTrue(servo.getNewSetAngleCommand(90));
   }
 
   /**

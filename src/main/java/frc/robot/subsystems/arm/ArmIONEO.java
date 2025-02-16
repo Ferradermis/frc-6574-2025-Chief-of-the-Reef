@@ -38,12 +38,11 @@ public class ArmIONEO implements ArmIO {
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
                 .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
                 .outputRange(-1, 1) // same thing here, will probably not use this
-                .pid(0, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
+                .pid(0.1, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
                 .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
                 .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-        m_motorConfig
-            .softLimit
+        m_motorConfig.softLimit
             .forwardSoftLimit(1)
             .reverseSoftLimit(-1); // TODO: Find correct soft limits - both set to zero for now :)
 

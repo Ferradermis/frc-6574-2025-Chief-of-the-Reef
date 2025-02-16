@@ -30,25 +30,25 @@ public class Climber extends SubsystemBase {
   }
 
   // Set the angle of the climber
-  public void setAngle(Angle climbAngle, Angle servoAngle) {
-    climberIO.setClimberTarget(climbAngle, servoAngle);
+  public void setAngle(Angle climbAngle) {
+    climberIO.setClimberTarget(climbAngle);
     System.out.println("Setting Climber Target");
   }
 
   // Create a new command to set the angle of the climber
-  public Command getNewPivotTurnCommand(Angle a, Angle s) {
+  public Command getNewPivotTurnCommand(Angle a) {
     return new InstantCommand(
         () -> {
-          setAngle(a, s);
+          setAngle(a);
         },
         this);
   }
 
   // Set the voltage of the climber - test command (will probably be used at Sussex)
-  public Command setVoltageTest(double voltage, double sAngle) {
+  public Command setVoltageTest(double voltage) {
     return new InstantCommand(
         () -> {
-          climberIO.setVoltage(voltage, sAngle);
+          climberIO.setVoltage(voltage);
         },
         this);
   }

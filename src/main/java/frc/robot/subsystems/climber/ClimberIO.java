@@ -21,11 +21,11 @@ public interface ClimberIO {
     public MutCurrent torqueCurrent = Amps.mutable(0);
   }
 
-  public default void setClimberTarget(Angle target, Angle servoAngle) {}
+  public default void setClimberTarget(Angle target) {}
 
   public default void stop() {}
 
-  public default void setVoltage(double voltage, double sAngle) {}
+  public default void setVoltage(double voltage) {}
 
   public default void updateInputs(ClimberInputs inputs) {}
 }

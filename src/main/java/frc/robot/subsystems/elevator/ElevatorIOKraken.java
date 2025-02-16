@@ -59,18 +59,18 @@ public class ElevatorIOKraken implements ElevatorIO {
   @Override
   public void updateInputs(ElevatorInputs inputs) {
     inputs.distance.mut_replace(Inches.of(leftMotor.getPosition().getValue().in(Rotations) * 2 * Math.PI * spoolRadius));
-    inputs.rightDist.mut_replace(Meters.of(rightMotor.getPosition().getValue().in(Rotations) * 2 * Math.PI * spoolRadius));
+    inputs.rightDist.mut_replace(Inches.of(rightMotor.getPosition().getValue().in(Rotations) * 2 * Math.PI * spoolRadius));
     inputs.velocity.mut_replace(MetersPerSecond.of(leftMotor.getVelocity().getValue().in(DegreesPerSecond) * 2 * Math.PI * spoolRadius));
     inputs.setpoint.mut_replace(
         Distance.ofRelativeUnits(
-            ((MotionMagicVoltage) leftMotor.getAppliedControl()).Position, Meters));
+            ((MotionMagicVoltage) leftMotor.getAppliedControl()).Position, Inches));
     inputs.supplyCurrent.mut_replace(leftMotor.getStatorCurrent().getValue());
   }
 
   // Sets the target distance of the elevator
   @Override
-  public void setTarget(Distance meters) {
-    request = request.withPosition(meters.in(Meters)/(2 * Math.PI * spoolRadius));
+  public void setTarget(Distance inches) {
+    request = request.withPosition(inches.in(Inches)/(2 * Math.PI * spoolRadius));
     leftMotor.setControl(request);
     rightMotor.setControl(request);
   }

@@ -41,11 +41,11 @@ public class RotateIONEO implements RotateIO {
                 .pid(0, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
                 .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
                 .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
-
+        m_motorConfig.smartCurrentLimit(40);
         m_motorConfig
             .softLimit
-            .forwardSoftLimit(0)
-            .reverseSoftLimit(0); // TODO: Find correct soft limits - both set to zero for now :)
+            .forwardSoftLimit(10)
+            .reverseSoftLimit(-10); // TODO: Find correct soft limits - both set to zero for now :)
 
         m_motor.configure(
             m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

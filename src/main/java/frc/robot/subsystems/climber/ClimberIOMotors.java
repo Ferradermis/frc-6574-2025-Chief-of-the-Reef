@@ -19,15 +19,13 @@ public class ClimberIOMotors implements ClimberIO {
     public SparkMax m_climberMotor;
     public SparkClosedLoopController m_controller;
     public SparkMaxConfig m_climberConfig;
-    public Servo m_lockingServo;
 
     // Create a new instance of the RotateIONEO subsystem
     // Creates a new spark max using the provided motor id and creates a new motor controller and config, also creates a new servo using the provided servo channel
-    public ClimberIOMotors(int motorId, int servoChannel) {
+    public ClimberIOMotors(int motorId) {
         m_climberMotor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
         m_controller = m_climberMotor.getClosedLoopController();
         m_climberConfig = new SparkMaxConfig();
-        m_lockingServo = new Servo(servoChannel);
     }
 
     /** Configures the NEO motor */
@@ -61,9 +59,8 @@ public class ClimberIOMotors implements ClimberIO {
 
     // Sets the target angle of the climber
     @Override
-    public void setClimberTarget(Angle target, Angle servoAngle) {
+    public void setClimberTarget(Angle target) {
         m_controller.setReference(target.in(Rotations), ControlType.kPosition, ClosedLoopSlot.kSlot1);
-        m_lockingServo.set(servoAngle.in(Degrees));
     }
 
     // Stops the motor of the climber
@@ -74,7 +71,7 @@ public class ClimberIOMotors implements ClimberIO {
 
     // Sets the voltage of the climber
     @Override
-    public void setVoltage(double voltage, double sAngle) {
+    public void setVoltage(double voltage) {
         m_climberMotor.setVoltage(voltage);
         //m_lockingServo.set(sAngle);
     }
