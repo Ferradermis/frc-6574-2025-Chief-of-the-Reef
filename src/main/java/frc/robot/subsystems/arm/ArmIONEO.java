@@ -30,7 +30,7 @@ public class ArmIONEO implements ArmIO {
     /** Configures the NEO motor */
     public void configureNEO() { 
         //Left motor configs
-        m_motorConfig.inverted(false).idleMode(IdleMode.kBrake); //TODO: either the left or right motor will need to be inverted, will find out when I see the robot
+        m_motorConfig.inverted(false).idleMode(IdleMode.kCoast); //TODO: either the left or right motor will need to be inverted, will find out when I see the robot
         m_motorConfig.encoder
             .positionConversionFactor(1) // TODO: Find correct conversion factor - defaulted at 1 for now :)
             .velocityConversionFactor(1); // TODO: Find correct conversion factor - defaulted at 1 for now :) 
