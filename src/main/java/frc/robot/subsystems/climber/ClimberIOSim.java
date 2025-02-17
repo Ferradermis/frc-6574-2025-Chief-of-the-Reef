@@ -10,12 +10,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import frc.robot.util.LoggedTunableNumber;
 
 public class ClimberIOSim implements ClimberIO {
   private ArmFeedforward feedforward;
   private Voltage appliedVoltage = Volts.mutable(0);
-  private LoggedTunableNumber servoSim;
 
   private final ProfiledPIDController controller =
       new ProfiledPIDController(
@@ -37,10 +35,9 @@ public class ClimberIOSim implements ClimberIO {
             0.001,
             0.001);
     feedforward = new ArmFeedforward(0.1, 0, 0, 0);
-    servoSim = new LoggedTunableNumber("RobotState/Climber/ServoInput", 0);
   }
 
-  // Sets the target angle of the simulated climber -  not using servo angle in sim (at least for now)
+  // Sets the target angle of the simulated climber
   @Override
   public void setClimberTarget(Angle target) {
     controller.setGoal(new State(target.in(Degrees), 0));

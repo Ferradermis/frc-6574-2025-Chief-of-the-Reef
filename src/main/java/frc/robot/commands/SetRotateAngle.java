@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 public class SetRotateAngle extends Command {
-    int angle;
+    double angle;
 
-    public SetRotateAngle(int a) {
+    public SetRotateAngle(double a) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(RobotContainer.rotate);
         angle = a;

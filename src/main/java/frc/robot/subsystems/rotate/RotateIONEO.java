@@ -67,11 +67,9 @@ public class RotateIONEO implements RotateIO {
     @Override
     public void updateInputs(RotateInputs inputs) {
         inputs.angle.mut_replace(
-            Degrees.convertFrom(m_motor.getEncoder().getPosition(), Rotations), 
-            Degrees);
+            Degrees.of(m_motor.getEncoder().getPosition()));
         inputs.angularVelocity.mut_replace(
-            DegreesPerSecond.convertFrom(m_motor.getEncoder().getVelocity(), RadiansPerSecond),
-            DegreesPerSecond);
+            DegreesPerSecond.of(m_motor.getEncoder().getVelocity()));
         inputs.setpoint.mut_replace(m_motor.getAppliedOutput(), Degrees);
         inputs.supplyCurrent.mut_replace(m_motor.getOutputCurrent(), Amps);
         inputs.torqueCurrent.mut_replace(inputs.supplyCurrent.in(Amps), Amps);

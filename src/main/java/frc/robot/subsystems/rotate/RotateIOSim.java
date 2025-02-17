@@ -20,7 +20,7 @@ public class RotateIOSim implements RotateIO{
     // Grabs the constants for the rotate subsystem
     public RotateIOSim(RotateConstants constants) {
         sim = new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(0, 0), 
+            LinearSystemId.createDCMotorSystem(1, 1), 
             DCMotor.getNEO(1),
             0.001,
             0.001);

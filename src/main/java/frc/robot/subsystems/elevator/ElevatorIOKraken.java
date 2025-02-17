@@ -2,7 +2,6 @@ package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -43,8 +42,8 @@ public class ElevatorIOKraken implements ElevatorIO {
     leftConfig.Slot0.kP = 2.0;
     leftConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     rightConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    rightConfig.Voltage.PeakForwardVoltage = 1; //TODO: Probably need to change this value
-    rightConfig.Voltage.PeakReverseVoltage = 1; //TODO: Probably need to change this value
+    rightConfig.Voltage.PeakForwardVoltage = 1; //TODO: Probably need to change this value - set to 1 because we need it slow for now
+    rightConfig.Voltage.PeakReverseVoltage = 1; //TODO: Probably need to change this value - set to 1 because we need it slow for now
     rightConfig.CurrentLimits.StatorCurrentLimit = 80; //TODO: find value
     rightConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     rightConfig.CurrentLimits.SupplyCurrentLimit = 40; //TODO: find value

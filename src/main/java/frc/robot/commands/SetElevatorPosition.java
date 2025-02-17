@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 public class SetElevatorPosition extends Command {
-    public int distance;
-    public SetElevatorPosition(int d) {
+    public double distance;
+    public SetElevatorPosition(double d) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(RobotContainer.elevator);
         distance = d;

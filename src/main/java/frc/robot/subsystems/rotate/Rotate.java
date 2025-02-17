@@ -41,6 +41,7 @@ public class Rotate extends SubsystemBase{
             this);
     }
 
+    // Create a new command to set the voltage of the Rotate subsystem
     public Command setVoltageTest(double voltage) {
         return new InstantCommand(
             () -> {

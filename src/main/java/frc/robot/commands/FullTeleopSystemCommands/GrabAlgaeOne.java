@@ -8,17 +8,17 @@ import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetRotateAngle;
 
-public class ScoreProcessor extends SequentialCommandGroup {
-  public ScoreProcessor() {
+public class GrabAlgaeOne extends SequentialCommandGroup {
+  public GrabAlgaeOne() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
-            new SetElevatorPosition(Constants.PositionConstants.GROUND_ELEVATOR_HEIGHT),
-            new SetArmAngle(Constants.PositionConstants.GROUND_ARM_ANGLE),
+            new SetElevatorPosition(Constants.PositionConstants.ALGAE_ONE_ELEVATOR_HEIGHT),
+            new SetArmAngle(Constants.PositionConstants.ALGAE_ONE_ARM_ANGLE),
             new SetRotateAngle(Constants.PositionConstants.HORIZONTAL_ROTATE_ANGLE)
         ),
         new Intake()
     );
-  }
+  } 
 }

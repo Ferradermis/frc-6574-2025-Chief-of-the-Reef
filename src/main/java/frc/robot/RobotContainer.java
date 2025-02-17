@@ -25,13 +25,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
-import frc.robot.commands.FullTeleopSystemCommands.GrabAlgae;
+import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeOne;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
@@ -75,7 +74,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.util.LoggedTunableNumber;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -96,7 +94,7 @@ public class RobotContainer {
   public static Climber climber;
   public static EndEffector endEffector;
   public static Rotate rotate;
-  //public static LockingServo servo;
+  public static LockingServo servo;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -105,9 +103,6 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  final LoggedTunableNumber setElevator = new LoggedTunableNumber("RobotState/Elevator/setElevator", 30);
-  final LoggedTunableNumber returnToZero = new LoggedTunableNumber("RobotState/Elevator/returnToZero", 10);
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (Constants.currentMode) {
@@ -115,10 +110,10 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         //elevator = new Elevator(new ElevatorIOKraken(16, 17));
         arm = new Arm(new ArmIONEO(18));
-        climber = new Climber(new ClimberIOMotors(15)); // servo channel 1
+        climber = new Climber(new ClimberIOMotors(15)); 
         endEffector = new EndEffector(new EndEffectorIOKraken(20));
         rotate = new Rotate(new RotateIONEO(19));
-        //servo = new LockingServo(1);
+        servo = new LockingServo(1);
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -144,7 +139,7 @@ public class RobotContainer {
         arm = new Arm(new ArmIOSim(new ArmConstants()));
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
-        //rotate = new Rotate(new RotateIOSim(new RotateConstants()));
+        rotate = new Rotate(new RotateIOSim(new RotateConstants()));
         drive =
             new Drive(
                 new GyroIO() {},
@@ -266,14 +261,14 @@ public class RobotContainer {
     operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
     driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    // driverController.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37), Degrees.of(0)));
-    // driverController.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90), Degrees.of(0)));
+    // driverController.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37)));
+    // driverController.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90)));
 
     //driverController.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
 
     operatorController.rightTrigger().whileTrue(climber.setVoltageTest(4)).onFalse(climber.setVoltageTest(0));
     operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
-    //operatorController.b().onTrue(servo.getNewSetAngleCommand(90));
+    operatorController.b().onTrue(servo.getNewSetAngleCommand(90));
   }
 
   /**

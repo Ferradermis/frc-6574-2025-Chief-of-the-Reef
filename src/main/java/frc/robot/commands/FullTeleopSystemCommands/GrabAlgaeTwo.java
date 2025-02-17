@@ -7,8 +7,8 @@ import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetRotateAngle;
 
-public class GrabAlgae extends SequentialCommandGroup {
-  public GrabAlgae() {
+public class GrabAlgaeTwo extends SequentialCommandGroup {
+  public GrabAlgaeTwo() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

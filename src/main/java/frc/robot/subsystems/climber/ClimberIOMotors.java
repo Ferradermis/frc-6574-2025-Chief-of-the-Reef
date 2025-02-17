@@ -12,16 +12,14 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.Servo;
 
-//TODO: also add servo implementation
 public class ClimberIOMotors implements ClimberIO {
     public SparkMax m_climberMotor;
     public SparkClosedLoopController m_controller;
     public SparkMaxConfig m_climberConfig;
 
     // Create a new instance of the RotateIONEO subsystem
-    // Creates a new spark max using the provided motor id and creates a new motor controller and config, also creates a new servo using the provided servo channel
+    // Creates a new spark max using the provided motor id and creates a new motor controller and config
     public ClimberIOMotors(int motorId) {
         m_climberMotor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
         m_controller = m_climberMotor.getClosedLoopController();
@@ -34,8 +32,8 @@ public class ClimberIOMotors implements ClimberIO {
             m_climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_climberConfig.inverted(false).idleMode(IdleMode.kBrake);
         m_climberConfig.encoder
-            .positionConversionFactor(0.01) // TODO: Find correct conversion factor - defaulted at 1 for now :)
-            .velocityConversionFactor(1); // TODO: Find correct conversion factor - defaulted at 1 for now :)
+            .positionConversionFactor(360/675) // TODO: Find correct conversion factor - defaulted at 1 for now :)
+            .velocityConversionFactor(360/675/60); // TODO: Find correct conversion factor - defaulted at 1 for now :)
         m_climberConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
                 .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
@@ -80,9 +78,9 @@ public class ClimberIOMotors implements ClimberIO {
     // TODO: I DO NOT KNOW IF THESE UNIT CONVERSIONS ARE DONE CORRECTLY! PLEASE VERIFY! thank :)
     @Override
     public void updateInputs(ClimberInputs inputs) {
-        inputs.climberAngle.mut_replace(Rotations.of(m_climberMotor.getEncoder().getPosition()).times(0.01));
+        inputs.climberAngle.mut_replace(Degrees.of(m_climberMotor.getEncoder().getPosition()));
         inputs.climberAngularVelocity.mut_replace(
-            RotationsPerSecond.of(m_climberMotor.getEncoder().getVelocity()));
+            DegreesPerSecond.of(m_climberMotor.getEncoder().getVelocity()));
         inputs.climberSetPoint.mut_replace(
             Degrees.of(m_climberMotor.getAppliedOutput()));
         inputs.supplyCurrent.mut_replace(m_climberMotor.getOutputCurrent(), Amps);

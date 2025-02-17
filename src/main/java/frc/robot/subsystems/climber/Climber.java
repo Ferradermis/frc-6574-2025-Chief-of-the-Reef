@@ -36,10 +36,10 @@ public class Climber extends SubsystemBase {
   }
 
   // Create a new command to set the angle of the climber
-  public Command getNewPivotTurnCommand(Angle a) {
+  public Command getNewPivotTurnCommand(double a) {
     return new InstantCommand(
         () -> {
-          setAngle(a);
+          setAngle(Degrees.of(a));
         },
         this);
   }
