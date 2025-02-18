@@ -253,8 +253,8 @@ public class RobotContainer {
     // operatorController.leftBumper().onTrue(new ReturnToHome());
 
     // Test buttons
-    driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(1)).onFalse(elevator.stopMotors());
-    driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(-1)).onFalse(elevator.stopMotors());
+    driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(1.0));
+    driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(5.0));
     //operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     //operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     operatorController.povLeft().onTrue(new SetRotateAngle(0));

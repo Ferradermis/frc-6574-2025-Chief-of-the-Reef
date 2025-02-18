@@ -2,6 +2,8 @@ package frc.robot.subsystems.elevator;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -18,7 +20,7 @@ public class Elevator extends SubsystemBase {
   // Grabs the IO layer for the Elevator subsystem, could be a simulation or real hardware
   public Elevator(ElevatorIO io) {
     elevatorIO = io;
-    loggedElevator.distance = Inches.mutable(5);
+    loggedElevator.distance = Inches.mutable(0);
     loggedElevator.velocity = InchesPerSecond.mutable(0);
     loggedElevator.setpoint = Meters.mutable(0);
     loggedElevator.supplyCurrent = Amps.mutable(0);

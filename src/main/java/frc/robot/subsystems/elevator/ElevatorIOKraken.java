@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -16,8 +17,8 @@ import frc.robot.util.PhoenixUtil;
 
 public class ElevatorIOKraken implements ElevatorIO {
 
-  public static final double spoolRadius = 2.312; //TODO: defaulted to 0 until I can look at the robot/CAD
-  public MotionMagicVoltage request;
+  public static final double spoolRadius = 2.312/2;
+  public PositionVoltage request;
   public TalonFX followerMotor;
   public TalonFX leaderMotor;
   private Distance setpoint = Distance.ofBaseUnits(0, Inches);
@@ -27,7 +28,7 @@ public class ElevatorIOKraken implements ElevatorIO {
   public ElevatorIOKraken(int leftMotorId, int rightMotorId) {
     followerMotor = new TalonFX(leftMotorId);
     leaderMotor = new TalonFX(rightMotorId);
-    request = new MotionMagicVoltage(0);
+    request = new PositionVoltage(0);
     configureTalons();
   }
 
@@ -37,27 +38,29 @@ public class ElevatorIOKraken implements ElevatorIO {
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     config.Voltage.PeakForwardVoltage = 1; //TODO: Probably need to change this value
     config.Voltage.PeakReverseVoltage = 1; //TODO: Probably need to change this value
-    config.CurrentLimits.StatorCurrentLimit = 80; //TODO: find value
+    config.CurrentLimits.StatorCurrentLimit = 80;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
-    config.CurrentLimits.SupplyCurrentLimit = 40; //TODO: find value
+    config.CurrentLimits.SupplyCurrentLimit = 40;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.Slot0.kP = 0.0;
+    config.Slot0.kP = 1;
     config.Slot0.kG = 0.0;
-    config.Slot0.kS = 0.0;
+    config.Slot0.kS = 0.1;
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    config.Feedback.SensorToMechanismRatio = 25/1;
 
     TalonFXConfiguration config2 = new TalonFXConfiguration();
     config2.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     config2.Voltage.PeakForwardVoltage = 1; //TODO: Probably need to change this value
     config2.Voltage.PeakReverseVoltage = 1; //TODO: Probably need to change this value
-    config2.CurrentLimits.StatorCurrentLimit = 80; //TODO: find value
+    config2.CurrentLimits.StatorCurrentLimit = 80;
     config2.CurrentLimits.StatorCurrentLimitEnable = true;
-    config2.CurrentLimits.SupplyCurrentLimit = 40; //TODO: find value
+    config2.CurrentLimits.SupplyCurrentLimit = 40;
     config2.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config2.Slot0.kP = 0.0;
+    config2.Slot0.kP = 1;
     config2.Slot0.kG = 0.0;
-    config2.Slot0.kS = 0.0;
+    config2.Slot0.kS = 0.1;
     config2.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    config2.Feedback.SensorToMechanismRatio = 25/1;
 
     PhoenixUtil.tryUntilOk(5, () -> leaderMotor.getConfigurator().apply(config));
     PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(config2));
@@ -77,7 +80,7 @@ public class ElevatorIOKraken implements ElevatorIO {
   public void updateInputs(ElevatorInputs inputs) {
     inputs.distance.mut_replace(Inches.of(followerMotor.getPosition().getValue().in(Rotations) * 2 * Math.PI * spoolRadius));
     inputs.rightDist.mut_replace(Inches.of(leaderMotor.getPosition().getValue().in(Rotations) * 2 * Math.PI * spoolRadius));
-    inputs.velocity.mut_replace(MetersPerSecond.of(followerMotor.getVelocity().getValue().in(DegreesPerSecond) * 2 * Math.PI * spoolRadius));
+    inputs.velocity.mut_replace(InchesPerSecond.of(followerMotor.getVelocity().getValue().in(RotationsPerSecond) * 2 * Math.PI * spoolRadius));
     inputs.setpoint.mut_replace(setpoint);
     inputs.supplyCurrent.mut_replace(leaderMotor.getStatorCurrent().getValue());
   }
