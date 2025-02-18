@@ -20,6 +20,7 @@ public class ElevatorIOKraken implements ElevatorIO {
   public MotionMagicVoltage request;
   public TalonFX followerMotor;
   public TalonFX leaderMotor;
+  private Distance setpoint = Distance.ofBaseUnits(0, Inches);
 
   // Create a new instance of the ElevatorIOKraken subsystem
   // Creates two new TalonFX motor controllers for the elevator and a new voltage output request
@@ -76,9 +77,7 @@ public class ElevatorIOKraken implements ElevatorIO {
     inputs.distance.mut_replace(Inches.of(followerMotor.getPosition().getValue().in(Rotations) * 2 * Math.PI * spoolRadius));
     inputs.rightDist.mut_replace(Inches.of(leaderMotor.getPosition().getValue().in(Rotations) * 2 * Math.PI * spoolRadius));
     inputs.velocity.mut_replace(MetersPerSecond.of(followerMotor.getVelocity().getValue().in(DegreesPerSecond) * 2 * Math.PI * spoolRadius));
-    inputs.setpoint.mut_replace(
-        Distance.ofRelativeUnits(
-            ((MotionMagicVoltage) leaderMotor.getAppliedControl()).Position, Inches));
+    inputs.setpoint.mut_replace(setpoint);
     inputs.supplyCurrent.mut_replace(leaderMotor.getStatorCurrent().getValue());
   }
 
