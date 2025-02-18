@@ -32,8 +32,8 @@ public class RotateIONEO implements RotateIO {
         //Left motor configs
         m_motorConfig.inverted(false).idleMode(IdleMode.kBrake); //TODO: either the left or right motor will need to be inverted, will find out when I see the robot
         m_motorConfig.encoder
-            .positionConversionFactor(1) // TODO: Find correct conversion factor - defaulted at 1 for now :)
-            .velocityConversionFactor(1); // TODO: Find correct conversion factor - defaulted at 1 for now :) 
+            .positionConversionFactor(360/12.94) // TODO: Find correct conversion factor - defaulted at 1 for now :)
+            .velocityConversionFactor(360/12.94/60); // TODO: Find correct conversion factor - defaulted at 1 for now :) 
         m_motorConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
                 .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
@@ -67,9 +67,9 @@ public class RotateIONEO implements RotateIO {
     @Override
     public void updateInputs(RotateInputs inputs) {
         inputs.angle.mut_replace(
-            Degrees.of(m_motor.getEncoder().getPosition()));
+            Degrees.convertFrom(m_motor.getAbsoluteEncoder().getPosition(), Rotations), Degrees);
         inputs.angularVelocity.mut_replace(
-            DegreesPerSecond.of(m_motor.getEncoder().getVelocity()));
+            DegreesPerSecond.of(m_motor.getAbsoluteEncoder().getVelocity()));
         inputs.setpoint.mut_replace(m_motor.getAppliedOutput(), Degrees);
         inputs.supplyCurrent.mut_replace(m_motor.getOutputCurrent(), Amps);
         inputs.torqueCurrent.mut_replace(inputs.supplyCurrent.in(Amps), Amps);

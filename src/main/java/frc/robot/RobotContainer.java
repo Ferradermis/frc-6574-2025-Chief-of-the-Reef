@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
+import frc.robot.commands.SetRotateAngle;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
@@ -252,10 +253,11 @@ public class RobotContainer {
     // operatorController.leftBumper().onTrue(new ReturnToHome());
 
     // Test buttons
-    driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(5)).onFalse(elevator.stopMotors());
-    driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(0)).onFalse(elevator.stopMotors());
-    operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
-    operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
+    driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(1)).onFalse(elevator.stopMotors());
+    driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(-1)).onFalse(elevator.stopMotors());
+    //operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
+    //operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
+    operatorController.povLeft().onTrue(new SetRotateAngle(0));
     operatorController.povUp().whileTrue(arm.setVoltageTest(2)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));

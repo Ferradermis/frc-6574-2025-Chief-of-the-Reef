@@ -33,7 +33,6 @@ public class ElevatorIOKraken implements ElevatorIO {
 
   // Configures the TalonFX motor controllers
   private void configureTalons() {
-    //TalonFXConfiguration leftConfig = new TalonFXConfiguration();
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     config.Voltage.PeakForwardVoltage = 1; //TODO: Probably need to change this value
@@ -47,28 +46,30 @@ public class ElevatorIOKraken implements ElevatorIO {
     config.Slot0.kS = 0.0;
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
+    TalonFXConfiguration config2 = new TalonFXConfiguration();
+    config2.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config2.Voltage.PeakForwardVoltage = 1; //TODO: Probably need to change this value
+    config2.Voltage.PeakReverseVoltage = 1; //TODO: Probably need to change this value
+    config2.CurrentLimits.StatorCurrentLimit = 80; //TODO: find value
+    config2.CurrentLimits.StatorCurrentLimitEnable = true;
+    config2.CurrentLimits.SupplyCurrentLimit = 40; //TODO: find value
+    config2.CurrentLimits.SupplyCurrentLimitEnable = true;
+    config2.Slot0.kP = 0.0;
+    config2.Slot0.kG = 0.0;
+    config2.Slot0.kS = 0.0;
+    config2.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
     PhoenixUtil.tryUntilOk(5, () -> leaderMotor.getConfigurator().apply(config));
-
-    followerMotor.setControl(new Follower(leaderMotor.getDeviceID(), true));
-
-    // Slot0Configs slot0Configs = new Slot0Configs();
-    // slot0Configs.kP = 0.0;
-    // slot0Configs.kI = 0.0;
-    // slot0Configs.kD = 0.0;
-    // slot0Configs.kS = 0.0;
-    // slot0Configs.kG = 0.0;
-    // slot0Configs.kV = 0.0;
-    // slot0Configs.kA = 0.0;
-    // slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
-    // PhoenixUtil.tryUntilOk(5, () -> rightMotor.getConfigurator().apply(slot0Configs));
+    PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(config2));
 
     MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
     motionMagicConfigs.MotionMagicCruiseVelocity = 0.0;
     motionMagicConfigs.MotionMagicAcceleration = 0.0;
     motionMagicConfigs.MotionMagicJerk = 0.0;
-    motionMagicConfigs.MotionMagicExpo_kV = 0.0;
-    motionMagicConfigs.MotionMagicExpo_kA = 0.0;
+    motionMagicConfigs.MotionMagicExpo_kV = 0.1;
+    motionMagicConfigs.MotionMagicExpo_kA = 0.1;
     PhoenixUtil.tryUntilOk(5, () -> leaderMotor.getConfigurator().apply(motionMagicConfigs));
+    PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(motionMagicConfigs));
   }
   
   // Updates the inputs of the elevator
@@ -83,9 +84,11 @@ public class ElevatorIOKraken implements ElevatorIO {
 
   // Sets the target distance of the elevator
   @Override
-  public void setTarget(Distance inches) {
-    request = request.withPosition(inches.in(Inches)/(2 * Math.PI * spoolRadius));
+  public void setTarget(Distance target) {
+    request = request.withPosition(target.in(Inches)/(2 * Math.PI * spoolRadius));
     leaderMotor.setControl(request);
+    followerMotor.setControl(request);
+    setpoint = target;
   }
 
   // Stops the motors of the elevator
