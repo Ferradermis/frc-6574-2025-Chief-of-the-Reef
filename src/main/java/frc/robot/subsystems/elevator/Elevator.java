@@ -18,7 +18,7 @@ public class Elevator extends SubsystemBase {
   // Grabs the IO layer for the Elevator subsystem, could be a simulation or real hardware
   public Elevator(ElevatorIO io) {
     elevatorIO = io;
-    loggedElevator.distance = Inches.mutable(0);
+    loggedElevator.distance = Inches.mutable(5);
     loggedElevator.velocity = InchesPerSecond.mutable(0);
     loggedElevator.setpoint = Meters.mutable(0);
     loggedElevator.supplyCurrent = Amps.mutable(0);
