@@ -18,6 +18,7 @@ public interface ElevatorIO {
     public MutDistance setpoint = Inches.mutable(0);
     public MutVoltage voltageSetpoint = Volts.mutable(0);
     public MutCurrent supplyCurrent = Amps.mutable(0);
+    public MutCurrent statorCurrent = Amps.mutable(0);
     public MutCurrent torqueCurrent = Amps.mutable(0);
     public MutDistance rightDist = Inches.mutable(0);
   }

@@ -18,59 +18,61 @@ import frc.robot.util.PhoenixUtil;
 public class ElevatorIOKraken implements ElevatorIO {
 
   public static final double spoolRadius = 2.312/2;
-  public PositionVoltage request;
+  public MotionMagicVoltage request;
   public TalonFX followerMotor;
   public TalonFX leaderMotor;
-  private Distance setpoint = Distance.ofBaseUnits(0, Inches);
+  private Distance setpoint = Inches.of(0);
 
   // Create a new instance of the ElevatorIOKraken subsystem
   // Creates two new TalonFX motor controllers for the elevator and a new voltage output request
   public ElevatorIOKraken(int leftMotorId, int rightMotorId) {
     followerMotor = new TalonFX(leftMotorId);
     leaderMotor = new TalonFX(rightMotorId);
-    request = new PositionVoltage(0);
+    request = new MotionMagicVoltage(0);
     configureTalons();
   }
 
   // Configures the TalonFX motor controllers
   private void configureTalons() {
     TalonFXConfiguration config = new TalonFXConfiguration();
-    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config.Voltage.PeakForwardVoltage = 1; //TODO: Probably need to change this value
-    config.Voltage.PeakReverseVoltage = 1; //TODO: Probably need to change this value
+    config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    config.Voltage.PeakForwardVoltage = 11; //TODO: Probably need to change this value
+    config.Voltage.PeakReverseVoltage = -11; //TODO: Probably need to change this value
     config.CurrentLimits.StatorCurrentLimit = 80;
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimit = 40;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.Slot0.kP = 1;
+    config.Slot0.kP = 4;
     config.Slot0.kG = 0.0;
-    config.Slot0.kS = 0.1;
+    config.Slot0.kS = 0.3;
+    config.Slot0.kV = 0.0;
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    config.Feedback.SensorToMechanismRatio = 25/1;
+    config.Feedback.SensorToMechanismRatio = 1/25;
 
     TalonFXConfiguration config2 = new TalonFXConfiguration();
-    config2.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    config2.Voltage.PeakForwardVoltage = 1; //TODO: Probably need to change this value
-    config2.Voltage.PeakReverseVoltage = 1; //TODO: Probably need to change this value
+    config2.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    config2.Voltage.PeakForwardVoltage = 11; //TODO: Probably need to change this value
+    config2.Voltage.PeakReverseVoltage = -11; //TODO: Probably need to change this value
     config2.CurrentLimits.StatorCurrentLimit = 80;
     config2.CurrentLimits.StatorCurrentLimitEnable = true;
     config2.CurrentLimits.SupplyCurrentLimit = 40;
     config2.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config2.Slot0.kP = 1;
+    config2.Slot0.kP = 4;  
     config2.Slot0.kG = 0.0;
-    config2.Slot0.kS = 0.1;
+    config2.Slot0.kS = 0.3;
+    config2.Slot0.kV = 0.0;
     config2.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    config2.Feedback.SensorToMechanismRatio = 25/1;
+    config2.Feedback.SensorToMechanismRatio = 1/25;
 
     PhoenixUtil.tryUntilOk(5, () -> leaderMotor.getConfigurator().apply(config));
     PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(config2));
 
     MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    motionMagicConfigs.MotionMagicCruiseVelocity = 0.0;
-    motionMagicConfigs.MotionMagicAcceleration = 0.0;
+    motionMagicConfigs.MotionMagicCruiseVelocity = 80.0;
+    motionMagicConfigs.MotionMagicAcceleration = 100;
     motionMagicConfigs.MotionMagicJerk = 0.0;
-    motionMagicConfigs.MotionMagicExpo_kV = 0.1;
-    motionMagicConfigs.MotionMagicExpo_kA = 0.1;
+    motionMagicConfigs.MotionMagicExpo_kV = 0.0;
+    motionMagicConfigs.MotionMagicExpo_kA = 0.0;
     PhoenixUtil.tryUntilOk(5, () -> leaderMotor.getConfigurator().apply(motionMagicConfigs));
     PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(motionMagicConfigs));
   }
@@ -82,7 +84,9 @@ public class ElevatorIOKraken implements ElevatorIO {
     inputs.rightDist.mut_replace(Inches.of(leaderMotor.getPosition().getValue().in(Rotations) * 2 * Math.PI * spoolRadius));
     inputs.velocity.mut_replace(InchesPerSecond.of(followerMotor.getVelocity().getValue().in(RotationsPerSecond) * 2 * Math.PI * spoolRadius));
     inputs.setpoint.mut_replace(setpoint);
-    inputs.supplyCurrent.mut_replace(leaderMotor.getStatorCurrent().getValue());
+    inputs.supplyCurrent.mut_replace(leaderMotor.getSupplyCurrent().getValue());
+    inputs.statorCurrent.mut_replace(leaderMotor.getStatorCurrent().getValue());
+    inputs.voltageSetpoint.mut_replace(leaderMotor.getMotorVoltage().getValue());
   }
 
   // Sets the target distance of the elevator

@@ -44,8 +44,8 @@ public class RotateIOSim implements RotateIO{
 
     // Sets the target angle of the simulated rotate
     @Override
-    public void setTarget(Angle target) {
-        controller.setGoal(new State(target.in(Degrees), 0));
+    public void setTarget(double target) {
+        //controller.setGoal(new State(target.in(Degrees), 0));
     }
 
     // Sets the voltage of the simulated climber

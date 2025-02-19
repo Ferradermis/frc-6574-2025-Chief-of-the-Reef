@@ -28,7 +28,7 @@ public class Rotate extends SubsystemBase{
     }
 
     // Set the angle of the Rotate subsystem
-    public void setAngle(Angle angle) {
+    public void setAngle(double angle) {
         rotateIO.setTarget(angle);
     }
 
@@ -36,7 +36,7 @@ public class Rotate extends SubsystemBase{
     public Command getNewSetAngleCommand(double i) {
         return new InstantCommand(
             () -> {
-                setAngle(Degrees.of(i));
+                setAngle(i);
             },
             this);
     }

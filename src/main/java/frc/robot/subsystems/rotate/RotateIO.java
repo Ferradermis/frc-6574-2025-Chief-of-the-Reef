@@ -21,7 +21,7 @@ public interface RotateIO {
         public MutCurrent torqueCurrent = Amps.mutable(0);
     }
 
-    public default void setTarget(Angle target) {}
+    public default void setTarget(double target) {}
 
     public default void updateInputs(RotateInputs inputs) {}
 

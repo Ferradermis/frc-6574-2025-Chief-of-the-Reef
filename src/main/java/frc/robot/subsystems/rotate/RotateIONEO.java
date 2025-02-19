@@ -17,6 +17,7 @@ public class RotateIONEO implements RotateIO {
     public SparkClosedLoopController m_motorController;
     public SparkMaxConfig m_motorConfig;
     public RotateConstants rotateConstants;
+    private double setpoint = 0.0;
     
     // Create a new instance of the RotateIONEO subsystem
     // Creates a new spark max using the provided motor id and creates a new motor controller and config
@@ -36,9 +37,9 @@ public class RotateIONEO implements RotateIO {
             .velocityConversionFactor(360/12.94/60); // TODO: Find correct conversion factor - defaulted at 1 for now :) 
         m_motorConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
-                .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
+               // .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
                 .outputRange(-1, 1) // same thing here, will probably not use this
-                .pid(0, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
+                .pid(0.1, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
                 .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
                 .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
         m_motorConfig.smartCurrentLimit(40);
@@ -53,8 +54,9 @@ public class RotateIONEO implements RotateIO {
 
     // Sets the target angle of the rotate subsystem
     @Override
-    public void setTarget(Angle target) {
-        m_motorController.setReference(target.magnitude(), ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    public void setTarget(double target) {
+        m_motorController.setReference(target, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        setpoint = target;
     }
 
     // Sets the voltage of the arm
@@ -67,10 +69,11 @@ public class RotateIONEO implements RotateIO {
     @Override
     public void updateInputs(RotateInputs inputs) {
         inputs.angle.mut_replace(
-            Degrees.convertFrom(m_motor.getAbsoluteEncoder().getPosition(), Rotations), Degrees);
+            //Degrees.convertFrom(m_motor.getAbsoluteEncoder().getPosition(), Rotations), Degrees);
+        m_motor.getAbsoluteEncoder().getPosition(), Rotations);
         inputs.angularVelocity.mut_replace(
             DegreesPerSecond.of(m_motor.getAbsoluteEncoder().getVelocity()));
-        inputs.setpoint.mut_replace(m_motor.getAppliedOutput(), Degrees);
+        inputs.setpoint.mut_replace(setpoint, Rotations);
         inputs.supplyCurrent.mut_replace(m_motor.getOutputCurrent(), Amps);
         inputs.torqueCurrent.mut_replace(inputs.supplyCurrent.in(Amps), Amps);
         inputs.voltageSetpoint.mut_replace(m_motor.getBusVoltage(), Volts);
