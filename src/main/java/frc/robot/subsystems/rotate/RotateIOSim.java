@@ -37,7 +37,7 @@ public class RotateIOSim implements RotateIO{
         runVolts(effort);
     }
 
-    // Sets the target voltage of the simulated arm
+    // Sets the target voltage of the simulated rotate
     private void runVolts(Voltage volts) {
         appliedVoltage = volts;
     }
@@ -48,7 +48,7 @@ public class RotateIOSim implements RotateIO{
         //controller.setGoal(new State(target.in(Degrees), 0));
     }
 
-    // Sets the voltage of the simulated climber
+    // Sets the voltage of the simulated rotate
     @Override
     public void setVoltage(double voltage) {
         System.out.println("Setting Climber Voltage");
@@ -58,13 +58,13 @@ public class RotateIOSim implements RotateIO{
     // Updates the inputs of the simulated rotate
     @Override
     public void updateInputs(RotateInputs inputs) {
-        inputs.angle.mut_replace(
-            Degrees.convertFrom(sim.getAngularPositionRad(), Radians), 
-            Degrees);
+        //inputs.angle.mut_replace(
+            //Degrees.convertFrom(sim.getAngularPositionRad(), Radians), 
+            //Degrees);
         inputs.angularVelocity.mut_replace(
             DegreesPerSecond.convertFrom(sim.getAngularVelocityRadPerSec(), RadiansPerSecond),
             DegreesPerSecond);
-        inputs.setpoint.mut_replace(controller.getGoal().position, Degrees);
+        //inputs.setpoint.mut_replace(controller.getGoal().position, Degrees);
         inputs.supplyCurrent.mut_replace(sim.getCurrentDrawAmps(), Amps);
         inputs.torqueCurrent.mut_replace(inputs.supplyCurrent.in(Amps), Amps);
         inputs.voltageSetpoint.mut_replace(appliedVoltage);
@@ -76,7 +76,7 @@ public class RotateIOSim implements RotateIO{
         sim.update(0.02);
     }
 
-    // Stops the simulated arm
+    // Stops the simulated rotate
     @Override
     public void stop() {
         Angle currentAngle = Radians.of(sim.getAngularPositionRad());

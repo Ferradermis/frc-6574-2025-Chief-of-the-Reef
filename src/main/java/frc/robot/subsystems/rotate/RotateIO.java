@@ -13,9 +13,9 @@ import edu.wpi.first.units.measure.MutVoltage;
 public interface RotateIO {
     @AutoLog
     public static class RotateInputs {
-        public MutAngle angle = Degrees.mutable(0);
+        public double angle = 0;
         public MutAngularVelocity angularVelocity = DegreesPerSecond.mutable(0);
-        public MutAngle setpoint = Degrees.mutable(0);
+        public double setpoint = 0;
         public MutVoltage voltageSetpoint = Volts.mutable(0);
         public MutCurrent supplyCurrent = Amps.mutable(0);
         public MutCurrent torqueCurrent = Amps.mutable(0);

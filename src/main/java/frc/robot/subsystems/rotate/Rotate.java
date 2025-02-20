@@ -16,20 +16,21 @@ public class Rotate extends SubsystemBase{
     // Grabs the IO layer for the Rotate subsystem, could be a simulation or real hardware
     public Rotate(RotateIO io) {
         rotateIO = io;
-        loggedRotate.angle = Degrees.mutable(0);
+        loggedRotate.angle = 0; //Degrees.mutable(0);
         loggedRotate.angularVelocity = DegreesPerSecond.mutable(0);
-        loggedRotate.setpoint = Degrees.mutable(0);
+        loggedRotate.setpoint = 0; //Degrees.mutable(0);
         loggedRotate.supplyCurrent = Amps.mutable(0);
         loggedRotate.torqueCurrent = Amps.mutable(0);
         loggedRotate.voltageSetpoint = Volts.mutable(0);
 
         rotateConstants = rotateIO.getConstants();
-        rotateConstants.mechanismSimCallback.accept(loggedRotate.angle);
+        //rotateConstants.mechanismSimCallback.accept(loggedRotate.angle);
     }
 
     // Set the angle of the Rotate subsystem
     public void setAngle(double angle) {
         rotateIO.setTarget(angle);
+        System.out.println("Setting rotate(setAngle):" + angle);
     }
 
     // Create a new command to set the angle of the Rotate subsystem
@@ -37,6 +38,7 @@ public class Rotate extends SubsystemBase{
         return new InstantCommand(
             () -> {
                 setAngle(i);
+                System.out.println("Setting rotate(getNewSetAngleCommand):" + i);
             },
             this);
     }
