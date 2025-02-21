@@ -41,9 +41,9 @@ public class RotateIONEO implements RotateIO {
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
                // .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
                 .outputRange(-1, 1) // same thing here, will probably not use this
-                .pid(2, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
-                .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
-                .outputRange(-2, 2, ClosedLoopSlot.kSlot1);
+                .pid(2.01, 0, 0, ClosedLoopSlot.kSlot0) // TODO: Find correct PID values - defaulted at 0 for now :)
+                .velocityFF(0, ClosedLoopSlot.kSlot0) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
+                .outputRange(-2, 2, ClosedLoopSlot.kSlot0);
         m_motorConfig.smartCurrentLimit(40);
         m_motorConfig
             .softLimit
@@ -51,13 +51,15 @@ public class RotateIONEO implements RotateIO {
             .reverseSoftLimit(-10); // TODO: Find correct soft limits - both set to zero for now :)
 
         m_motor.configure(
-            m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+            m_motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
+            
     }
 
     // Sets the target angle of the rotate subsystem
     @Override
     public void setTarget(double target) {
-        m_motorController.setReference(target, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        m_motorController.setReference(target, ControlType.kPosition, ClosedLoopSlot.kSlot0);
         System.out.println(m_motor.getAbsoluteEncoder().getPosition());
         setpoint = target;
     }

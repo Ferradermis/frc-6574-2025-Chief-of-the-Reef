@@ -17,7 +17,10 @@ public class ArmIONEO implements ArmIO {
     public SparkClosedLoopController m_motorController;
     public SparkMaxConfig m_motorConfig;
     public ArmConstants armConstants;
+
+    private double setpoint = 0.0;
     
+    //TODO: Delete and rewrite this class to use a kraken instead (YIPPEE)
     // Create a new instance of the ArmIONEO subsystem
     // Creates a new spark max using the provided motor id and creates a new motor controller and config
     public ArmIONEO(int leftMotorId) {
@@ -25,20 +28,21 @@ public class ArmIONEO implements ArmIO {
         m_motorController = m_motor.getClosedLoopController();
         m_motorConfig = new SparkMaxConfig();
         armConstants = new ArmConstants();
+        configureNEO();
     }
 
     /** Configures the NEO motor */
     public void configureNEO() { 
         //Left motor configs
-        m_motorConfig.inverted(false).idleMode(IdleMode.kCoast); //TODO: either the left or right motor will need to be inverted, will find out when I see the robot
+        m_motorConfig.inverted(false).idleMode(IdleMode.kCoast);
         m_motorConfig.encoder
             .positionConversionFactor(1) // TODO: Find correct conversion factor - defaulted at 1 for now :)
             .velocityConversionFactor(1); // TODO: Find correct conversion factor - defaulted at 1 for now :) 
         m_motorConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
-                .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
+                .pid(0.5, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
                 .outputRange(-1, 1) // same thing here, will probably not use this
-                .pid(0.1, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
+                .pid(0.5, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
                 .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
                 .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
@@ -52,8 +56,8 @@ public class ArmIONEO implements ArmIO {
 
     // Sets the target angle of the arm
     @Override
-    public void setTarget(Angle target) {
-        m_motorController.setReference(target.in(Rotations), ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    public void setTarget(double target) {
+        m_motorController.setReference(target, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
     // Sets the voltage of the arm
@@ -65,15 +69,15 @@ public class ArmIONEO implements ArmIO {
     // Updates the inputs of the arm
     @Override
     public void updateInputs(ArmInputs inputs) {
-        inputs.angle.mut_replace(
-            Degrees.convertFrom(m_motor.getEncoder().getPosition(), Rotations), 
-            Degrees);
+        //inputs.angle.mut_replace(m_motor.getEncoder().getPosition(), Rotations);
+        inputs.angle = m_motor.getAbsoluteEncoder().getPosition();
         inputs.angularVelocity.mut_replace(
             DegreesPerSecond.convertFrom(m_motor.getEncoder().getVelocity(), RadiansPerSecond),
             DegreesPerSecond);
-        inputs.setpoint.mut_replace(m_motor.getAppliedOutput(), Degrees);
+        //inputs.setpoint.mut_replace(m_motor.getAppliedOutput(), Degrees);
+        inputs.setpoint = setpoint;
         inputs.supplyCurrent.mut_replace(m_motor.getOutputCurrent(), Amps);
-        inputs.torqueCurrent.mut_replace(inputs.supplyCurrent.in(Amps), Amps);
+        inputs.torqueCurrent.mut_replace(m_motor.getAppliedOutput(), Amps);
         inputs.voltageSetpoint.mut_replace(m_motor.getBusVoltage(), Volts);
     }
 

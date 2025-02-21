@@ -18,20 +18,20 @@ public class Arm extends SubsystemBase {
     // Grabs the IO layer for the Arm subsystem, could be a simulation or real hardware
     public Arm(ArmIO io) {
         armIO = io;
-        loggedArm.angle = Degrees.mutable(0);
+        loggedArm.angle = 0;
         loggedArm.angularVelocity = DegreesPerSecond.mutable(0);
-        loggedArm.setpoint = Degrees.mutable(0);
+        loggedArm.setpoint = 0;
         loggedArm.supplyCurrent = Amps.mutable(0);
         loggedArm.torqueCurrent = Amps.mutable(0);
         loggedArm.voltageSetpoint = Volts.mutable(0);
 
         armConstants = armIO.getConstants();
         // Set the arm source in the visualizer
-        armConstants.mechanismSimCallback.accept(loggedArm.angle);
+        //armConstants.mechanismSimCallback.accept(loggedArm.angle);
     }
 
     // Set the angle of the arm
-    public void setAngle(Angle angle) {
+    public void setAngle(double angle) {
         armIO.setTarget(angle);
     }
 
@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
     public Command getNewSetAngleCommand(double i) {
         return new InstantCommand(
             () -> {
-                setAngle(Degrees.of(i));
+                setAngle(i);
             },
             this);
     }

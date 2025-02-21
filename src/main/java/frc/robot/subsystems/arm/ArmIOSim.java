@@ -46,8 +46,8 @@ public class ArmIOSim implements ArmIO {
 
     // Sets the target angle of the simulated arm
     @Override
-    public void setTarget(Angle target) {
-        controller.setGoal(new State(target.in(Degrees), 0));
+    public void setTarget(double target) {
+        //controller.setGoal(new State(target.in(Degrees), 0));
     }
 
     // Sets the voltage of the simulated climber
@@ -74,13 +74,13 @@ public class ArmIOSim implements ArmIO {
     // Updates the inputs of the simulated arm
     @Override
     public void updateInputs(ArmInputs inputs) {
-        inputs.angle.mut_replace(
-            Degrees.convertFrom(simulator.getAngleRads(), Radians), 
-            Degrees);
+        //inputs.angle.mut_replace(
+            //Degrees.convertFrom(simulator.getAngleRads(), Radians), 
+            //Degrees);
         inputs.angularVelocity.mut_replace(
             DegreesPerSecond.convertFrom(simulator.getVelocityRadPerSec(), RadiansPerSecond),
             DegreesPerSecond);
-        inputs.setpoint.mut_replace(controller.getGoal().position, Degrees);
+        //inputs.setpoint.mut_replace(controller.getGoal().position, Degrees);
         inputs.supplyCurrent.mut_replace(simulator.getCurrentDrawAmps(), Amps);
         inputs.torqueCurrent.mut_replace(inputs.supplyCurrent.in(Amps), Amps);
         inputs.voltageSetpoint.mut_replace(appliedVoltage);

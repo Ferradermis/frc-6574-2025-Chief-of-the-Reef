@@ -15,15 +15,15 @@ import edu.wpi.first.units.measure.MutVoltage;
 public interface ArmIO {
     @AutoLog
     public static class ArmInputs {
-        public MutAngle angle = Degrees.mutable(0);
+        public double angle = 0;
         public MutAngularVelocity angularVelocity = DegreesPerSecond.mutable(0);
-        public MutAngle setpoint = Degrees.mutable(0);
+        public double setpoint = 0;
         public MutVoltage voltageSetpoint = Volts.mutable(0);
         public MutCurrent supplyCurrent = Amps.mutable(0);
         public MutCurrent torqueCurrent = Amps.mutable(0);
     }
 
-    public default void setTarget(Angle target) {}
+    public default void setTarget(double target) {}
 
     public default void updateInputs(ArmInputs inputs) {}
 
