@@ -18,19 +18,19 @@ public class Climber extends SubsystemBase {
   // Grabs the IO layer for the Climber subsystem, could be a simulation or real hardware
   public Climber(ClimberIO io) {
     climberIO = io;
-    loggedClimber.climberAngle = Degrees.mutable(0);
+    loggedClimber.climberAngle = 0;
     loggedClimber.climberAngularVelocity = DegreesPerSecond.mutable(0);
-    loggedClimber.climberSetPoint = Degrees.mutable(0);
+    loggedClimber.climberSetpoint = 0;
     loggedClimber.supplyCurrent = Amps.mutable(0);
     loggedClimber.torqueCurrent = Amps.mutable(0);
     loggedClimber.voltageSetPoint = Volts.mutable(0);
     
     // Set the climber source in the visualizer
-    RobotState.getInstance().setClimberTwist(loggedClimber.climberAngle);
+    //RobotState.getInstance().setClimberTwist(loggedClimber.climberAngle);
   }
 
   // Set the angle of the climber
-  public void setAngle(Angle climbAngle) {
+  public void setAngle(double climbAngle) {
     climberIO.setClimberTarget(climbAngle);
     System.out.println("Setting Climber Target");
   }
@@ -39,7 +39,7 @@ public class Climber extends SubsystemBase {
   public Command getNewPivotTurnCommand(double a) {
     return new InstantCommand(
         () -> {
-          setAngle(Degrees.of(a));
+          setAngle(a);
         },
         this);
   }
@@ -58,6 +58,6 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     climberIO.updateInputs(loggedClimber);
     Logger.processInputs("RobotState/Climber", loggedClimber);
-    SmartDashboard.putNumber("Climber Angle", loggedClimber.climberAngle.in(Degrees));
+    SmartDashboard.putNumber("Climber Angle", loggedClimber.climberAngle);
   }
 }

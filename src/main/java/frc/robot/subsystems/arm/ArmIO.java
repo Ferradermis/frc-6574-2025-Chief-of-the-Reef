@@ -22,6 +22,7 @@ public interface ArmIO {
         public MutVoltage voltageSetpoint = Volts.mutable(0);
         public MutCurrent supplyCurrent = Amps.mutable(0);
         public MutCurrent torqueCurrent = Amps.mutable(0);
+        public double error = 0;
     }
 
     public default void setTarget(double target) {}

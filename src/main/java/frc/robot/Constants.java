@@ -36,6 +36,17 @@ public final class Constants {
     REPLAY
   }
 
+  public static final class CANConstants {
+    public static final int CLIMBER_ID = 15;
+    public static final int ELEVATOR_RIGHT_ID = 16;
+    public static final int ELEVATOR_LEFT_ID = 17;
+    public static final int ARM_ID = 18;
+    public static final int ARM_CANCODER_ID = 19;
+    public static final int ROTATE_ID = 20;
+    public static final int END_EFFECTOR_ID = 21;
+    public static final int LOCKING_SERVO_ID = 1;
+  }
+
   public static final class PositionConstants {
     // Elevator Constants
     public static final double LEVEL_FOUR_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)

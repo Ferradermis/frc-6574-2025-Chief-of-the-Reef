@@ -39,8 +39,8 @@ public class ClimberIOSim implements ClimberIO {
 
   // Sets the target angle of the simulated climber
   @Override
-  public void setClimberTarget(Angle target) {
-    controller.setGoal(new State(target.in(Degrees), 0));
+  public void setClimberTarget(double target) {
+    //controller.setGoal(new State(target.in(Degrees), 0));
   }
 
   // Updates the voltage setpoint of the simulated climber
@@ -76,11 +76,11 @@ public class ClimberIOSim implements ClimberIO {
   //TODO: fix units so that they line up with the units in ClimberIOREV.java so it is easier to understand (I think??)
   @Override
   public void updateInputs(ClimberInputs input) {
-    input.climberAngle.mut_replace(Degrees.convertFrom(sim.getAngleRads(), Radians), Degrees);
+    //input.climberAngle.mut_replace(Degrees.convertFrom(sim.getAngleRads(), Radians), Degrees);
     input.climberAngularVelocity.mut_replace(
         DegreesPerSecond.convertFrom(sim.getVelocityRadPerSec(), RadiansPerSecond),
         DegreesPerSecond);
-    input.climberSetPoint.mut_replace(controller.getGoal().position, Degrees);
+    //input.climberSetPoint.mut_replace(controller.getGoal().position, Degrees);
     input.supplyCurrent.mut_replace(sim.getCurrentDrawAmps(), Amps);
     input.torqueCurrent.mut_replace(input.supplyCurrent.in(Amps), Amps);
     input.voltageSetPoint.mut_replace(appliedVoltage);

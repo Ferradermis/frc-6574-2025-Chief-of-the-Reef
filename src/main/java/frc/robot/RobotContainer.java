@@ -69,7 +69,7 @@ import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.rotate.Rotate;
 import frc.robot.subsystems.rotate.RotateConstants;
 import frc.robot.subsystems.rotate.RotateIO;
-import frc.robot.subsystems.rotate.RotateIONEO;
+import frc.robot.subsystems.rotate.RotateIOKraken;
 import frc.robot.subsystems.rotate.RotateIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -109,12 +109,12 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        elevator = new Elevator(new ElevatorIOKraken(17, 16));
-        arm = new Arm(new ArmIOKraken(18));
-        climber = new Climber(new ClimberIOMotors(15)); 
-        endEffector = new EndEffector(new EndEffectorIOKraken(20));
-        rotate = new Rotate(new RotateIONEO(19));
-        pinServo = new LockingServo(1);
+        elevator = new Elevator(new ElevatorIOKraken(Constants.CANConstants.ELEVATOR_LEFT_ID, Constants.CANConstants.ELEVATOR_RIGHT_ID));
+        arm = new Arm(new ArmIOKraken(Constants.CANConstants.ARM_ID));
+        climber = new Climber(new ClimberIOMotors(Constants.CANConstants.CLIMBER_ID)); 
+        endEffector = new EndEffector(new EndEffectorIOKraken(Constants.CANConstants.END_EFFECTOR_ID));
+        rotate = new Rotate(new RotateIOKraken(Constants.CANConstants.ROTATE_ID));
+        pinServo = new LockingServo(Constants.CANConstants.LOCKING_SERVO_ID);
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -259,7 +259,7 @@ public class RobotContainer {
     // operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povLeft().onTrue(rotate.getNewSetAngleCommand(1));
-    operatorController.povUp().onTrue(arm.getNewSetAngleCommand(25));
+    operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.170));
     //operatorController.povUp().whileTrue(arm.setVoltageTest(1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     //operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));

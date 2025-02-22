@@ -17,6 +17,7 @@ public class ClimberIOMotors implements ClimberIO {
     public SparkMax m_climberMotor;
     public SparkClosedLoopController m_controller;
     public SparkMaxConfig m_climberConfig;
+    private double setpoint = 0;
 
     // Create a new instance of the RotateIONEO subsystem
     // Creates a new spark max using the provided motor id and creates a new motor controller and config
@@ -57,8 +58,9 @@ public class ClimberIOMotors implements ClimberIO {
 
     // Sets the target angle of the climber
     @Override
-    public void setClimberTarget(Angle target) {
-        m_controller.setReference(target.in(Rotations), ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    public void setClimberTarget(double target) {
+        m_controller.setReference(target, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        setpoint = target;
     }
 
     // Stops the motor of the climber
@@ -78,11 +80,13 @@ public class ClimberIOMotors implements ClimberIO {
     // TODO: I DO NOT KNOW IF THESE UNIT CONVERSIONS ARE DONE CORRECTLY! PLEASE VERIFY! thank :)
     @Override
     public void updateInputs(ClimberInputs inputs) {
-        inputs.climberAngle.mut_replace(Degrees.of(m_climberMotor.getEncoder().getPosition()));
+        //inputs.climberAngle.mut_replace(Degrees.of(m_climberMotor.getEncoder().getPosition()));
+        inputs.climberAngle = m_climberMotor.getEncoder().getPosition();
         inputs.climberAngularVelocity.mut_replace(
             DegreesPerSecond.of(m_climberMotor.getEncoder().getVelocity()));
-        inputs.climberSetPoint.mut_replace(
-            Degrees.of(m_climberMotor.getAppliedOutput()));
+        // inputs.climberSetPoint.mut_replace(
+        //     Degrees.of(m_climberMotor.getAppliedOutput()));
+        inputs.climberSetpoint = setpoint;
         inputs.supplyCurrent.mut_replace(m_climberMotor.getOutputCurrent(), Amps);
     }
 }
