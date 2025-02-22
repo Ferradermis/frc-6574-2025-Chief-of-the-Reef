@@ -16,6 +16,7 @@ public interface ArmIO {
     @AutoLog
     public static class ArmInputs {
         public MutAngle angle = Degrees.mutable(0);
+        public double encoder = 0;
         public MutAngularVelocity angularVelocity = DegreesPerSecond.mutable(0);
         public double setpoint = 0;
         public MutVoltage voltageSetpoint = Volts.mutable(0);

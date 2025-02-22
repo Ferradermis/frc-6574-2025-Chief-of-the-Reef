@@ -1,6 +1,5 @@
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.rotate;
 
-import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -10,26 +9,24 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.util.PhoenixUtil;
 
-public class ArmIOKraken implements ArmIO{
+public class RotateIOKraken implements RotateIO{
     public TalonFX motor;
     public MotionMagicVoltage request;
-    public ArmConstants armConstants;
+    public RotateConstants rotateConstants;
     private double angleSetpoint = 0;
-    public static DutyCycleEncoder encoder = new DutyCycleEncoder(0);
     
-    // Create a new instance of the ArmIOKraken subsystem
-    // Creates a new TalonFX motor controller for the arm and a new voltage output request
-    public ArmIOKraken (int motorid) {
+    // Create a new instance of the RotateIOKraken subsystem
+    // Creates a new TalonFX motor controller for the rotate and a new voltage output request
+    public RotateIOKraken (int motorid) {
         motor = new TalonFX(motorid);
-        armConstants = new ArmConstants();
-        request = new MotionMagicVoltage(armConstants.startingAngle);
+        rotateConstants = new RotateConstants();
+        request = new MotionMagicVoltage(rotateConstants.startingAngle);
         configureKrakens();
     }
 
-    // Configures the TalonFX motor controller for the arm
+    // Configures the TalonFX motor controller for the rotate
     public void configureKrakens() {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -40,7 +37,7 @@ public class ArmIOKraken implements ArmIO{
         config.CurrentLimits.SupplyCurrentLimit = 40.0;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        config.Feedback.SensorToMechanismRatio = 1; //60.0/34.0/9;
+        config.Feedback.SensorToMechanismRatio = 1; 
 
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
 
@@ -65,7 +62,7 @@ public class ArmIOKraken implements ArmIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motionMagicConfigs));
     }
 
-    // Sets the target angle of the arm
+    // Sets the target angle of the rotate
     @Override
     public void setTarget(double target) {
         request = request.withPosition(target);
@@ -73,18 +70,17 @@ public class ArmIOKraken implements ArmIO{
         angleSetpoint = target;
     }
 
-    // Updates the inputs of the arm
+    // Updates the inputs of the rotate
     @Override
-    public void updateInputs(ArmInputs inputs) {
-        inputs.angle.mut_replace(motor.getPosition().getValue());
-        inputs.encoder = encoder.get();
+    public void updateInputs(RotateInputs inputs) {
+        inputs.angle = motor.getPosition().getValueAsDouble();
         inputs.angularVelocity.mut_replace(motor.getVelocity().getValue());
         inputs.setpoint = angleSetpoint;
         inputs.voltageSetpoint.mut_replace(motor.getMotorVoltage().getValue());
         inputs.supplyCurrent.mut_replace(motor.getSupplyCurrent().getValue());
     }
 
-    // Stops the motor of the arm
+    // Stops the motor of the rotate
     @Override
     public void stop() {
         motor.setControl(new StaticBrake());
@@ -96,9 +92,9 @@ public class ArmIOKraken implements ArmIO{
         motor.setVoltage(voltage);
     }
 
-    // Gets the constants of the arm
+    // Gets the constants of the rotate
     @Override
-    public ArmConstants getConstants() {
-        return armConstants;
+    public RotateConstants getConstants() {
+        return rotateConstants;
     }
 }
