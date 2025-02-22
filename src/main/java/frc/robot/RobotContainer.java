@@ -259,7 +259,8 @@ public class RobotContainer {
     // operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povLeft().onTrue(rotate.getNewSetAngleCommand(1));
-    operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.170));
+    //operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.170));
+    operatorController.b().onTrue(elevator.resetEncoder());
     //operatorController.povUp().whileTrue(arm.setVoltageTest(1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     //operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));

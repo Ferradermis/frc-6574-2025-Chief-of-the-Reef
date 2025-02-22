@@ -75,6 +75,14 @@ public class ElevatorIOSim implements ElevatorIO {
     sim.update(0.02);
   }
 
+  @Override
+  public void reset() {
+
+  }
+
+  @Override
+  public void setVoltage(double voltage) {}
+
   // Stops the motors of the simulated elevator
   @Override
   public void stop() {

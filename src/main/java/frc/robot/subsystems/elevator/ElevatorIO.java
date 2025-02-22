@@ -27,5 +27,9 @@ public interface ElevatorIO {
 
   public default void setTarget(Distance target) {}
 
+  public default void setVoltage(double voltage) {}
+
+  public default void reset() {}
+
   public default void stop() {}
 }

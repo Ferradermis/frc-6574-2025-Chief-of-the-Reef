@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -51,6 +52,14 @@ public class Elevator extends SubsystemBase {
           elevatorIO.stop();
         },
         this);
+  }
+
+  public Command resetEncoder() {
+    return new InstantCommand(
+      () -> {
+        elevatorIO.reset();
+      },
+      this);
   }
 
   // Called periodically to update the Elevator subsystem with the new inputs and log them

@@ -29,6 +29,8 @@ public class ElevatorIOKraken implements ElevatorIO {
     followerMotor = new TalonFX(leftMotorId);
     leaderMotor = new TalonFX(rightMotorId);
     request = new MotionMagicVoltage(0);
+    leaderMotor.setPosition(0);
+    followerMotor.setPosition(0);
     configureKrakens();
   }
 
@@ -89,6 +91,12 @@ public class ElevatorIOKraken implements ElevatorIO {
     inputs.voltageSetpoint.mut_replace(leaderMotor.getMotorVoltage().getValue());
   }
 
+  @Override
+  public void reset() {
+    leaderMotor.setPosition(0);
+    followerMotor.setPosition(0);
+  }
+
   // Sets the target distance of the elevator
   @Override
   public void setTarget(Distance target) {
@@ -96,6 +104,12 @@ public class ElevatorIOKraken implements ElevatorIO {
     leaderMotor.setControl(request);
     followerMotor.setControl(request);
     setpoint = target;
+  }
+
+  @Override
+  public void setVoltage(double voltage) {
+    leaderMotor.setVoltage(voltage);
+    followerMotor.setVoltage(voltage);
   }
 
   // Stops the motors of the elevator
