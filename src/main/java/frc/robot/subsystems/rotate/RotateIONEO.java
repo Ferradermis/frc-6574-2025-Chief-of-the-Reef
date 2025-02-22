@@ -10,7 +10,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import static edu.wpi.first.units.Units.*;
-import edu.wpi.first.units.measure.Angle;
 
 public class RotateIONEO implements RotateIO {
     public SparkMax m_motor;
@@ -26,6 +25,7 @@ public class RotateIONEO implements RotateIO {
         m_motorController = m_motor.getClosedLoopController();
         m_motorConfig = new SparkMaxConfig();
         rotateConstants = new RotateConstants();
+        configureNEO();
     }
 
     /** Configures the NEO motor */

@@ -15,7 +15,7 @@ import edu.wpi.first.units.measure.MutVoltage;
 public interface ArmIO {
     @AutoLog
     public static class ArmInputs {
-        public double angle = 0;
+        public MutAngle angle = Degrees.mutable(0);
         public MutAngularVelocity angularVelocity = DegreesPerSecond.mutable(0);
         public double setpoint = 0;
         public MutVoltage voltageSetpoint = Volts.mutable(0);

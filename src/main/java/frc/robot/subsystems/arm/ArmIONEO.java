@@ -57,7 +57,7 @@ public class ArmIONEO implements ArmIO {
     // Sets the target angle of the arm
     @Override
     public void setTarget(double target) {
-        m_motorController.setReference(target, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        //m_motorController.setReference(target, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
     // Sets the voltage of the arm
@@ -70,12 +70,12 @@ public class ArmIONEO implements ArmIO {
     @Override
     public void updateInputs(ArmInputs inputs) {
         //inputs.angle.mut_replace(m_motor.getEncoder().getPosition(), Rotations);
-        inputs.angle = m_motor.getAbsoluteEncoder().getPosition();
+        //inputs.angle = m_motor.getAbsoluteEncoder().getPosition();
         inputs.angularVelocity.mut_replace(
             DegreesPerSecond.convertFrom(m_motor.getEncoder().getVelocity(), RadiansPerSecond),
             DegreesPerSecond);
         //inputs.setpoint.mut_replace(m_motor.getAppliedOutput(), Degrees);
-        inputs.setpoint = setpoint;
+        //inputs.setpoint = setpoint;
         inputs.supplyCurrent.mut_replace(m_motor.getOutputCurrent(), Amps);
         inputs.torqueCurrent.mut_replace(m_motor.getAppliedOutput(), Amps);
         inputs.voltageSetpoint.mut_replace(m_motor.getBusVoltage(), Volts);

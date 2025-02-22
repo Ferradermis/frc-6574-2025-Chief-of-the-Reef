@@ -29,11 +29,11 @@ public class ElevatorIOKraken implements ElevatorIO {
     followerMotor = new TalonFX(leftMotorId);
     leaderMotor = new TalonFX(rightMotorId);
     request = new MotionMagicVoltage(0);
-    configureTalons();
+    configureKrakens();
   }
 
   // Configures the TalonFX motor controllers
-  private void configureTalons() {
+  private void configureKrakens() {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     config.Voltage.PeakForwardVoltage = 11; //TODO: Probably need to change this value

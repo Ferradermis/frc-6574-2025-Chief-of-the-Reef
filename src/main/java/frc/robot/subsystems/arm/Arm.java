@@ -18,7 +18,7 @@ public class Arm extends SubsystemBase {
     // Grabs the IO layer for the Arm subsystem, could be a simulation or real hardware
     public Arm(ArmIO io) {
         armIO = io;
-        loggedArm.angle = 0;
+        loggedArm.angle = Degrees.mutable(0);
         loggedArm.angularVelocity = DegreesPerSecond.mutable(0);
         loggedArm.setpoint = 0;
         loggedArm.supplyCurrent = Amps.mutable(0);
@@ -27,7 +27,7 @@ public class Arm extends SubsystemBase {
 
         armConstants = armIO.getConstants();
         // Set the arm source in the visualizer
-        //armConstants.mechanismSimCallback.accept(loggedArm.angle);
+        armConstants.mechanismSimCallback.accept(loggedArm.angle);
     }
 
     // Set the angle of the arm
