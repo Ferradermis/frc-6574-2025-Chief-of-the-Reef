@@ -3,19 +3,19 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
-public class SetArmAngle extends Command {
+public class SetPivotAngle extends Command {
     double angle;
 
-    public SetArmAngle(double a) {
+    public SetPivotAngle(double a) {
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(RobotContainer.arm);
+        addRequirements(RobotContainer.pivot);
         angle = a;
     }
 
     @Override
     public void initialize() {
         // Called when the command is initially scheduled.
-        RobotContainer.arm.getNewSetAngleCommand(angle); // TODO: test command, defaulted to 0
+        RobotContainer.pivot.getNewSetAngleCommand(angle); // TODO: test command, defaulted to 0
     }
 
     @Override

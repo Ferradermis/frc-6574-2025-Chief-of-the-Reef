@@ -30,7 +30,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
-import frc.robot.commands.SetRotateAngle;
+import frc.robot.commands.SetElevatorPosition;
+import frc.robot.commands.SetTurretAngle;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
@@ -42,12 +43,6 @@ import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.LockingServo;
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmConstants;
-import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIOKraken;
-import frc.robot.subsystems.arm.ArmIONEO;
-import frc.robot.subsystems.arm.ArmIOSim;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOMotors;
@@ -66,11 +61,16 @@ import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOKraken;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
-import frc.robot.subsystems.rotate.Rotate;
-import frc.robot.subsystems.rotate.RotateConstants;
-import frc.robot.subsystems.rotate.RotateIO;
-import frc.robot.subsystems.rotate.RotateIOKraken;
-import frc.robot.subsystems.rotate.RotateIOSim;
+import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.PivotConstants;
+import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOKraken;
+import frc.robot.subsystems.pivot.PivotIOSim;
+import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.turret.TurretConstants;
+import frc.robot.subsystems.turret.TurretIO;
+import frc.robot.subsystems.turret.TurretIOKraken;
+import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -91,10 +91,10 @@ public class RobotContainer {
   public static Vision vision;
   public static Drive drive;
   public static Elevator elevator;
-  public static Arm arm;
+  public static Pivot pivot;
   public static Climber climber;
   public static EndEffector endEffector;
-  public static Rotate rotate;
+  public static Turret turret;
   public static LockingServo pinServo;
 
   // Controller
@@ -110,10 +110,10 @@ public class RobotContainer {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         elevator = new Elevator(new ElevatorIOKraken(Constants.CANConstants.ELEVATOR_LEFT_ID, Constants.CANConstants.ELEVATOR_RIGHT_ID));
-        arm = new Arm(new ArmIOKraken(Constants.CANConstants.ARM_ID));
+        pivot = new Pivot(new PivotIOKraken(Constants.CANConstants.PIVOT_ID));
         climber = new Climber(new ClimberIOMotors(Constants.CANConstants.CLIMBER_ID)); 
         endEffector = new EndEffector(new EndEffectorIOKraken(Constants.CANConstants.END_EFFECTOR_ID));
-        rotate = new Rotate(new RotateIOKraken(Constants.CANConstants.ROTATE_ID));
+        turret = new Turret(new TurretIOKraken(Constants.CANConstants.TURRET_ID));
         pinServo = new LockingServo(Constants.CANConstants.LOCKING_SERVO_ID);
         drive =
             new Drive(
@@ -137,10 +137,10 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         elevator = new Elevator(new ElevatorIOSim());
-        arm = new Arm(new ArmIOSim(new ArmConstants()));
+        pivot = new Pivot(new PivotIOSim(new PivotConstants()));
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
-        rotate = new Rotate(new RotateIOSim(new RotateConstants()));
+        turret = new Turret(new TurretIOSim(new TurretConstants()));
         drive =
             new Drive(
                 new GyroIO() {},
@@ -158,10 +158,10 @@ public class RobotContainer {
       default:
       // Replayed robot, disable IO implementations
         elevator = new Elevator(new ElevatorIO() {});
-        arm = new Arm(new ArmIO() {});
+        pivot = new Pivot(new PivotIO() {});
         climber = new Climber(new ClimberIO() {});
         endEffector = new EndEffector(new EndEffectorIO() {});
-        rotate = new Rotate(new RotateIO() {});
+        turret = new Turret(new TurretIO() {});
         drive =
             new Drive(
                 new GyroIO() {},
@@ -238,8 +238,8 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // driverController.x().onTrue(new ReturnToHome());
-    // driverController.rightBumper().whileTrue(new Intake());
-    // driverController.leftBumper().whileTrue(new Release());
+    driverController.rightBumper().whileTrue(new Intake());
+    driverController.leftBumper().whileTrue(new Release());
 
     // Operator buttons
     // operatorController.a().onTrue(new ScoreLevelOne());
@@ -252,6 +252,14 @@ public class RobotContainer {
     // operatorController.povRight().onTrue(new PickupCoralFromChute());
     // operatorController.rightBumper().onTrue(new GrabAlgae());
     // operatorController.leftBumper().onTrue(new ReturnToHome());
+    operatorController.a().onTrue(new SetElevatorPosition(0));
+    operatorController.b().onTrue(new SetElevatorPosition(0));
+    operatorController.x().onTrue(new SetElevatorPosition(0));
+    operatorController.y().onTrue(new SetElevatorPosition(0)); // Add more elevator positions as needed for Duluth
+    operatorController.povLeft().whileTrue(turret.setVoltageTest(1)).whileFalse(turret.setVoltageTest(0)); // Rotate clockwise
+    operatorController.povRight().whileTrue(turret.setVoltageTest(-1)).whileFalse(turret.setVoltageTest(0)); // Rotate counterclockwise
+    operatorController.povUp().whileTrue(pivot.setVoltageTest(2)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
+    operatorController.povDown().whileTrue(pivot.setVoltageTest(-1)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
 
     // Test buttons
     //driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(0.1));

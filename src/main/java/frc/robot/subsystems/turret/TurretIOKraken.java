@@ -1,4 +1,4 @@
-package frc.robot.subsystems.rotate;
+package frc.robot.subsystems.turret;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -11,22 +11,22 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.util.PhoenixUtil;
 
-public class RotateIOKraken implements RotateIO{
+public class TurretIOKraken implements TurretIO{
     public TalonFX motor;
     public MotionMagicVoltage request;
-    public RotateConstants rotateConstants;
+    public TurretConstants turretConstants;
     private double angleSetpoint = 0;
     
-    // Create a new instance of the RotateIOKraken subsystem
-    // Creates a new TalonFX motor controller for the rotate and a new voltage output request
-    public RotateIOKraken (int motorid) {
+    // Create a new instance of the TurretIOKraken subsystem
+    // Creates a new TalonFX motor controller for the turret and a new voltage output request
+    public TurretIOKraken (int motorid) {
         motor = new TalonFX(motorid);
-        rotateConstants = new RotateConstants();
-        request = new MotionMagicVoltage(rotateConstants.startingAngle);
+        turretConstants = new TurretConstants();
+        request = new MotionMagicVoltage(turretConstants.startingAngle);
         configureKrakens();
     }
 
-    // Configures the TalonFX motor controller for the rotate
+    // Configures the TalonFX motor controller for the turret
     public void configureKrakens() {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -62,7 +62,7 @@ public class RotateIOKraken implements RotateIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motionMagicConfigs));
     }
 
-    // Sets the target angle of the rotate
+    // Sets the target angle of the turret
     @Override
     public void setTarget(double target) {
         request = request.withPosition(target);
@@ -70,9 +70,9 @@ public class RotateIOKraken implements RotateIO{
         angleSetpoint = target;
     }
 
-    // Updates the inputs of the rotate
+    // Updates the inputs of the turret
     @Override
-    public void updateInputs(RotateInputs inputs) {
+    public void updateInputs(TurretInputs inputs) {
         inputs.angle = motor.getPosition().getValueAsDouble();
         inputs.angularVelocity.mut_replace(motor.getVelocity().getValue());
         inputs.setpoint = angleSetpoint;
@@ -80,7 +80,7 @@ public class RotateIOKraken implements RotateIO{
         inputs.supplyCurrent.mut_replace(motor.getSupplyCurrent().getValue());
     }
 
-    // Stops the motor of the rotate
+    // Stops the motor of the turret
     @Override
     public void stop() {
         motor.setControl(new StaticBrake());
@@ -92,9 +92,9 @@ public class RotateIOKraken implements RotateIO{
         motor.setVoltage(voltage);
     }
 
-    // Gets the constants of the rotate
+    // Gets the constants of the turret
     @Override
-    public RotateConstants getConstants() {
-        return rotateConstants;
+    public TurretConstants getConstants() {
+        return turretConstants;
     }
 }

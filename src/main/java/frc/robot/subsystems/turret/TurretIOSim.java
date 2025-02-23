@@ -1,4 +1,4 @@
-package frc.robot.subsystems.rotate;
+package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -10,26 +10,26 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-public class RotateIOSim implements RotateIO{
+public class TurretIOSim implements TurretIO{
     private final ProfiledPIDController controller;
     private final DCMotorSim sim;
     private Voltage appliedVoltage = Volts.mutable(0);
-    private RotateConstants rotateConstants;
+    private TurretConstants turretConstants;
 
-    // Create a new instance of the rotate simulator
-    // Grabs the constants for the rotate subsystem
-    public RotateIOSim(RotateConstants constants) {
+    // Create a new instance of the turret simulator
+    // Grabs the constants for the turret subsystem
+    public TurretIOSim(TurretConstants constants) {
         sim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(1, 1), 
             DCMotor.getNEO(1),
             0.001,
             0.001);
         controller = new ProfiledPIDController(0, 0, 0, new Constraints(100000, 361));
-        rotateConstants = constants;
+        turretConstants = constants;
 
     }
 
-    // Updates the voltage setpoint of the simulated rotate
+    // Updates the voltage setpoint of the simulated turret
     private void updateVoltageSetpoint() {
         Angle currentAngle = Radians.of(sim.getAngularPositionRad());
         Voltage controllerVoltage = Volts.of(controller.calculate(currentAngle.in(Degrees)));
@@ -37,27 +37,26 @@ public class RotateIOSim implements RotateIO{
         runVolts(effort);
     }
 
-    // Sets the target voltage of the simulated rotate
+    // Sets the target voltage of the simulated turret
     private void runVolts(Voltage volts) {
         appliedVoltage = volts;
     }
 
-    // Sets the target angle of the simulated rotate
+    // Sets the target angle of the simulated turret
     @Override
     public void setTarget(double target) {
         //controller.setGoal(new State(target.in(Degrees), 0));
     }
 
-    // Sets the voltage of the simulated rotate
+    // Sets the voltage of the simulated turret
     @Override
     public void setVoltage(double voltage) {
-        System.out.println("Setting Climber Voltage");
         runVolts(Volts.of(voltage));
     }
 
-    // Updates the inputs of the simulated rotate
+    // Updates the inputs of the simulated turret
     @Override
-    public void updateInputs(RotateInputs inputs) {
+    public void updateInputs(TurretInputs inputs) {
         //inputs.angle.mut_replace(
             //Degrees.convertFrom(sim.getAngularPositionRad(), Radians), 
             //Degrees);
@@ -76,7 +75,7 @@ public class RotateIOSim implements RotateIO{
         sim.update(0.02);
     }
 
-    // Stops the simulated rotate
+    // Stops the simulated turret
     @Override
     public void stop() {
         Angle currentAngle = Radians.of(sim.getAngularPositionRad());
@@ -84,10 +83,10 @@ public class RotateIOSim implements RotateIO{
         runVolts(Volts.of(0));
     }
 
-    // Gets the constants of the rotate
+    // Gets the constants of the turret
     @Override
-    public RotateConstants getConstants() {
-        return rotateConstants;
+    public TurretConstants getConstants() {
+        return turretConstants;
     }
 
 }

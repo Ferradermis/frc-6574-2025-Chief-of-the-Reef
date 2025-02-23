@@ -40,9 +40,9 @@ public final class Constants {
     public static final int CLIMBER_ID = 15;
     public static final int ELEVATOR_RIGHT_ID = 16;
     public static final int ELEVATOR_LEFT_ID = 17;
-    public static final int ARM_ID = 18;
-    public static final int ARM_CANCODER_ID = 19;
-    public static final int ROTATE_ID = 20;
+    public static final int PIVOT_ID = 18;
+    public static final int PIVOT_CANCODER_ID = 19;
+    public static final int TURRET_ID = 20;
     public static final int END_EFFECTOR_ID = 21;
     public static final int LOCKING_SERVO_ID = 1;
   }
@@ -59,20 +59,20 @@ public final class Constants {
     public static final double CHUTE_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double HOME_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
 
-    // Arm Constants
-    public static final double LEVEL_FOUR_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double LEVEL_THREE_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double LEVEL_TWO_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double LEVEL_ONE_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double ALGAE_ONE_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double ALGAE_TWO_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double GROUND_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double CHUTE_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double HOME_ARM_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    // Pivot Constants
+    public static final double LEVEL_FOUR_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double LEVEL_THREE_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double LEVEL_TWO_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double LEVEL_ONE_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double ALGAE_ONE_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double ALGAE_TWO_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double GROUND_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double CHUTE_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double HOME_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
 
-    // Rotate Constants
-    public static final double VERTICAL_ROTATE_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double HORIZONTAL_ROTATE_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    // Turret Constants
+    public static final double VERTICAL_TURRET_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double HORIZONTAL_TURRET_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
 
     // Climber Constants
     public static final double CLIMBER_UP_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)

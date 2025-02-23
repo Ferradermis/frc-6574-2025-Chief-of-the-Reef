@@ -1,4 +1,4 @@
-package frc.robot.subsystems.rotate;
+package frc.robot.subsystems.turret;
 
 import java.util.function.Consumer;
 import static edu.wpi.first.units.Units.*;
@@ -15,7 +15,7 @@ import frc.robot.util.CanDef;
 import frc.robot.util.CanDef.CanBus;
 import frc.robot.util.Gains;
 
-public class RotateConstants {
+public class TurretConstants {
     public CanDef leaderProfile = CanDef.builder().id(0).bus(CanBus.Rio).build();
 
     public Gains simGains =

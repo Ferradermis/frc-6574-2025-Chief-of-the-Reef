@@ -1,13 +1,11 @@
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.pivot;
 
 import static edu.wpi.first.units.Units.*;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -15,30 +13,27 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 import frc.robot.util.PhoenixUtil;
 
-public class ArmIOKraken implements ArmIO{
+public class PivotIOKraken implements PivotIO{
     public TalonFX motor;
     public CANcoder encoder;
     public MotionMagicVoltage request;
-    public ArmConstants armConstants;
+    public PivotConstants pivotConstants;
     private double angleSetpoint = 0;
     
-    // Create a new instance of the ArmIOKraken subsystem
-    // Creates a new TalonFX motor controller for the arm and a new voltage output request
-    public ArmIOKraken (int motorid) {
+    // Create a new instance of the PivotIOKraken subsystem
+    // Creates a new TalonFX motor controller for the pivot and a new voltage output request
+    public PivotIOKraken (int motorid) {
         motor = new TalonFX(motorid);
-        encoder = new CANcoder(Constants.CANConstants.ARM_CANCODER_ID);
-        armConstants = new ArmConstants();
-        request = new MotionMagicVoltage(armConstants.startingAngle);
+        encoder = new CANcoder(Constants.CANConstants.PIVOT_CANCODER_ID);
+        pivotConstants = new PivotConstants();
+        request = new MotionMagicVoltage(pivotConstants.startingAngle);
         configureKrakens();
     }
 
-    // Configures the TalonFX motor controller for the arm
+    // Configures the TalonFX motor controller for the pivot
     public void configureKrakens() {
         CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
         cancoderConfig.MagnetSensor.MagnetOffset = -0.088; //-0.842;
@@ -58,7 +53,7 @@ public class ArmIOKraken implements ArmIO{
         config.Feedback.SensorToMechanismRatio = ((9 * 60)/(34) * (1/2.364) * 0.989);
         config.Feedback.RotorToSensorRatio = 1;
         config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-        config.Feedback.FeedbackRemoteSensorID = Constants.CANConstants.ARM_CANCODER_ID;
+        config.Feedback.FeedbackRemoteSensorID = Constants.CANConstants.PIVOT_CANCODER_ID;
         config.Feedback.FeedbackRotorOffset = 0;
         config.ClosedLoopGeneral.ContinuousWrap = false;
 
@@ -85,7 +80,7 @@ public class ArmIOKraken implements ArmIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(motionMagicConfigs));
     }
 
-    // Sets the target angle of the arm
+    // Sets the target angle of the pivot
     @Override
     public void setTarget(double target) {
         request = request.withPosition(target);
@@ -93,9 +88,9 @@ public class ArmIOKraken implements ArmIO{
         angleSetpoint = target;
     }
 
-    // Updates the inputs of the arm
+    // Updates the inputs of the pivot
     @Override
-    public void updateInputs(ArmInputs inputs) {
+    public void updateInputs(PivotInputs inputs) {
         inputs.angle.mut_replace(motor.getPosition().getValue());
         inputs.encoder = encoder.getAbsolutePosition().getValueAsDouble();
         inputs.angularVelocity.mut_replace(motor.getVelocity().getValue());
@@ -105,21 +100,21 @@ public class ArmIOKraken implements ArmIO{
         inputs.supplyCurrent.mut_replace(motor.getStatorCurrent().getValue());
     }
 
-    // Stops the motor of the arm
+    // Stops the motor of the pivot
     @Override
     public void stop() {
         motor.setControl(new StaticBrake());
     }
 
-    // Sets the voltage of the arm
+    // Sets the voltage of the pivot
     @Override
     public void setVoltage(double voltage) {
         motor.setVoltage(voltage);
     }
 
-    // Gets the constants of the arm
+    // Gets the constants of the pivot
     @Override
-    public ArmConstants getConstants() {
-        return armConstants;
+    public PivotConstants getConstants() {
+        return pivotConstants;
     }
 }

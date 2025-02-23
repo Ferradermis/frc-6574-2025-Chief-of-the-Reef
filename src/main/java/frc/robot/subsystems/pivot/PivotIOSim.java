@@ -1,4 +1,4 @@
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.pivot;
 
 import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -8,18 +8,17 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 
-public class ArmIOSim implements ArmIO {
+public class PivotIOSim implements PivotIO {
     private ArmFeedforward feedforward;
     private final ProfiledPIDController controller;
     private final SingleJointedArmSim simulator;
-    private final ArmConstants armConstants;
+    private final PivotConstants pivotConstants;
     private Voltage appliedVoltage = Volts.mutable(0);
 
-    // Create a new instance of the arm simulator
-    // Grabs the constants for the arm subsystem
-    public ArmIOSim(ArmConstants constants) {
+    // Create a new instance of the pivot simulator
+    // Grabs the constants for the pivot subsystem
+    public PivotIOSim(PivotConstants constants) {
         simulator = new SingleJointedArmSim(
             DCMotor.getNEO(1), 
             constants.gearing, 
@@ -41,23 +40,22 @@ public class ArmIOSim implements ArmIO {
             constants.simGains.kI, 
             constants.simGains.kD, 
             new Constraints(constants.maxVelocity.in(DegreesPerSecond), constants.maxAcceleration.in(DegreesPerSecondPerSecond)));
-        armConstants = constants;
+        pivotConstants = constants;
     }
 
-    // Sets the target angle of the simulated arm
+    // Sets the target angle of the simulated pivot
     @Override
     public void setTarget(double target) {
         //controller.setGoal(new State(target.in(Degrees), 0));
     }
 
-    // Sets the voltage of the simulated climber
+    // Sets the voltage of the simulated pivot
     @Override
     public void setVoltage(double voltage) {
-        System.out.println("Setting Climber Voltage");
         runVolts(Volts.of(voltage));
     }
 
-    // Updates the voltage setpoint of the simulated arm
+    // Updates the voltage setpoint of the simulated pivot
     private void updateVoltageSetpoint() {
         Angle currentAngle = Radians.of(simulator.getAngleRads());
         Voltage controllerVoltage = Volts.of(controller.calculate(currentAngle.in(Degrees)));
@@ -66,14 +64,14 @@ public class ArmIOSim implements ArmIO {
         runVolts(effort);
     }
 
-    // Sets the target voltage of the simulated arm
+    // Sets the target voltage of the simulated pivot
     private void runVolts(Voltage volts) {
         appliedVoltage = volts;
     }
 
-    // Updates the inputs of the simulated arm
+    // Updates the inputs of the simulated pivot
     @Override
-    public void updateInputs(ArmInputs inputs) {
+    public void updateInputs(PivotInputs inputs) {
         //inputs.angle.mut_replace(
             //Degrees.convertFrom(simulator.getAngleRads(), Radians), 
             //Degrees);
@@ -92,7 +90,7 @@ public class ArmIOSim implements ArmIO {
         simulator.update(0.02);
     }
 
-    // Stops the simulated arm
+    // Stops the simulated pivot
     @Override
     public void stop() {
         Angle currentAngle = Radians.of(simulator.getAngleRads());
@@ -100,9 +98,9 @@ public class ArmIOSim implements ArmIO {
         runVolts(Volts.of(0));
     }
 
-    // Gets the constants of the arm
+    // Gets the constants of the pivot
     @Override
-    public ArmConstants getConstants() {
-        return armConstants;
+    public PivotConstants getConstants() {
+        return pivotConstants;
     }
 }

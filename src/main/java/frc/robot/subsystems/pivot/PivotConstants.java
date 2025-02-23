@@ -1,4 +1,4 @@
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.pivot;
 
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
@@ -18,7 +18,7 @@ import frc.robot.util.Gains;
 import frc.robot.util.CanDef.CanBus;
 import static edu.wpi.first.units.Units.*;
 
-public class ArmConstants {
+public class PivotConstants {
     public CanDef leaderProfile = CanDef.builder().id(0).bus(CanBus.Rio).build();
 
     public Gains simGains =
