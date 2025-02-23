@@ -259,10 +259,10 @@ public class RobotContainer {
     // operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povLeft().onTrue(rotate.getNewSetAngleCommand(1));
-    //operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.170));
-    operatorController.b().onTrue(elevator.resetEncoder());
-    //operatorController.povUp().whileTrue(arm.setVoltageTest(1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
-    //operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
+    operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.060)); //.onFalse(arm.getNewSetAngleCommand(-0.060));
+    //operatorController.b().onTrue(elevator.resetEncoder());
+    // operatorController.povUp().whileTrue(arm.setVoltageTest(2)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
+    // operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
     // driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
     // // driverController.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37)));

@@ -24,7 +24,7 @@ import frc.robot.util.PhoenixUtil;
 public class ArmIOKraken implements ArmIO{
     public TalonFX motor;
     public CANcoder encoder;
-    public PositionVoltage request;
+    public MotionMagicVoltage request;
     public ArmConstants armConstants;
     private double angleSetpoint = 0;
     
@@ -34,28 +34,28 @@ public class ArmIOKraken implements ArmIO{
         motor = new TalonFX(motorid);
         encoder = new CANcoder(Constants.CANConstants.ARM_CANCODER_ID);
         armConstants = new ArmConstants();
-        request = new PositionVoltage(armConstants.startingAngle);
+        request = new MotionMagicVoltage(armConstants.startingAngle);
         configureKrakens();
     }
 
     // Configures the TalonFX motor controller for the arm
     public void configureKrakens() {
         CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
-        cancoderConfig.MagnetSensor.MagnetOffset = 0; //-0.842;
+        cancoderConfig.MagnetSensor.MagnetOffset = 0.912; //-0.842;
         cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
 
         PhoenixUtil.tryUntilOk(5, () -> encoder.getConfigurator().apply(cancoderConfig));
 
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        config.Voltage.PeakForwardVoltage = 2.0; //TODO: Probably need to change this value
-        config.Voltage.PeakReverseVoltage = -2.0; //TODO: Probably need to change this value
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.Voltage.PeakForwardVoltage = 5.0; //TODO: Probably need to change this value
+        config.Voltage.PeakReverseVoltage = -5.0; //TODO: Probably need to change this value
         config.CurrentLimits.StatorCurrentLimit = 80.0;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimit = 40.0;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        config.Feedback.SensorToMechanismRatio = ((9 * 60 * 48)/(34 * 93)) * 0.787;
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        config.Feedback.SensorToMechanismRatio = ((9 * 60)/(34) * (1/2.364) * 0.989);
         config.Feedback.RotorToSensorRatio = 1;
         config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         config.Feedback.FeedbackRemoteSensorID = Constants.CANConstants.ARM_CANCODER_ID;
@@ -65,7 +65,7 @@ public class ArmIOKraken implements ArmIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
 
         Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = 8;
+        slot0Configs.kP = 25.0;
         slot0Configs.kI = 0.0;
         slot0Configs.kD = 0.0;
         slot0Configs.kS = 0.0;
@@ -76,8 +76,8 @@ public class ArmIOKraken implements ArmIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
 
         MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = 20.0;
-        motionMagicConfigs.MotionMagicAcceleration = 20.0;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 0.05;
+        motionMagicConfigs.MotionMagicAcceleration = 1;
         motionMagicConfigs.MotionMagicJerk = 0.0;
         motionMagicConfigs.MotionMagicExpo_kV = 0.0;
         motionMagicConfigs.MotionMagicExpo_kA = 0.0;
@@ -102,7 +102,7 @@ public class ArmIOKraken implements ArmIO{
         inputs.setpoint = angleSetpoint;
         inputs.voltageSetpoint.mut_replace(motor.getMotorVoltage().getValue());
         inputs.error = motor.getClosedLoopError().getValueAsDouble();
-        inputs.supplyCurrent.mut_replace(motor.getSupplyCurrent().getValue());
+        inputs.supplyCurrent.mut_replace(motor.getStatorCurrent().getValue());
     }
 
     // Stops the motor of the arm
