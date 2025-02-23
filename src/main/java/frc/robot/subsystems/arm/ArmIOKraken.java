@@ -41,8 +41,8 @@ public class ArmIOKraken implements ArmIO{
     // Configures the TalonFX motor controller for the arm
     public void configureKrakens() {
         CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
-        cancoderConfig.MagnetSensor.MagnetOffset = 0.912; //-0.842;
-        cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        cancoderConfig.MagnetSensor.MagnetOffset = -0.088; //-0.842;
+        cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0;
 
         PhoenixUtil.tryUntilOk(5, () -> encoder.getConfigurator().apply(cancoderConfig));
 
@@ -76,7 +76,7 @@ public class ArmIOKraken implements ArmIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
 
         MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = 0.05;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 0.025;
         motionMagicConfigs.MotionMagicAcceleration = 1;
         motionMagicConfigs.MotionMagicJerk = 0.0;
         motionMagicConfigs.MotionMagicExpo_kV = 0.0;
