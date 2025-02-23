@@ -259,7 +259,7 @@ public class RobotContainer {
     // operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povLeft().onTrue(rotate.getNewSetAngleCommand(1));
-    operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.295)); //.onFalse(arm.getNewSetAngleCommand(-0.060));
+    //operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.295)); //.onFalse(arm.getNewSetAngleCommand(-0.060));
     //operatorController.b().onTrue(elevator.resetEncoder());
     // operatorController.povUp().whileTrue(arm.setVoltageTest(2)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     // operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
@@ -270,8 +270,8 @@ public class RobotContainer {
 
     // //driverController.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
 
-    operatorController.rightTrigger().whileTrue(climber.setVoltageTest(4 )).onFalse(climber.setVoltageTest(0));
-    operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
+    //operatorController.rightTrigger().whileTrue(climber.setVoltageTest(4 )).onFalse(climber.setVoltageTest(0));
+    //operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
     //operatorController.b().onTrue(servo.getNewSetAngleCommand(-90));
   }
 
