@@ -46,6 +46,15 @@ public class Elevator extends SubsystemBase {
         this);
   }
 
+  // Create a new command to set the distance of the elevator
+  public Command getNewSetVoltageCommand(double setElevator) {
+    return new InstantCommand(
+        () -> {
+          elevatorIO.setVoltage(setElevator);
+        },
+        this);
+  }
+
   public Command stopMotors() {
     return new InstantCommand(
         () -> {

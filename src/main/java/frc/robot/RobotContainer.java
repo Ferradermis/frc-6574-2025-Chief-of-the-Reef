@@ -213,22 +213,22 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
-    // Lock to 0° when A button is held
-    driverController
-        .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () -> new Rotation2d()));
+    // // Lock to 0° when A button is held
+    // driverController
+    //     .a()
+    //     .whileTrue(
+    //         DriveCommands.joystickDriveAtAngle(
+    //             drive,
+    //             () -> -driverController.getLeftY(),
+    //             () -> -driverController.getLeftX(),
+    //             () -> new Rotation2d()));
 
-    // Switch to X pattern when X button is pressed
-    driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // // Switch to X pattern when X button is pressed
+    // driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when Y button is pressed
     driverController
-        .y()
+        .povUp()
         .onTrue(
             Commands.runOnce(
                     () ->
@@ -238,8 +238,13 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // driverController.x().onTrue(new ReturnToHome());
-    driverController.rightBumper().whileTrue(new Intake());
-    driverController.leftBumper().whileTrue(new Release());
+    driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(1.5)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    driverController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
+    driverController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
+    driverController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));
+    driverController.a().onTrue(elevator.getNewSetDistanceCommand(4.5 * 39.37));
+    driverController.povDown().onTrue(elevator.resetEncoder());
 
     // Operator buttons
     // operatorController.a().onTrue(new ScoreLevelOne());
@@ -252,14 +257,20 @@ public class RobotContainer {
     // operatorController.povRight().onTrue(new PickupCoralFromChute());
     // operatorController.rightBumper().onTrue(new GrabAlgae());
     // operatorController.leftBumper().onTrue(new ReturnToHome());
-    operatorController.a().onTrue(new SetElevatorPosition(0));
-    operatorController.b().onTrue(new SetElevatorPosition(0));
-    operatorController.x().onTrue(new SetElevatorPosition(0));
-    operatorController.y().onTrue(new SetElevatorPosition(0)); // Add more elevator positions as needed for Duluth
+    operatorController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
+    operatorController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
+    operatorController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));
+    operatorController.a().onTrue(elevator.getNewSetDistanceCommand(4.5 * 39.37)); // Add more elevator positions as needed for Duluth
+    // operatorController.a().onTrue(elevator.getNewSetVoltageCommand(2)).onFalse(elevator.stopMotors());
+    // operatorController.b().onTrue(elevator.getNewSetVoltageCommand(-2)).onFalse(elevator.stopMotors());
+    operatorController.leftBumper().onTrue(elevator.resetEncoder());
     operatorController.povLeft().whileTrue(turret.setVoltageTest(1)).whileFalse(turret.setVoltageTest(0)); // Rotate clockwise
     operatorController.povRight().whileTrue(turret.setVoltageTest(-1)).whileFalse(turret.setVoltageTest(0)); // Rotate counterclockwise
-    operatorController.povUp().whileTrue(pivot.setVoltageTest(2)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
-    operatorController.povDown().whileTrue(pivot.setVoltageTest(-1)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
+    operatorController.povUp().whileTrue(pivot.setVoltageTest(-1.5)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
+    operatorController.povDown().whileTrue(pivot.setVoltageTest(0.75)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
+    operatorController.rightTrigger().whileTrue(climber.setVoltageTest(2)).onFalse(climber.setVoltageTest(0));
+    operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
+    //operatorController.rightBumper().onTrue(pinServo.getNewSetAngleCommand(-90));
 
     // Test buttons
     //driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(0.1));
@@ -277,10 +288,6 @@ public class RobotContainer {
     // // driverController.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90)));
 
     // //driverController.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
-
-    //operatorController.rightTrigger().whileTrue(climber.setVoltageTest(4 )).onFalse(climber.setVoltageTest(0));
-    //operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
-    //operatorController.b().onTrue(servo.getNewSetAngleCommand(-90));
   }
 
   /**

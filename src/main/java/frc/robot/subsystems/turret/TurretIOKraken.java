@@ -29,7 +29,7 @@ public class TurretIOKraken implements TurretIO{
     // Configures the TalonFX motor controller for the turret
     public void configureKrakens() {
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         config.Voltage.PeakForwardVoltage = 1.0; //TODO: Probably need to change this value
         config.Voltage.PeakReverseVoltage = -1.0; //TODO: Probably need to change this value
         config.CurrentLimits.StatorCurrentLimit = 80.0;
