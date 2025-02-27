@@ -43,6 +43,22 @@ public class Turret extends SubsystemBase{
             this);
     }
 
+    public Command stopMotors() {
+        return new InstantCommand(
+            () -> {
+                turretIO.stop();
+            },
+            this);
+    }
+
+    public Command reset() {
+        return new InstantCommand(
+            () -> {
+                turretIO.resetEncoder();
+            },
+            this);
+    }
+
     // Create a new command to set the voltage of the Turret subsystem
     public Command setVoltageTest(double voltage) {
         return new InstantCommand(

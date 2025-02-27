@@ -237,14 +237,15 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    // driverController.x().onTrue(new ReturnToHome());
-    driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(1.5)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    // driverController.x().onTrue(new ReturnToHome()); - not used currently
+    driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-8)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(3.5)).whileFalse(endEffector.getNewSetVoltsCommand(0));
     driverController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
     driverController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
     driverController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));
     driverController.a().onTrue(elevator.getNewSetDistanceCommand(4.5 * 39.37));
     driverController.povDown().onTrue(elevator.resetEncoder());
+    driverController.povLeft().onTrue(turret.reset());
 
     // Operator buttons
     // operatorController.a().onTrue(new ScoreLevelOne());
@@ -264,13 +265,17 @@ public class RobotContainer {
     // operatorController.a().onTrue(elevator.getNewSetVoltageCommand(2)).onFalse(elevator.stopMotors());
     // operatorController.b().onTrue(elevator.getNewSetVoltageCommand(-2)).onFalse(elevator.stopMotors());
     operatorController.leftBumper().onTrue(elevator.resetEncoder());
-    operatorController.povLeft().whileTrue(turret.setVoltageTest(1)).whileFalse(turret.setVoltageTest(0)); // Rotate clockwise
-    operatorController.povRight().whileTrue(turret.setVoltageTest(-1)).whileFalse(turret.setVoltageTest(0)); // Rotate counterclockwise
+    operatorController.rightBumper().onTrue(pinServo.getNewSetAngleCommand(-90));
+    //operatorController.povLeft().whileTrue(turret.setVoltageTest(1)).whileFalse(turret.setVoltageTest(0)); // Rotate clockwise
+    operatorController.povLeft().onTrue(turret.getNewSetAngleCommand(0));
+    //operatorController.povRight().whileTrue(turret.setVoltageTest(-1)).whileFalse(turret.setVoltageTest(0)); // Rotate counterclockwise
+    operatorController.povRight().onTrue(turret.getNewSetAngleCommand(2.225));
     operatorController.povUp().whileTrue(pivot.setVoltageTest(-1.5)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
     operatorController.povDown().whileTrue(pivot.setVoltageTest(0.75)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
     operatorController.rightTrigger().whileTrue(climber.setVoltageTest(2)).onFalse(climber.setVoltageTest(0));
     operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
-    //operatorController.rightBumper().onTrue(pinServo.getNewSetAngleCommand(-90));
+    // operatorController.a().onTrue(turret.getNewSetAngleCommand(1.846)).onFalse(turret.stopMotors());
+    // operatorController.b().onTrue(turret.getNewSetAngleCommand(-0.480)).onFalse(turret.stopMotors());
 
     // Test buttons
     //driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(0.1));

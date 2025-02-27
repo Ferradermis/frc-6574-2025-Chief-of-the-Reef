@@ -28,6 +28,8 @@ public interface TurretIO {
     public default void stop() {}
 
     public default void setVoltage(double voltage) {}
+    
+    public default void resetEncoder() {}
 
     public default TurretConstants getConstants() {
         return new TurretConstants();

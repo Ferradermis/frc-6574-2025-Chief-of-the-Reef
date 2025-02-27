@@ -24,6 +24,7 @@ public class TurretIOKraken implements TurretIO{
         turretConstants = new TurretConstants();
         request = new MotionMagicVoltage(turretConstants.startingAngle);
         configureKrakens();
+        motor.setPosition(0);
     }
 
     // Configures the TalonFX motor controller for the turret
@@ -42,18 +43,18 @@ public class TurretIOKraken implements TurretIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
 
         Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = 0.1;
+        slot0Configs.kP = 40.0;
         slot0Configs.kI = 0.0;
         slot0Configs.kD = 0.0;
         slot0Configs.kS = 0.0;
         slot0Configs.kG = 0.0;
         slot0Configs.kV = 0.0;
         slot0Configs.kA = 0.0;
-        slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
+        slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
 
         MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = 20.0;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 50.0;
         motionMagicConfigs.MotionMagicAcceleration = 20.0;
         motionMagicConfigs.MotionMagicJerk = 0.0;
         motionMagicConfigs.MotionMagicExpo_kV = 0.0;
@@ -68,6 +69,11 @@ public class TurretIOKraken implements TurretIO{
         request = request.withPosition(target);
         motor.setControl(request);
         angleSetpoint = target;
+    }
+
+    @Override
+    public void resetEncoder() {
+        motor.setPosition(0);
     }
 
     // Updates the inputs of the turret

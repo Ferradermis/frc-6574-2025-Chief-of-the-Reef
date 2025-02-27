@@ -70,8 +70,8 @@ public class ElevatorIOKraken implements ElevatorIO {
     PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(config2));
 
     MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    motionMagicConfigs.MotionMagicCruiseVelocity = 80.0;
-    motionMagicConfigs.MotionMagicAcceleration = 100;
+    motionMagicConfigs.MotionMagicCruiseVelocity = 100.0;
+    motionMagicConfigs.MotionMagicAcceleration = 200;
     motionMagicConfigs.MotionMagicJerk = 0.0;
     motionMagicConfigs.MotionMagicExpo_kV = 0.0;
     motionMagicConfigs.MotionMagicExpo_kA = 0.0;
