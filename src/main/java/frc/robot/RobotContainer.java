@@ -276,6 +276,7 @@ public class RobotContainer {
     operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
     // operatorController.a().onTrue(turret.getNewSetAngleCommand(1.846)).onFalse(turret.stopMotors());
     // operatorController.b().onTrue(turret.getNewSetAngleCommand(-0.480)).onFalse(turret.stopMotors());
+    //operatorController.a().onTrue(pivot.getNewSetAngleCommand(-0.238));
 
     // Test buttons
     //driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(0.1));
