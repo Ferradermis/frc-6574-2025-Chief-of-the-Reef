@@ -19,6 +19,8 @@ import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -32,6 +34,7 @@ import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetTurretAngle;
+import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
@@ -192,6 +195,8 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+    NamedCommands.registerCommand("ReleaseInAuto", new ReleaseInAuto());
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -238,8 +243,10 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
-    driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-8)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(3.5)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    // driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-8)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(3.5)).whileFalse(endEffector.getNewSetVoltsCommand(0));
+    driverController.leftBumper().whileTrue(new Intake(8));
+    driverController.rightBumper().whileTrue(new Release(3.5));
     driverController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
     driverController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
     driverController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));

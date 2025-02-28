@@ -4,15 +4,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 public class Intake extends Command {
-    public Intake() {
+    private double speed;
+
+    public Intake(double s) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(RobotContainer.endEffector);
+        speed = s;
     }
 
     @Override
     public void initialize() {
         // Called when the command is initially scheduled.
-        RobotContainer.endEffector.getNewSetVoltsCommand(1); // TODO: Test command, default value is 1
+        RobotContainer.endEffector.getNewSetVoltsCommand(speed); // TODO: Test command, default value is 1
     }
 
     @Override
