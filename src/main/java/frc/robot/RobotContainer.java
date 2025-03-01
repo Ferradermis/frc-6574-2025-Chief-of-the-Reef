@@ -21,8 +21,12 @@ import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -111,7 +115,11 @@ public class RobotContainer {
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
-        // Real robot, instantiate hardware IO implementations
+        // Real robot, instantiate hardware IO implementations and start camera feed
+        UsbCamera camera = CameraServer.startAutomaticCapture();
+        camera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
+        camera.setVideoMode(PixelFormat.kYUYV, 320, 240, 30);
+        camera.setBrightness(50);
         elevator = new Elevator(new ElevatorIOKraken(Constants.CANConstants.ELEVATOR_LEFT_ID, Constants.CANConstants.ELEVATOR_RIGHT_ID));
         pivot = new Pivot(new PivotIOKraken(Constants.CANConstants.PIVOT_ID));
         climber = new Climber(new ClimberIOMotors(Constants.CANConstants.CLIMBER_ID)); 
