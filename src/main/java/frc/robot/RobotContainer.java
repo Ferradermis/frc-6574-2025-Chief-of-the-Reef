@@ -176,6 +176,8 @@ public class RobotContainer {
         break;
     }
 
+    NamedCommands.registerCommand("Release", new ReleaseInAuto());
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -194,8 +196,6 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
-    NamedCommands.registerCommand("ReleaseInAuto", new ReleaseInAuto());
 
     // Configure the button bindings
     configureButtonBindings();
@@ -245,8 +245,8 @@ public class RobotContainer {
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
     // driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-8)).whileFalse(endEffector.getNewSetVoltsCommand(0));
     // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(3.5)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    driverController.leftBumper().whileTrue(new Intake(8));
-    driverController.rightBumper().whileTrue(new Release(3.5));
+    driverController.leftBumper().whileTrue(new Intake(8)).whileFalse(new Intake(0));
+    driverController.rightBumper().whileTrue(new Release(3.5)).whileFalse(new Intake(0));
     driverController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
     driverController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
     driverController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));
@@ -279,7 +279,7 @@ public class RobotContainer {
     operatorController.povRight().onTrue(turret.getNewSetAngleCommand(2.225));
     operatorController.povUp().whileTrue(pivot.setVoltageTest(-1.5)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
     operatorController.povDown().whileTrue(pivot.setVoltageTest(0.75)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
-    operatorController.rightTrigger().whileTrue(climber.setVoltageTest(2)).onFalse(climber.setVoltageTest(0));
+    operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0));
     operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
     // operatorController.a().onTrue(turret.getNewSetAngleCommand(1.846)).onFalse(turret.stopMotors());
     // operatorController.b().onTrue(turret.getNewSetAngleCommand(-0.480)).onFalse(turret.stopMotors());

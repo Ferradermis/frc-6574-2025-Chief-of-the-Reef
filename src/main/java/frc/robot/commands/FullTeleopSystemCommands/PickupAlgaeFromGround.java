@@ -18,7 +18,7 @@ public class PickupAlgaeFromGround extends SequentialCommandGroup {
             new SetPivotAngle(Constants.PositionConstants.GROUND_PIVOT_ANGLE),
             new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE)
         ),
-        new Intake()
+        new Intake(0)
     );
   }
 }

@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
@@ -15,12 +16,14 @@ public class Intake extends Command {
     @Override
     public void initialize() {
         // Called when the command is initially scheduled.
-        RobotContainer.endEffector.getNewSetVoltsCommand(speed); // TODO: Test command, default value is 1
+        System.out.println("running intake");
+        
     }
 
     @Override
     public void execute() {
         // Called every time the scheduler runs while the command is scheduled.
+        RobotContainer.endEffector.setTarget(Volts.of(speed)); // TODO: Test command, default value is 1
     }
 
     @Override

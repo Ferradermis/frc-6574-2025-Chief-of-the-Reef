@@ -18,7 +18,7 @@ public class ScoreLevelThree extends SequentialCommandGroup {
             new SetPivotAngle(Constants.PositionConstants.LEVEL_THREE_PIVOT_ANGLE),
             new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE)
         ),
-        new Intake()
+        new Intake(0)
     );
   }
 }

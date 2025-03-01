@@ -17,7 +17,7 @@ public class GrabAlgaeTwo extends SequentialCommandGroup {
             new SetPivotAngle(0),
             new SetTurretAngle(0)
         ),
-        new Intake()
+        new Intake(0)
     );
   } 
 }
