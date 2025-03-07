@@ -116,10 +116,10 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations and start camera feed
-        UsbCamera camera = CameraServer.startAutomaticCapture();
-        camera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-        camera.setVideoMode(PixelFormat.kYUYV, 320, 240, 30);
-        camera.setBrightness(50);
+        // UsbCamera camera = CameraServer.startAutomaticCapture();
+        // camera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
+        // camera.setVideoMode(PixelFormat.kYUYV, 320, 240, 30);
+        // camera.setBrightness(50);
         elevator = new Elevator(new ElevatorIOKraken(Constants.CANConstants.ELEVATOR_LEFT_ID, Constants.CANConstants.ELEVATOR_RIGHT_ID));
         pivot = new Pivot(new PivotIOKraken(Constants.CANConstants.PIVOT_ID));
         climber = new Climber(new ClimberIOMotors(Constants.CANConstants.CLIMBER_ID)); 
@@ -253,14 +253,14 @@ public class RobotContainer {
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
     // driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-8)).whileFalse(endEffector.getNewSetVoltsCommand(0));
     // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(3.5)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    driverController.leftBumper().whileTrue(new Intake(8)).whileFalse(new Intake(0));
-    driverController.rightBumper().whileTrue(new Release(3.5)).whileFalse(new Intake(0));
-    driverController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
-    driverController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
-    driverController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));
-    driverController.a().onTrue(elevator.getNewSetDistanceCommand(4.5 * 39.37));
-    driverController.povDown().onTrue(elevator.resetEncoder());
-    driverController.povLeft().onTrue(turret.reset());
+    // driverController.leftBumper().whileTrue(new Intake(8)).whileFalse(new Intake(0));
+    // driverController.rightBumper().whileTrue(new Release(3.5)).whileFalse(new Intake(0));
+    // driverController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
+    // driverController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
+    // driverController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));
+    // driverController.a().onTrue(elevator.getNewSetDistanceCommand(4.5 * 39.37));
+    // driverController.povDown().onTrue(elevator.resetEncoder());
+    // driverController.povLeft().onTrue(turret.reset());
 
     // Operator buttons
     // operatorController.a().onTrue(new ScoreLevelOne());
@@ -273,25 +273,26 @@ public class RobotContainer {
     // operatorController.povRight().onTrue(new PickupCoralFromChute());
     // operatorController.rightBumper().onTrue(new GrabAlgae());
     // operatorController.leftBumper().onTrue(new ReturnToHome());
-    operatorController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
-    operatorController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
-    operatorController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));
-    operatorController.a().onTrue(elevator.getNewSetDistanceCommand(4.5 * 39.37)); // Add more elevator positions as needed for Duluth
-    // operatorController.a().onTrue(elevator.getNewSetVoltageCommand(2)).onFalse(elevator.stopMotors());
-    // operatorController.b().onTrue(elevator.getNewSetVoltageCommand(-2)).onFalse(elevator.stopMotors());
-    operatorController.leftBumper().onTrue(elevator.resetEncoder());
-    operatorController.rightBumper().onTrue(pinServo.getNewSetAngleCommand(-90));
-    //operatorController.povLeft().whileTrue(turret.setVoltageTest(1)).whileFalse(turret.setVoltageTest(0)); // Rotate clockwise
-    operatorController.povLeft().onTrue(turret.getNewSetAngleCommand(0));
-    //operatorController.povRight().whileTrue(turret.setVoltageTest(-1)).whileFalse(turret.setVoltageTest(0)); // Rotate counterclockwise
-    operatorController.povRight().onTrue(turret.getNewSetAngleCommand(2.225));
-    operatorController.povUp().whileTrue(pivot.setVoltageTest(-1.5)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
-    operatorController.povDown().whileTrue(pivot.setVoltageTest(0.75)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
-    operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0));
-    operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
+    // operatorController.y().onTrue(elevator.getNewSetDistanceCommand(1208.659)); // 30.7
+    // operatorController.x().onTrue(elevator.getNewSetDistanceCommand(0)); //* 39.37
+    // operatorController.b().onTrue(elevator.getNewSetDistanceCommand(15 * 39.37));
+    // operatorController.a().onTrue(elevator.getNewSetDistanceCommand(4.5 * 39.37)); // Add more elevator positions as needed for Duluth
+    // // operatorController.a().onTrue(elevator.getNewSetVoltageCommand(2)).onFalse(elevator.stopMotors());
+    // // operatorController.b().onTrue(elevator.getNewSetVoltageCommand(-2)).onFalse(elevator.stopMotors());
+    // operatorController.leftBumper().onTrue(elevator.resetEncoder());
+    // operatorController.rightBumper().onTrue(pinServo.getNewSetAngleCommand(-90));
+    // //operatorController.povLeft().whileTrue(turret.setVoltageTest(1)).whileFalse(turret.setVoltageTest(0)); // Rotate clockwise
+    // operatorController.povLeft().onTrue(turret.getNewSetAngleCommand(0));
+    // //operatorController.povRight().whileTrue(turret.setVoltageTest(-1)).whileFalse(turret.setVoltageTest(0)); // Rotate counterclockwise
+    // operatorController.povRight().onTrue(turret.getNewSetAngleCommand(2.225));
+    // operatorController.povUp().whileTrue(pivot.setVoltageTest(-1.5)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
+    // operatorController.povDown().whileTrue(pivot.setVoltageTest(0.75)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
+    // operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0));
+    // operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
     // operatorController.a().onTrue(turret.getNewSetAngleCommand(1.846)).onFalse(turret.stopMotors());
     // operatorController.b().onTrue(turret.getNewSetAngleCommand(-0.480)).onFalse(turret.stopMotors());
-    //operatorController.a().onTrue(pivot.getNewSetAngleCommand(-0.238));
+    operatorController.a().onTrue(pivot.getNewSetAngleCommand(0.1));
+    operatorController.b().onTrue(pivot.getNewSetAngleCommand(-0.05));
 
     // Test buttons
     //driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(0.1));

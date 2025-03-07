@@ -29,16 +29,16 @@ public class PivotIOKraken implements PivotIO{
         motor = new TalonFX(motorid);
         encoder = new CANcoder(Constants.CANConstants.PIVOT_CANCODER_ID);
         pivotConstants = new PivotConstants();
-        request = new MotionMagicVoltage(pivotConstants.startingAngle);
+        request = new MotionMagicVoltage(0.187);
         configureKrakens();
     }
 
     // Configures the TalonFX motor controller for the pivot
     public void configureKrakens() {
         CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
-        cancoderConfig.MagnetSensor.MagnetOffset = -0.088; //-0.842;
-        cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0;
-
+        cancoderConfig.MagnetSensor.MagnetOffset = 0.148; //-0.088;
+        cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+ 
         PhoenixUtil.tryUntilOk(5, () -> encoder.getConfigurator().apply(cancoderConfig));
 
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -49,9 +49,9 @@ public class PivotIOKraken implements PivotIO{
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimit = 40.0;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config.Feedback.SensorToMechanismRatio = ((9 * 60)/(34) * (1/2.364) * 0.989);
-        config.Feedback.RotorToSensorRatio = 1;
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        config.Feedback.SensorToMechanismRatio = 1; //((9 * 60)/(34) * (1/2.364) * 0.989)
+        config.Feedback.RotorToSensorRatio = (45 * 60) / 34;
         config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         config.Feedback.FeedbackRemoteSensorID = Constants.CANConstants.PIVOT_CANCODER_ID;
         config.Feedback.FeedbackRotorOffset = 0;
@@ -60,19 +60,19 @@ public class PivotIOKraken implements PivotIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
 
         Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = 0.0;
+        slot0Configs.kP = 60.0;
         slot0Configs.kI = 0.0;
-        slot0Configs.kD = 0.0;
+        slot0Configs.kD = 0.5;
         slot0Configs.kS = 0.0;
-        slot0Configs.kG = 0.0;
+        slot0Configs.kG = 0.3;
         slot0Configs.kV = 0.0;
         slot0Configs.kA = 0.0;
         slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
 
         MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = 0.025;
-        motionMagicConfigs.MotionMagicAcceleration = 1;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 4.0;
+        motionMagicConfigs.MotionMagicAcceleration = 1.0;
         motionMagicConfigs.MotionMagicJerk = 0.0;
         motionMagicConfigs.MotionMagicExpo_kV = 0.0;
         motionMagicConfigs.MotionMagicExpo_kA = 0.0;
@@ -84,7 +84,7 @@ public class PivotIOKraken implements PivotIO{
     @Override
     public void setTarget(double target) {
         request = request.withPosition(target);
-        motor.setControl(request);
+        motor.setControl(request); //0.187
         angleSetpoint = target;
     }
 
