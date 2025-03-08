@@ -49,7 +49,7 @@ public class ElevatorIOKraken implements ElevatorIO {
     config.Slot0.kS = 0.3;
     config.Slot0.kV = 0.0;
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    config.Feedback.SensorToMechanismRatio = 1/25;
+    config.Feedback.SensorToMechanismRatio = 1/16;
 
     TalonFXConfiguration config2 = new TalonFXConfiguration();
     config2.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -64,7 +64,7 @@ public class ElevatorIOKraken implements ElevatorIO {
     config2.Slot0.kS = 0.3;
     config2.Slot0.kV = 0.0;
     config2.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    config2.Feedback.SensorToMechanismRatio = 1/25;
+    config2.Feedback.SensorToMechanismRatio = 1/16;
 
     PhoenixUtil.tryUntilOk(5, () -> leaderMotor.getConfigurator().apply(config));
     PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(config2));

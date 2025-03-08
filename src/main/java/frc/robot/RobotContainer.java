@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -52,7 +53,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.LockingServo;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOMotors;
+import frc.robot.subsystems.climber.ClimberIONEO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -121,7 +122,7 @@ public class RobotContainer {
         // camera.setBrightness(50);
         elevator = new Elevator(new ElevatorIOKraken(Constants.CANConstants.ELEVATOR_LEFT_ID, Constants.CANConstants.ELEVATOR_RIGHT_ID));
         pivot = new Pivot(new PivotIOKraken(Constants.CANConstants.PIVOT_ID));
-        climber = new Climber(new ClimberIOMotors(Constants.CANConstants.CLIMBER_ID)); 
+        climber = new Climber(new ClimberIONEO(Constants.CANConstants.CLIMBER_ID)); 
         endEffector = new EndEffector(new EndEffectorIOKraken(Constants.CANConstants.END_EFFECTOR_ID));
         turret = new Turret(new TurretIOKraken(Constants.CANConstants.TURRET_ID));
         drive =
@@ -224,6 +225,20 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
+    driverController.a().whileTrue(
+        DriveCommands.joystickDriveAtAngle(
+            drive, 
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> vision.getTargetX(0)));
+
+    driverController.b().whileTrue(
+        DriveCommands.joystickDrive(
+            drive, 
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
+
     // // Lock to 0° when A button is held
     // driverController
     //     .a()
@@ -249,14 +264,12 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
-    // driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-8)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(3.5)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    driverController.leftBumper().whileTrue(new Intake(8)).whileFalse(new Intake(0));
-    driverController.rightBumper().whileTrue(new Release(3.5)).whileFalse(new Intake(0));
-    driverController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7
-    driverController.x().onTrue(new SetElevatorPosition(0)); //* 39.37
-    driverController.b().onTrue(new SetElevatorPosition(15 * 39.37));
-    driverController.a().onTrue(new SetElevatorPosition(4.5 * 39.37));
+    // driverController.leftBumper().whileTrue(new Intake(8)).whileFalse(new Intake(0));
+    // driverController.rightBumper().whileTrue(new Release(3.5)).whileFalse(new Intake(0));
+    // driverController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7
+    // driverController.x().onTrue(new SetElevatorPosition(0)); //* 39.37
+    // driverController.b().onTrue(new SetElevatorPosition(15 * 39.37));
+    // driverController.a().onTrue(new SetElevatorPosition(4.5 * 39.37));
     // driverController.povDown().onTrue(elevator.resetEncoder());
     // driverController.povLeft().onTrue(turret.reset());
 
@@ -271,13 +284,14 @@ public class RobotContainer {
     // operatorController.povRight().onTrue(new PickupCoralFromChute());
     // operatorController.rightBumper().onTrue(new GrabAlgae());
     // operatorController.leftBumper().onTrue(new ReturnToHome());
-    operatorController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7
-    operatorController.x().onTrue(new SetElevatorPosition(0)); //* 39.37
-    operatorController.b().onTrue(new SetElevatorPosition(15 * 39.37));
-    operatorController.a().onTrue(new SetElevatorPosition(4.5 * 39.37)); // Add more elevator positions as needed for Duluth
-    operatorController.leftBumper().onTrue(elevator.resetEncoder());
-    operatorController.povLeft().onTrue(new SetTurretAngle(0));
-    operatorController.povRight().onTrue(new SetTurretAngle(2.225));
+
+    // operatorController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7
+    // operatorController.x().onTrue(new SetElevatorPosition(0)); //* 39.37
+    // operatorController.b().onTrue(new SetElevatorPosition(15 * 39.37));
+    // operatorController.a().onTrue(new SetElevatorPosition(4.5 * 39.37)); // Add more elevator positions as needed for Duluth
+    // operatorController.leftBumper().onTrue(elevator.resetEncoder());
+    // operatorController.povLeft().onTrue(new SetTurretAngle(0));
+    // operatorController.povRight().onTrue(new SetTurretAngle(2.225));
     // operatorController.povUp().whileTrue(pivot.setVoltageTest(-1.5)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
     // operatorController.povDown().whileTrue(pivot.setVoltageTest(0.75)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
     // operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0));

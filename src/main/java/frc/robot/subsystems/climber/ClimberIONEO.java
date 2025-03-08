@@ -13,7 +13,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 
-public class ClimberIOMotors implements ClimberIO {
+public class ClimberIONEO implements ClimberIO {
     public SparkMax m_climberMotor;
     public SparkClosedLoopController m_controller;
     public SparkMaxConfig m_climberConfig;
@@ -21,7 +21,7 @@ public class ClimberIOMotors implements ClimberIO {
 
     // Create a new instance of the RotateIONEO subsystem
     // Creates a new spark max using the provided motor id and creates a new motor controller and config
-    public ClimberIOMotors(int motorId) {
+    public ClimberIONEO(int motorId) {
         m_climberMotor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
         m_controller = m_climberMotor.getClosedLoopController();
         m_climberConfig = new SparkMaxConfig();
@@ -33,13 +33,13 @@ public class ClimberIOMotors implements ClimberIO {
             m_climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_climberConfig.inverted(false).idleMode(IdleMode.kBrake);
         m_climberConfig.encoder
-            .positionConversionFactor(360/675) // TODO: Find correct conversion factor - defaulted at 1 for now :)
-            .velocityConversionFactor(360/675/60); // TODO: Find correct conversion factor - defaulted at 1 for now :)
+            .positionConversionFactor(360/675) // TODO: Find correct conversion factor
+            .velocityConversionFactor(360/675/60); // TODO: Find correct conversion factor
         m_climberConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
                 .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
                 .outputRange(-1, 1) // same thing here, will probably not use this
-                .pid(0.5, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values - defaulted at 0 for now :)
+                .pid(0.5, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values
                 .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
                 .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
@@ -77,7 +77,6 @@ public class ClimberIOMotors implements ClimberIO {
     }
 
     // Updates the inputs of the climber
-    // TODO: I DO NOT KNOW IF THESE UNIT CONVERSIONS ARE DONE CORRECTLY! PLEASE VERIFY! thank :)
     @Override
     public void updateInputs(ClimberInputs inputs) {
         //inputs.climberAngle.mut_replace(Degrees.of(m_climberMotor.getEncoder().getPosition()));

@@ -14,6 +14,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -35,6 +36,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentricFacingAngle;
+import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
@@ -155,6 +161,25 @@ public class DriveCommands {
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
+
+  // WIP command
+  // public static Command alignToReefCommand(Supplier<Pose2d> target) {
+  //   SwerveRequest.FieldCentricFacingAngle reefAlignRequest = new FieldCentricFacingAngle()
+  //     .withDriveRequestType(DriveRequestType.Velocity)
+  //     .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance);
+
+  //   // TODO: Find PID values (might be the ones from other commands in this file)
+  //   // (Could be different due to the use of the phoenix swerve request in this command)
+  //   // Also define acceptable tolerance values
+  //   PIDController xPIDController = new PIDController(0.0, 0.0, 0.0); 
+  //   PIDController yPIDController = new PIDController(0.0, 0.0, 0.0); 
+  //   xPIDController.setTolerance(0.0, 0.0);
+  //   yPIDController.setTolerance(0.0, 0.0);
+
+  //   reefAlignRequest.HeadingController.setP(0.0);
+  //   reefAlignRequest.HeadingController.setTolerance(0.0, 0.0);
+
+  // }
 
   /**
    * Measures the velocity feedforward constants for the drive motors.

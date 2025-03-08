@@ -25,6 +25,10 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,6 +66,17 @@ public class Vision extends SubsystemBase {
    */
   public Rotation2d getTargetX(int cameraIndex) {
     return inputs[cameraIndex].latestTargetObservation.tx();
+  }
+
+  // simple proportional ranging control with Limelight's "ty" value
+  // this works best if your Limelight's mount height and target mount height are different.
+  // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
+  double limelight_range_proportional() {    
+    double kP = .1;
+    double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
+    targetingForwardSpeed *= TunerConstants.kSpeedAt12Volts.magnitude();
+    targetingForwardSpeed *= -1.0;
+    return targetingForwardSpeed;
   }
 
   @Override
