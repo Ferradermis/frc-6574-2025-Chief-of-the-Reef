@@ -29,7 +29,7 @@ public class Intake extends Command {
     @Override
     public void end(boolean interrupted) {
         // Called once the command ends or is interrupted.
-        RobotContainer.endEffector.getNewSetVoltsCommand(0);
+        RobotContainer.endEffector.setTarget(Volts.of(0));
     }
 
     @Override

@@ -23,7 +23,7 @@ public class Climber extends SubsystemBase {
     loggedClimber.climberSetpoint = 0;
     loggedClimber.supplyCurrent = Amps.mutable(0);
     loggedClimber.torqueCurrent = Amps.mutable(0);
-    loggedClimber.voltageSetPoint = Volts.mutable(0);
+    loggedClimber.voltageSetpoint = Volts.mutable(0);
     
     // Set the climber source in the visualizer
     //RobotState.getInstance().setClimberTwist(loggedClimber.climberAngle);

@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
@@ -14,7 +15,7 @@ public class SetElevatorPosition extends Command {
     @Override
     public void initialize() {
         // Called when the command is initially scheduled.
-        RobotContainer.elevator.getNewSetDistanceCommand(distance); // TODO: test command, defaulted to 0
+        RobotContainer.elevator.setDistance(Inches.of(distance)); // TODO: test command, defaulted to 0
     }
 
     @Override

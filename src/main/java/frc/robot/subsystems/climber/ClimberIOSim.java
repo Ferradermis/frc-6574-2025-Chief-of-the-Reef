@@ -83,7 +83,7 @@ public class ClimberIOSim implements ClimberIO {
     //input.climberSetPoint.mut_replace(controller.getGoal().position, Degrees);
     input.supplyCurrent.mut_replace(sim.getCurrentDrawAmps(), Amps);
     input.torqueCurrent.mut_replace(input.supplyCurrent.in(Amps), Amps);
-    input.voltageSetPoint.mut_replace(appliedVoltage);
+    input.voltageSetpoint.mut_replace(appliedVoltage);
 
     // Periodically set the input voltage
     // Update the simulator every 0.02 seconds

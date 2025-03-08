@@ -21,7 +21,7 @@ public interface ClimberIO {
     public MutAngularVelocity climberAngularVelocity = DegreesPerSecond.mutable(0);
     //public MutAngle climberSetPoint = Degrees.mutable(0);
     public double climberSetpoint = 0;
-    public MutVoltage voltageSetPoint = Volts.mutable(0);
+    public MutVoltage voltageSetpoint = Volts.mutable(0);
     public MutCurrent supplyCurrent = Amps.mutable(0);
     public MutCurrent torqueCurrent = Amps.mutable(0);
   }

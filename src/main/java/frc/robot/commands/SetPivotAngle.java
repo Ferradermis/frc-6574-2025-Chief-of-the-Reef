@@ -15,7 +15,7 @@ public class SetPivotAngle extends Command {
     @Override
     public void initialize() {
         // Called when the command is initially scheduled.
-        RobotContainer.pivot.getNewSetAngleCommand(angle); // TODO: test command, defaulted to 0
+        RobotContainer.pivot.setAngle(angle); // TODO: test command, defaulted to 0
     }
 
     @Override

@@ -15,7 +15,7 @@ public class SetTurretAngle extends Command {
     @Override
     public void initialize() {
         // Called when the command is initially scheduled.
-        RobotContainer.turret.getNewSetAngleCommand(angle); // TODO: test command, defaulted to 0
+        RobotContainer.turret.setAngle(angle); // TODO: test command, defaulted to 0
     }
 
     @Override
