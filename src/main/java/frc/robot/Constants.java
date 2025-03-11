@@ -49,15 +49,15 @@ public final class Constants {
 
   public static final class PositionConstants {
     // Elevator Constants
-    public static final double LEVEL_FOUR_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double LEVEL_ONE_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double LEVEL_FOUR_ELEVATOR_HEIGHT = 1208.659;
+    public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 15 * 39.37;
+    public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 4.5 * 39.37;
+    public static final double LEVEL_ONE_ELEVATOR_HEIGHT = 0.0; 
     public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double GROUND_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double CHUTE_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double HOME_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double CHUTE_ELEVATOR_HEIGHT = 4.0 * 39.37;
+    public static final double HOME_ELEVATOR_HEIGHT = 0.0;
 
     // Pivot Constants
     public static final double LEVEL_FOUR_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
@@ -71,8 +71,8 @@ public final class Constants {
     public static final double HOME_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
 
     // Turret Constants
-    public static final double VERTICAL_TURRET_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double HORIZONTAL_TURRET_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double VERTICAL_TURRET_ANGLE = 2.225;
+    public static final double HORIZONTAL_TURRET_ANGLE = 0.0;
 
     // Climber Constants
     public static final double CLIMBER_UP_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)

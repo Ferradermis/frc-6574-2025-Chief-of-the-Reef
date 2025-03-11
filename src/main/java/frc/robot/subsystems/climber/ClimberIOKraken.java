@@ -1,5 +1,7 @@
 package frc.robot.subsystems.climber;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -29,8 +31,8 @@ public class ClimberIOKraken implements ClimberIO{
     public void configureKrakens() {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        config.Voltage.PeakForwardVoltage = 1.0; //TODO: Probably need to change this value
-        config.Voltage.PeakReverseVoltage = -1.0; //TODO: Probably need to change this value
+        config.Voltage.PeakForwardVoltage = 6.0; //TODO: Probably need to change this value
+        config.Voltage.PeakReverseVoltage = -6.0; //TODO: Probably need to change this value
         config.CurrentLimits.StatorCurrentLimit = 80.0;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimit = 40.0;
@@ -41,7 +43,7 @@ public class ClimberIOKraken implements ClimberIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
 
         Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = 40.0;
+        slot0Configs.kP = 20.0;
         slot0Configs.kI = 0.0;
         slot0Configs.kD = 0.0;
         slot0Configs.kS = 0.0;
@@ -52,8 +54,8 @@ public class ClimberIOKraken implements ClimberIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
 
         MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = 50.0;
-        motionMagicConfigs.MotionMagicAcceleration = 20.0;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 100.0;
+        motionMagicConfigs.MotionMagicAcceleration = 80.0;
         motionMagicConfigs.MotionMagicJerk = 0.0;
         motionMagicConfigs.MotionMagicExpo_kV = 0.0;
         motionMagicConfigs.MotionMagicExpo_kA = 0.0;
@@ -72,11 +74,8 @@ public class ClimberIOKraken implements ClimberIO{
     // Updates the inputs of the turret
     @Override
     public void updateInputs(ClimberInputs inputs) {
-        inputs.climberAngle = motor.getPosition().getValueAsDouble();
-        inputs.climberAngularVelocity.mut_replace(motor.getVelocity().getValue());
-        inputs.climberSetpoint = angleSetpoint;
-        inputs.voltageSetpoint.mut_replace(motor.getMotorVoltage().getValue());
-        inputs.supplyCurrent.mut_replace(motor.getSupplyCurrent().getValue());
+        Logger.recordOutput("RobotState/ClimberGate/Position/", motor.getPosition().getValueAsDouble());
+        Logger.recordOutput("RobotState/ClimberGate/Voltage/", motor.getMotorVoltage().getValueAsDouble());
     }
 
     // Stops the motor of the turret

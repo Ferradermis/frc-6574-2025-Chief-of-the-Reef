@@ -79,6 +79,17 @@ public class Vision extends SubsystemBase {
     return targetingForwardSpeed;
   }
 
+  // simple proportional ranging control with Limelight's "ty" value
+  // this works best if your Limelight's mount height and target mount height are different.
+  // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
+  double limelight_range_proportional_horizontal() {    
+    double kP = .1;
+    double targetingHorizontalSpeed = LimelightHelpers.getTX("limelight") * kP;
+    targetingHorizontalSpeed *= TunerConstants.kSpeedAt12Volts.magnitude();
+    targetingHorizontalSpeed *= -1.0;
+    return targetingHorizontalSpeed;
+  }
+
   @Override
   public void periodic() {
     for (int i = 0; i < io.length; i++) {

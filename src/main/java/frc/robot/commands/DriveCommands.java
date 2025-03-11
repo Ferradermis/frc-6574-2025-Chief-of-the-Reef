@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.drive.Drive;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -161,25 +162,6 @@ public class DriveCommands {
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
-
-  // WIP command
-  // public static Command alignToReefCommand(Supplier<Pose2d> target) {
-  //   SwerveRequest.FieldCentricFacingAngle reefAlignRequest = new FieldCentricFacingAngle()
-  //     .withDriveRequestType(DriveRequestType.Velocity)
-  //     .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance);
-
-  //   // TODO: Find PID values (might be the ones from other commands in this file)
-  //   // (Could be different due to the use of the phoenix swerve request in this command)
-  //   // Also define acceptable tolerance values
-  //   PIDController xPIDController = new PIDController(0.0, 0.0, 0.0); 
-  //   PIDController yPIDController = new PIDController(0.0, 0.0, 0.0); 
-  //   xPIDController.setTolerance(0.0, 0.0);
-  //   yPIDController.setTolerance(0.0, 0.0);
-
-  //   reefAlignRequest.HeadingController.setP(0.0);
-  //   reefAlignRequest.HeadingController.setTolerance(0.0, 0.0);
-
-  // }
 
   /**
    * Measures the velocity feedforward constants for the drive motors.

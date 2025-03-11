@@ -44,7 +44,7 @@ public class ElevatorIOKraken implements ElevatorIO {
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimit = 40;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.Slot0.kP = 4;
+    config.Slot0.kP = 8.0;
     config.Slot0.kG = 0.0;
     config.Slot0.kS = 0.3;
     config.Slot0.kV = 0.0;
