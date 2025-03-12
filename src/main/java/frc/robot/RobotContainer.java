@@ -40,6 +40,7 @@ import frc.robot.commands.Release;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetTurretAngle;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
+import frc.robot.commands.FullAutoSystemCommands.ScoreL1InAuto;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
@@ -187,6 +188,7 @@ public class RobotContainer {
     }
 
     NamedCommands.registerCommand("Release", new ReleaseInAuto());
+    NamedCommands.registerCommand("ScoreLevelOne", new ScoreL1InAuto());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -267,8 +269,8 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
-    // driverController.leftBumper().whileTrue(new Intake(8)).whileFalse(new Intake(0));
-    // driverController.rightBumper().whileTrue(new Release(3.5)).whileFalse(new Intake(0));
+    driverController.leftBumper().whileTrue(new Intake(8)).whileFalse(new Intake(0));
+    driverController.rightBumper().whileTrue(new Release(3.5)).whileFalse(new Intake(0));
     // driverController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7
     // driverController.x().onTrue(new SetElevatorPosition(0)); //* 39.37
     // driverController.b().onTrue(new SetElevatorPosition(15 * 39.37));
@@ -291,7 +293,7 @@ public class RobotContainer {
     // operatorController.leftBumper().onTrue(new ReturnToHome());
 
     // operatorController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7 //l4
-    operatorController.x().onTrue(new SetElevatorPosition(4 * 39.37)); //* 39.37 //home
+    operatorController.x().onTrue(new ReturnToHome()); //* 39.37 //home
     // operatorController.b().onTrue(new SetElevatorPosition(15 * 39.37)); //l3
     // operatorController.a().onTrue(new SetElevatorPosition(4.5 * 39.37)); // Add more elevator positions as needed for Duluth
     operatorController.a().whileTrue(elevator.getNewSetVoltageCommand(1)).whileFalse(elevator.getNewSetVoltageCommand(0));
@@ -303,17 +305,18 @@ public class RobotContainer {
     operatorController.povDown().whileTrue(pivot.setVoltageTest(0.75)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
     operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0));
     operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
-    operatorController.y().onTrue(pivot.getNewSetAngleCommand(0));
+    //operatorController.y().onTrue(new PickupCoralFromChute());
+    operatorController.y().onTrue(new ScoreLevelOne());
 
 
     // Test buttons
-    //driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(0.1));
-    //driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(540.0)).onFalse(elevator.getNewSetDistanceCommand(40.0));
+    // driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(0.1));
+    // driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(540.0)).onFalse(elevator.getNewSetDistanceCommand(40.0));
     // operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
     // operatorController.povLeft().onTrue(rotate.getNewSetAngleCommand(1));
-    //operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.295)); //.onFalse(arm.getNewSetAngleCommand(-0.060));
-    //operatorController.b().onTrue(elevator.resetEncoder());
+    // operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.295)); //.onFalse(arm.getNewSetAngleCommand(-0.060));
+    // operatorController.b().onTrue(elevator.resetEncoder());
     // operatorController.povUp().whileTrue(arm.setVoltageTest(2)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     // operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
     // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
