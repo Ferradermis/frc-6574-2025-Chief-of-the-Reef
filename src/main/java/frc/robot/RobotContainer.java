@@ -41,6 +41,7 @@ import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetTurretAngle;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL1InAuto;
+import frc.robot.commands.FullAutoSystemCommands.ScoreL3InAuto;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
@@ -189,6 +190,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Release", new ReleaseInAuto());
     NamedCommands.registerCommand("ScoreLevelOne", new ScoreL1InAuto());
+    NamedCommands.registerCommand("ScoreLevelThreeInAuto", new ScoreL3InAuto());
+    NamedCommands.registerCommand("ReturnToHome", new ReturnToHome());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

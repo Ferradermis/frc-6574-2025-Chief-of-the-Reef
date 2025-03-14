@@ -9,6 +9,30 @@
           "data": {
             "pathName": "Score L1"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreLevelThreeInAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Release"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RetreatSmall"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReturnToHome"
+          }
         }
       ]
     }
