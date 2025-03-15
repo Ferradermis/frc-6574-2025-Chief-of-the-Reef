@@ -17,6 +17,7 @@ import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,24 +25,32 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.vision.VisionIO.PoseObservation;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
+
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
   private final VisionConsumer consumer;
+  private final VisionConsumer consumerAutoAlign;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
+  private double targetDistance = 0;
 
-  public Vision(VisionConsumer consumer, VisionIO... io) {
+  public Vision(VisionConsumer consumer, VisionConsumer consumerAutoAlign, VisionIO... io) {
     this.consumer = consumer;
+    this.consumerAutoAlign = consumerAutoAlign;
     this.io = io;
 
     // Initialize inputs
@@ -68,26 +77,24 @@ public class Vision extends SubsystemBase {
     return inputs[cameraIndex].latestTargetObservation.tx();
   }
 
-  // simple proportional ranging control with Limelight's "ty" value
-  // this works best if your Limelight's mount height and target mount height are different.
-  // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
-  double limelight_range_proportional() {    
-    double kP = .1;
-    double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
-    targetingForwardSpeed *= TunerConstants.kSpeedAt12Volts.magnitude();
-    targetingForwardSpeed *= -1.0;
-    return targetingForwardSpeed;
+  /**
+   * Returns the Y angle to the best target, which can be used for simple servoing with vision.
+   *
+   * @param cameraIndex The index of the camera to use.
+   */
+  public Rotation2d getTargetY(int cameraIndex) {
+    return inputs[cameraIndex].latestTargetObservation.ty();
   }
 
-  // simple proportional ranging control with Limelight's "ty" value
-  // this works best if your Limelight's mount height and target mount height are different.
-  // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
-  double limelight_range_proportional_horizontal() {    
-    double kP = .1;
-    double targetingHorizontalSpeed = LimelightHelpers.getTX("limelight") * kP;
-    targetingHorizontalSpeed *= TunerConstants.kSpeedAt12Volts.magnitude();
-    targetingHorizontalSpeed *= -1.0;
-    return targetingHorizontalSpeed;
+  public Double getTargetDistance(int cameraIndex) {
+    if (inputs[cameraIndex].poseObservations.length > 0) {
+      targetDistance = inputs[cameraIndex].poseObservations[0].averageTagDistance();
+    }
+    return targetDistance;
+  }
+
+  public Integer getTargetId(int cameraIndex) {
+    return (int) inputs[cameraIndex].latestTargetObservation.tagId();
   }
 
   @Override
@@ -166,7 +173,7 @@ public class Vision extends SubsystemBase {
         }
 
         // Send vision observation
-        consumer.accept(
+        addVisionMeasurementAA(
             observation.pose().toPose2d(),
             observation.timestamp(),
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
@@ -211,4 +218,39 @@ public class Vision extends SubsystemBase {
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs);
   }
+
+  // accepts the observation
+  public boolean rejectPose(PoseObservation observation) {
+    return false;
+  }
+  // accepts the vision measurements
+  public void addVisionMeasurement(Pose2d pose, double timestamp, Vector<N3> fill) {
+    consumer.accept(pose, timestamp, fill);
+  }
+
+  public void addVisionMeasurementAA(Pose2d pose, double timestamp, Vector<N3> fill){
+    consumerAutoAlign.accept(pose, timestamp, fill);
+  }
+
+  public Command setTagFilterCommand(int[] filter) {
+    return new InstantCommand(() -> {
+      setTagFilter(filter);
+    });
+  }
+
+  public void setTagFilter(int[] filter) {
+    // Creates a stream for array then sets the TagId for each camera.
+    Arrays.stream(io).forEach((e) -> {e.setTagIdFilter(filter);});
+  }
+
+  public Command setDefaultTagFilterCommand() {
+    return new InstantCommand(() -> {
+      setDefaultTagFilter();
+    });
+  }
+
+  public void setDefaultTagFilter() {
+    Arrays.stream(io).forEach((e) -> {e.setDefaultTagFilter();});
+  }
+
 }

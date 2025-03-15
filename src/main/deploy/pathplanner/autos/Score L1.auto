@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ScoreLevelOne"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Score L1"
@@ -13,13 +19,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreLevelOne"
+            "name": "Release"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Release"
+            "pathName": "RetreatSmall"
           }
         }
       ]

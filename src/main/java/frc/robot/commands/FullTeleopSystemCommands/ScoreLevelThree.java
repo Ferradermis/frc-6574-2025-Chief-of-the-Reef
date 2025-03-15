@@ -14,10 +14,10 @@ public class ScoreLevelThree extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-            new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3),
             new SetElevatorPosition(Constants.PositionConstants.LEVEL_THREE_ELEVATOR_HEIGHT).withTimeout(0.3),
             new WaitCommand(0.2),
-            new SetPivotAngle(Constants.PositionConstants.LEVEL_THREE_PIVOT_ANGLE).withTimeout(0.3)
+            new SetPivotAngle(Constants.PositionConstants.LEVEL_THREE_PIVOT_ANGLE).withTimeout(0.3),
+            new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3)
     );
   }
 }

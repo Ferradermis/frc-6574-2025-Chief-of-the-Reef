@@ -34,14 +34,22 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.PositionConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
 import frc.robot.commands.SetElevatorPosition;
+import frc.robot.commands.SetPivotAngle;
 import frc.robot.commands.SetTurretAngle;
+import frc.robot.commands.FullAutoSystemCommands.GrabAlgaeInAuto;
+import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL1InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL3InAuto;
+import frc.robot.commands.FullAutoSystemCommands.TomfooleryInAuto;
+import frc.robot.commands.FullTeleopSystemCommands.AlgaeReturnToHome;
+import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeOne;
+import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeTwo;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
@@ -51,6 +59,7 @@ import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelOne;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
+import frc.robot.commands.FullTeleopSystemCommands.Tomfoolery;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.LockingServo;
 import frc.robot.subsystems.climber.Climber;
@@ -137,10 +146,10 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOLimelight(camera0Name, drive::getRotation));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOLimelight(camera0Name, drive::getRotation));
         // vision =
         //     new Vision(
         //         demoDrive::addVisionMeasurement,
@@ -162,11 +171,11 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+        //         new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         break;
 
       default:
@@ -183,7 +192,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        //vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
     }
 
@@ -191,6 +200,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("ScoreLevelOne", new ScoreL1InAuto());
     NamedCommands.registerCommand("ScoreLevelThree", new ScoreL3InAuto());
     NamedCommands.registerCommand("ReturnToHome", new ReturnToHome());
+    NamedCommands.registerCommand("ScoreBarge", new TomfooleryInAuto());
+    NamedCommands.registerCommand("GrabAlgae", new GrabAlgaeInAuto());
+    NamedCommands.registerCommand("ReleaseAlage", new ReleaseAlgaeInAuto());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -271,8 +283,8 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
-    driverController.leftBumper().whileTrue(new Intake(8)).whileFalse(new Intake(0));
-    driverController.rightBumper().whileTrue(new Release(3.5)).whileFalse(new Intake(0));
+    driverController.leftBumper().whileTrue(new Intake(12)).whileFalse(new Intake(0));
+    driverController.rightBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
     // driverController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7
     // driverController.x().onTrue(new SetElevatorPosition(0)); //* 39.37
     // driverController.b().onTrue(new SetElevatorPosition(15 * 39.37));
@@ -283,50 +295,16 @@ public class RobotContainer {
     driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
 
     // Operator buttons
-    // operatorController.a().onTrue(new ScoreLevelOne());
-    // operatorController.b().onTrue(new ScoreLevelTwo());
-    // operatorController.x().onTrue(new ScoreLevelThree());
-    // operatorController.y().onTrue(new ScoreLevelFour());
-    // operatorController.povUp().onTrue(new PickupAlgaeFromGround()); // Could be moved to driver instead (with an auto intake added)
-    // operatorController.povDown().onTrue(new ScoreProcessor());
-    // operatorController.povLeft().onTrue(new PickupCoralFromGround()); // Could be moved to driver instead (with an auto intake added)
-    // operatorController.povRight().onTrue(new PickupCoralFromChute());
-    // operatorController.rightBumper().onTrue(new GrabAlgae());
-    // operatorController.leftBumper().onTrue(new ReturnToHome());
-
-    // operatorController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7 //l4
-    operatorController.x().onTrue(new ReturnToHome()); //* 39.37 //home
-    // operatorController.b().onTrue(new SetElevatorPosition(15 * 39.37)); //l3
-    // operatorController.a().onTrue(new SetElevatorPosition(4.5 * 39.37)); // Add more elevator positions as needed for Duluth
-    operatorController.a().whileTrue(elevator.getNewSetVoltageCommand(1)).whileFalse(elevator.getNewSetVoltageCommand(0));
-    operatorController.b().whileTrue(elevator.getNewSetVoltageCommand(-1)).whileFalse(elevator.getNewSetVoltageCommand(0));
-    operatorController.leftBumper().onTrue(elevator.resetEncoder());
-    operatorController.povLeft().onTrue(new SetTurretAngle(0));
-    operatorController.povRight().onTrue(new SetTurretAngle(2.225));
-    operatorController.povUp().whileTrue(pivot.setVoltageTest(-1.5)).whileFalse(pivot.setVoltageTest(0)); // Pivot up
-    operatorController.povDown().whileTrue(pivot.setVoltageTest(0.75)).whileFalse(pivot.setVoltageTest(0)); // Pivot down
-    operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0));
-    operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0));
-    //operatorController.y().onTrue(new PickupCoralFromChute());
-    operatorController.y().onTrue(new ScoreLevelOne());
-
-
-    // Test buttons
-    // driverController.povUp().onTrue(elevator.getNewSetDistanceCommand(0.1));
-    // driverController.povDown().onTrue(elevator.getNewSetDistanceCommand(540.0)).onFalse(elevator.getNewSetDistanceCommand(40.0));
-    // operatorController.povLeft().whileTrue(rotate.setVoltageTest(1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
-    // operatorController.povRight().whileTrue(rotate.setVoltageTest(-1)).whileFalse(rotate.setVoltageTest(0));//.onFalse(rotate.getNewSetAngleCommand(0));
-    // operatorController.povLeft().onTrue(rotate.getNewSetAngleCommand(1));
-    // operatorController.povUp().onTrue(arm.getNewSetAngleCommand(-0.295)); //.onFalse(arm.getNewSetAngleCommand(-0.060));
-    // operatorController.b().onTrue(elevator.resetEncoder());
-    // operatorController.povUp().whileTrue(arm.setVoltageTest(2)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
-    // operatorController.povDown().whileTrue(arm.setVoltageTest(-1)).whileFalse(arm.setVoltageTest(0));//.onFalse(arm.getNewSetAngleCommand(0));
-    // driverController.rightBumper().whileTrue(endEffector.getNewSetVoltsCommand(12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    // driverController.leftBumper().whileTrue(endEffector.getNewSetVoltsCommand(-12)).whileFalse(endEffector.getNewSetVoltsCommand(0));
-    // // driverController.rightBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(37)));
-    // // driverController.leftBumper().onTrue(climber.getNewPivotTurnCommand(Degrees.of(90)));
-
-    // //driverController.rightBumper().onTrue(new RunCommand(() -> climber.setVoltageTest(4), climber)).onFalse(new RunCommand(() -> climber.setVoltageTest(0), climber));
+    operatorController.a().onTrue(new ScoreLevelOne());
+    operatorController.b().onTrue(new ScoreLevelTwo());
+    operatorController.x().onTrue(new ScoreLevelThree());
+    operatorController.y().onTrue(new ScoreLevelFour());
+    operatorController.povDown().onTrue(new ReturnToHome());
+    operatorController.povUp().onTrue(new PickupCoralFromChute());
+    operatorController.rightBumper().whileTrue(new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE_L4));
+    operatorController.leftBumper().whileTrue(new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE));
+    operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0)); //down
+    operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
   }
 
   /**

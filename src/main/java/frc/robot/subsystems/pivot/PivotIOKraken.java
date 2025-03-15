@@ -64,7 +64,7 @@ public class PivotIOKraken implements PivotIO{
         slot0Configs.kI = 0.0;
         slot0Configs.kD = 0.5;
         slot0Configs.kS = 0.0;
-        slot0Configs.kG = 0.3;
+        slot0Configs.kG = 0.6;
         slot0Configs.kV = 0.0;
         slot0Configs.kA = 0.0;
         slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;

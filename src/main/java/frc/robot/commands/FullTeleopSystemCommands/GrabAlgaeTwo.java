@@ -2,6 +2,7 @@ package frc.robot.commands.FullTeleopSystemCommands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.Intake;
 import frc.robot.commands.SetPivotAngle;
 import frc.robot.commands.SetElevatorPosition;
@@ -13,11 +14,10 @@ public class GrabAlgaeTwo extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
-            new SetElevatorPosition(0),
-            new SetPivotAngle(0),
-            new SetTurretAngle(0)
-        ),
-        new Intake(0)
+          new SetPivotAngle(Constants.PositionConstants.ALGAE_TWO_PIVOT_ANGLE),
+            new SetElevatorPosition(Constants.PositionConstants.ALGAE_TWO_ELEVATOR_HEIGHT),
+            new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE)
+        )
     );
   } 
 }
