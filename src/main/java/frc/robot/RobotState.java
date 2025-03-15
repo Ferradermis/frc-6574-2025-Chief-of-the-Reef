@@ -66,7 +66,7 @@ public class RobotState extends VirtualSubsystem {
     robotBaseRoot.append(robotBaseLigament2d);
 
     // Add the primary mechanism to the SmartDashboard
-    SmartDashboard.putData(key, primaryMechanism2d);
+    //SmartDashboard.putData(key, primaryMechanism2d);
   }
 
   // If the instance is null, create a new instance

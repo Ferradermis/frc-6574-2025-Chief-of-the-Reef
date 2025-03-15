@@ -140,8 +140,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOLimelight(camera0Name, drive::getRotation),
-                new VisionIOLimelight(camera1Name, drive::getRotation));
+                new VisionIOLimelight(camera0Name, drive::getRotation));
         // vision =
         //     new Vision(
         //         demoDrive::addVisionMeasurement,
@@ -190,7 +189,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Release", new ReleaseInAuto());
     NamedCommands.registerCommand("ScoreLevelOne", new ScoreL1InAuto());
-    NamedCommands.registerCommand("ScoreLevelThreeInAuto", new ScoreL3InAuto());
+    NamedCommands.registerCommand("ScoreLevelThree", new ScoreL3InAuto());
     NamedCommands.registerCommand("ReturnToHome", new ReturnToHome());
 
     // Set up auto routines

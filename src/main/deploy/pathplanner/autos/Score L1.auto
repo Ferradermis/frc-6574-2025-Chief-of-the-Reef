@@ -13,25 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreLevelThreeInAuto"
+            "name": "ScoreLevelOne"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Release"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RetreatSmall"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ReturnToHome"
           }
         }
       ]

@@ -9,6 +9,7 @@ public class ScoreL1InAuto extends SequentialCommandGroup {
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
                 new ScoreLevelOne().withTimeout(1)
+
         );
     }
 }

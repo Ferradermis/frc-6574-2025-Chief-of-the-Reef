@@ -15,9 +15,7 @@ public class ScoreL3InAuto extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-            new ScoreLevelThree().withTimeout(1),
-            new SetPivotAngle(0.100).withTimeout(1)
-
+            new ScoreLevelThree().withTimeout(1)
         );
     }
 }
