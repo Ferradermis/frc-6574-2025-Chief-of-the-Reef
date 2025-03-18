@@ -295,8 +295,12 @@ public class RobotContainer {
     driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
 
     // Operator buttons
+    // 0.068 l3 pivot 10.660 l3 ele
+    // 
     // operatorController.a().onTrue(new GrabAlgaeOne());
     // operatorController.b().onTrue(new GrabAlgaeTwo());
+    operatorController.a().onTrue(new ScoreLevelOne());
+    operatorController.b().onTrue(new ScoreLevelTwo());
     operatorController.x().onTrue(new ScoreLevelThree());
     operatorController.y().onTrue(new ScoreLevelFour());
     operatorController.povDown().onTrue(new AlgaeReturnToHome());

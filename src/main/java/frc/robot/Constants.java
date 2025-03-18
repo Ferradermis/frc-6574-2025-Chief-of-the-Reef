@@ -50,14 +50,14 @@ public final class Constants {
   public static final class PositionConstants {
     // Elevator Constants
     public static final double LEVEL_FOUR_ELEVATOR_HEIGHT = 23.165 * 39.37;
-    public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 11.504 * 39.37;
+    public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 12 * 39.37;
     public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 4.765 * 39.37;
     public static final double LEVEL_ONE_ELEVATOR_HEIGHT = 0.0; 
     public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 2.978 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 9.628 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double GROUND_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double PROCESSOR_ELEVATOR_HEIGHT = 2.3825 * 39.87;
-    public static final double CHUTE_ELEVATOR_HEIGHT = 3.75 * 39.37;
+    public static final double CHUTE_ELEVATOR_HEIGHT = 4.720 * 39.37;
     public static final double HOME_ELEVATOR_HEIGHT = 0.0;
     public static final double ALGAE_NET_ELEVATOR_HEIGHT = 24.305 * 39.37;
 
@@ -65,13 +65,13 @@ public final class Constants {
     public static final double LEVEL_FOUR_PIVOT_ANGLE = 0.094;
     public static final double LEVEL_THREE_PIVOT_ANGLE = 0.103;
     public static final double LEVEL_TWO_PIVOT_ANGLE = 0.116;
-    public static final double PIVOT_LOWER_ANGLE = 0.090;
+    public static final double PIVOT_LOWER_ANGLE = 0.068;
     public static final double PIVOT_LOWER_ANGLE_L4 = 0.0;
     public static final double LEVEL_ONE_PIVOT_ANGLE = 0.126;
     public static final double ALGAE_ONE_PIVOT_ANGLE = 0.078; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double ALGAE_TWO_PIVOT_ANGLE = 0.081; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double GROUND_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double CHUTE_PIVOT_ANGLE = 0.167;
+    public static final double CHUTE_PIVOT_ANGLE = 0.156;
     public static final double HOME_PIVOT_ANGLE = 0.182;
     public static final double ALGAE_HOME_PIVOT_ANGLE = 0.137;
     public static final double ALGAE_NET_PIVOT_ANGLE = 0.190;
