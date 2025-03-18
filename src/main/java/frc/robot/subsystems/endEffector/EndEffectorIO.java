@@ -12,7 +12,8 @@ import org.littletonrobotics.junction.AutoLog;
 public interface EndEffectorIO {
   @AutoLog
   public static class EndEffectorInputs {
-    public MutAngularVelocity angularVelocity = DegreesPerSecond.mutable(0);
+    public MutAngularVelocity angularVelocity = RotationsPerSecond.mutable(0);
+    public double velocity = 0;
     public MutVoltage voltageSetpoint = Volts.mutable(0);
     public MutVoltage voltage = Volts.mutable(0);
     public MutCurrent supplyCurrent = Amps.mutable(0);

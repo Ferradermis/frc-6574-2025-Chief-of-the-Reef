@@ -54,7 +54,7 @@ public final class Constants {
     public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 4.765 * 39.37;
     public static final double LEVEL_ONE_ELEVATOR_HEIGHT = 0.0; 
     public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 2.978 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 9.328 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 9.628 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double GROUND_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double PROCESSOR_ELEVATOR_HEIGHT = 2.3825 * 39.87;
     public static final double CHUTE_ELEVATOR_HEIGHT = 3.75 * 39.37;

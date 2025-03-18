@@ -283,7 +283,7 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
-    driverController.leftBumper().whileTrue(new Intake(12)).whileFalse(new Intake(0));
+    driverController.leftBumper().whileTrue(new Intake(13)).whileFalse(new Intake(0));
     driverController.rightBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
     // driverController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7
     // driverController.x().onTrue(new SetElevatorPosition(0)); //* 39.37
@@ -295,11 +295,11 @@ public class RobotContainer {
     driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
 
     // Operator buttons
-    operatorController.a().onTrue(new ScoreLevelOne());
-    operatorController.b().onTrue(new ScoreLevelTwo());
+    // operatorController.a().onTrue(new GrabAlgaeOne());
+    // operatorController.b().onTrue(new GrabAlgaeTwo());
     operatorController.x().onTrue(new ScoreLevelThree());
     operatorController.y().onTrue(new ScoreLevelFour());
-    operatorController.povDown().onTrue(new ReturnToHome());
+    operatorController.povDown().onTrue(new AlgaeReturnToHome());
     operatorController.povUp().onTrue(new PickupCoralFromChute());
     operatorController.rightBumper().whileTrue(new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE_L4));
     operatorController.leftBumper().whileTrue(new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE));

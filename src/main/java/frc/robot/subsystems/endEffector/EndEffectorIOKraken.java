@@ -40,7 +40,8 @@ public class EndEffectorIOKraken implements EndEffectorIO {
   // Updates the inputs of the EndEffectorIOKraken subsystem
   @Override
   public void updateInputs(EndEffectorInputs inputs) {
-    inputs.angularVelocity.mut_replace(motor.getVelocity().getValue());
+    inputs.angularVelocity.mut_replace(motor.getRotorVelocity().getValue());
+    inputs.velocity = motor.getRotorVelocity().getValueAsDouble();
     inputs.voltageSetpoint.mut_replace(
         Voltage.ofRelativeUnits(((VoltageOut) motor.getAppliedControl()).Output, Volts));
     inputs.voltage.mut_replace(motor.getMotorVoltage().getValue());
