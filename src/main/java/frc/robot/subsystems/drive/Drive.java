@@ -27,6 +27,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -39,10 +40,12 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -70,9 +73,9 @@ public class Drive extends SubsystemBase {
               Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
 
   // PathPlanner config constants
-  private static final double ROBOT_MASS_KG = 24.948;
-  private static final double ROBOT_MOI = 1.957;
-  private static final double WHEEL_COF = 1.495;
+  private static final double ROBOT_MASS_KG = 61.689;
+  private static final double ROBOT_MOI = 20;
+  private static final double WHEEL_COF = 1.426;
   private static final RobotConfig PP_CONFIG =
       new RobotConfig(
           ROBOT_MASS_KG,
@@ -104,8 +107,17 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
+
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  private SwerveDrivePoseEstimator poseEstimatorAutoAlign =
+    new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
+  private final Field2d ppField2d = new Field2d();
+  private final Field2d robotField2d = new Field2d();
+
+  PIDController posPID = new PIDController(0.0, 0.0, 0.0);
+  PIDController rotPID = new PIDController(0.0, 0.0, 0.0);
 
   public Drive(
       GyroIO gyroIO,
@@ -134,6 +146,8 @@ public class Drive extends SubsystemBase {
     PhoenixOdometryThread.getInstance().start();
 
     // Configure AutoBuilder for PathPlanner
+    SmartDashboard.putData("pp_field", ppField2d);
+    SmartDashboard.putData("robot_field", robotField2d);
     AutoBuilder.configure(
         this::getPose,
         this::setPose,
@@ -154,6 +168,7 @@ public class Drive extends SubsystemBase {
     );
     PathPlannerLogging.setLogTargetPoseCallback(
         (targetPose) -> {
+          ppField2d.setRobotPose(targetPose);
           Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
         }
     );
@@ -226,6 +241,7 @@ public class Drive extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      poseEstimatorAutoAlign.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
     // Update gyro alert
@@ -314,7 +330,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
@@ -339,12 +355,25 @@ public class Drive extends SubsystemBase {
   /** Returns the current odometry pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
-    return poseEstimator.getEstimatedPosition();
+    Pose2d pose = poseEstimator.getEstimatedPosition();
+    robotField2d.setRobotPose(pose);
+    return pose;
+  }
+
+  @AutoLogOutput(key = "Odometry/RobotAutoAlign")
+  public Pose2d getAutoAlignPose() {
+    Pose2d pose = poseEstimatorAutoAlign.getEstimatedPosition();
+    robotField2d.setRobotPose(pose);
+    return pose;
   }
 
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
+  }
+
+  public Distance getDistanceTo(Pose2d other) {
+    return Meters.of(this.getPose().getTranslation().getDistance(other.getTranslation()));
   }
 
   /** Resets the current odometry pose. */
@@ -361,13 +390,13 @@ public class Drive extends SubsystemBase {
         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
   }
 
-  // public void addVisionMeasurementAutoAlign(
-  //     Pose2d visionRobotPoseMeters,
-  //     double timestampSeconds,
-  //     Matrix<N3, N1> visionMeasurementStdDevs){
-  //       poseEstimatorAutoAlign.addVisionMeasurement(
-  //         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
-  // }
+  public void addVisionMeasurementAutoAlign(
+      Pose2d visionRobotPoseMeters,
+      double timestampSeconds,
+      Matrix<N3, N1> visionMeasurementStdDevs){
+        poseEstimatorAutoAlign.addVisionMeasurement(
+          visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+  }
 
   /** Returns the maximum linear speed in meters per sec. */
   public double getMaxLinearSpeedMetersPerSec() {

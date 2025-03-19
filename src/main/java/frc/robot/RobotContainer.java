@@ -91,6 +91,7 @@ import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIO;
 import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretIOSim;
+import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -146,10 +147,12 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOLimelight(camera0Name, drive::getRotation));
+        vision =
+            new AprilTagVision(
+              drive::setPose, 
+              drive::addVisionMeasurement, 
+              drive::addVisionMeasurementAutoAlign, 
+              new VisionIOLimelight(camera1Name, drive::getRotation));
         // vision =
         //     new Vision(
         //         demoDrive::addVisionMeasurement,
@@ -295,14 +298,16 @@ public class RobotContainer {
     driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
 
     // Operator buttons
-    // operatorController.a().onTrue(new GrabAlgaeOne());
-    // operatorController.b().onTrue(new GrabAlgaeTwo());
+    operatorController.a().onTrue(new ScoreLevelOne());
+    operatorController.b().onTrue(new ScoreLevelTwo());
     operatorController.x().onTrue(new ScoreLevelThree());
     operatorController.y().onTrue(new ScoreLevelFour());
-    operatorController.povDown().onTrue(new AlgaeReturnToHome());
-    operatorController.povUp().onTrue(new PickupCoralFromChute());
-    operatorController.rightBumper().whileTrue(new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE_L4));
-    operatorController.leftBumper().whileTrue(new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE));
+    operatorController.povDown().onTrue(new GrabAlgaeOne());
+    operatorController.povUp().onTrue(new GrabAlgaeTwo());
+    operatorController.povLeft().onTrue(new Tomfoolery());
+    operatorController.povRight().onTrue(new ScoreProcessor());
+    operatorController.rightBumper().whileTrue(new PickupCoralFromChute());
+    operatorController.leftBumper().whileTrue(new AlgaeReturnToHome());
     operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0)); //down
     operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
   }
