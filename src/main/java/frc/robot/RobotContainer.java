@@ -31,13 +31,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.PositionConstants;
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
+import frc.robot.commands.SelectorCommandFactory;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetPivotAngle;
 import frc.robot.commands.SetTurretAngle;
@@ -48,6 +51,7 @@ import frc.robot.commands.FullAutoSystemCommands.ScoreL1InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL3InAuto;
 import frc.robot.commands.FullAutoSystemCommands.TomfooleryInAuto;
 import frc.robot.commands.FullTeleopSystemCommands.AlgaeReturnToHome;
+import frc.robot.commands.FullTeleopSystemCommands.AlignToReef;
 import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeOne;
 import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeTwo;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
@@ -60,6 +64,7 @@ import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
 import frc.robot.commands.FullTeleopSystemCommands.Tomfoolery;
+import frc.robot.commands.FullTeleopSystemCommands.AlignToReef.ReefPosition;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.LockingServo;
 import frc.robot.subsystems.climber.Climber;
@@ -96,6 +101,8 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.util.ReefPositionsUtil;
+import frc.robot.util.ReefPositionsUtil.AutoAlignSide;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -109,7 +116,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  public static Vision vision;
+  public static AprilTagVision vision;
   public static Drive drive;
   public static Elevator elevator;
   public static Pivot pivot;
@@ -124,6 +131,9 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  private ReefPositionsUtil reefPositions;
+  private boolean teleopInitialized = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -167,6 +177,7 @@ public class RobotContainer {
         climber = new Climber(new ClimberIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
         turret = new Turret(new TurretIOSim(new TurretConstants()));
+        climberGate = new Climber(new ClimberIOSim());
         drive =
             new Drive(
                 new GyroIO() {},
@@ -174,6 +185,12 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        vision = 
+            new AprilTagVision(
+              drive::setPose, 
+              drive::addVisionMeasurement, 
+              drive::addVisionMeasurementAutoAlign, 
+              new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose));
         // vision =
         //     new Vision(
         //         drive::addVisionMeasurement,
@@ -226,6 +243,8 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+    reefPositions = ReefPositionsUtil.getInstance();
+    AlignToReef.initialize();
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -237,15 +256,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() { // TODO: create commands and button bindings (last thing before code is mostly finished :D )
-
-    // Driver buttons
-    // Default command, normal field-relative drive
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()));
 
     // driverController.a().whileTrue(
     //     DriveCommands.joystickDriveAtAngle(
@@ -274,6 +284,15 @@ public class RobotContainer {
     // // Switch to X pattern when X button is pressed
     // driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
+    // Driver buttons
+    // Default command, normal field-relative drive
+    drive.setDefaultCommand(
+        DriveCommands.joystickDrive(
+            drive,
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
+
     // Reset gyro to 0° when Y button is pressed
     driverController
         .povUp()
@@ -286,16 +305,25 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
-    driverController.leftBumper().whileTrue(new Intake(13)).whileFalse(new Intake(0));
-    driverController.rightBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
-    // driverController.y().onTrue(new SetElevatorPosition(1208.659)); // 30.7
-    // driverController.x().onTrue(new SetElevatorPosition(0)); //* 39.37
-    // driverController.b().onTrue(new SetElevatorPosition(15 * 39.37));
-    // driverController.a().onTrue(new SetElevatorPosition(4.5 * 39.37));
-    // driverController.povDown().onTrue(elevator.resetEncoder());
-    // driverController.povLeft().onTrue(turret.reset());
-    driverController.a().onTrue(climberGate.getNewPivotTurnCommand(1.9));
-    driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
+    driverController.rightBumper().whileTrue(new Intake(13)).whileFalse(new Intake(0));
+    driverController.leftBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
+    driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
+    //driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
+    driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
+    // driverController.povLeft()
+    // .and(() -> reefPositions.getIsAutoAligning())
+    // .and(() -> {return reefPositions.getAutoAlignSide() == AutoAlignSide.Left;})
+    // .whileTrue(
+    //   AlignToReef.getNewReefCoralScoreSequence(
+    //     ReefPosition.Left, 
+    //     true, 
+    //     SelectorCommandFactory.getCoralLevelPrepCommandSelector(), 
+    //     SelectorCommandFactory.getCoralLevelScoreCommandSelector(), 
+    //     SelectorCommandFactory.getCoralLevelStopScoreCommandSelector(),
+    //      drive)
+    // ).onFalse(
+    //   new ReturnToHome());
+    driverController.povLeft().whileTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive));
 
     // Operator buttons
     operatorController.a().onTrue(new ScoreLevelOne());
@@ -309,7 +337,7 @@ public class RobotContainer {
     operatorController.rightBumper().whileTrue(new PickupCoralFromChute());
     operatorController.leftBumper().whileTrue(new AlgaeReturnToHome());
     operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0)); //down
-    operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
+    //operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
   }
 
   /**
@@ -319,5 +347,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.get();
+  }
+
+  public void teleopInit() {
+    if (!this.teleopInitialized) {
+      vision.setRobotPositionBasedOnAlliance();
+      vision.enableUpdateOdometryBasedOnApriltags();
+      teleopInitialized = true;
+    }
   }
 }

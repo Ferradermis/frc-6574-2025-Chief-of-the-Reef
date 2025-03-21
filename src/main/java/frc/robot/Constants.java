@@ -65,8 +65,7 @@ public final class Constants {
     public static final double LEVEL_FOUR_PIVOT_ANGLE = 0.094;
     public static final double LEVEL_THREE_PIVOT_ANGLE = 0.103;
     public static final double LEVEL_TWO_PIVOT_ANGLE = 0.116;
-    public static final double PIVOT_LOWER_ANGLE = 0.068;
-    public static final double PIVOT_LOWER_ANGLE_L4 = 0.0;
+    public static final double PIVOT_LOWER_ANGLE = 0.0;
     public static final double LEVEL_ONE_PIVOT_ANGLE = 0.126;
     public static final double ALGAE_ONE_PIVOT_ANGLE = 0.078; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double ALGAE_TWO_PIVOT_ANGLE = 0.081; // TODO: Find correct value, defaulted at 0 for now :)

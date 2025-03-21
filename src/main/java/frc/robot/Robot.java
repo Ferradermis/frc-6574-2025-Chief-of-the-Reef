@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.FullTeleopSystemCommands.AlignToReef;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.VirtualSubsystem;
 
@@ -113,6 +114,12 @@ public class Robot extends LoggedRobot {
     robotContainer = new RobotContainer();
   }
 
+  @Override
+  public void robotInit() {
+    super.robotInit();
+      AlignToReef.refreshAlliance();
+  }
+
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
@@ -168,6 +175,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    robotContainer.teleopInit();
   }
 
   /** This function is called periodically during operator control. */

@@ -39,11 +39,11 @@ public class AprilTagVision extends Vision {
             return true;
         }
 
-        if (observation.type() == PoseObservationType.MEGATAG_1) {
-            if (DriverStation.isAutonomousEnabled() || DriverStation.isTeleopEnabled()) {
-                return true;
-            }
-        }
+        // if (observation.type() == PoseObservationType.MEGATAG_1) {
+        //     if (DriverStation.isAutonomousEnabled() || DriverStation.isTeleopEnabled()) {
+        //         return true;
+        //     }
+        // }
         return super.rejectPose(observation);
     }
 

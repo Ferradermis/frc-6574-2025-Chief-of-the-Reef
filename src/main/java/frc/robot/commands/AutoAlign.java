@@ -1,4 +1,4 @@
-package frc.robot.commands.FullTeleopSystemCommands;
+package frc.robot.commands;
 
 import org.littletonrobotics.junction.Logger;
 

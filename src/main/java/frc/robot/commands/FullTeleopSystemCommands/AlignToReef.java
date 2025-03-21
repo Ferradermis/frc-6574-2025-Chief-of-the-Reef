@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
@@ -130,6 +131,7 @@ public class AlignToReef {
      */
     public static Command getNewAlignToReefCommand(ReefPosition position, boolean isBackingUp, Drive drive) {
         Function<Pose2d, Pose2d> positionFunction = getGetTargetPositionFunction(position, isBackingUp);
+        System.out.println("Position Function: " + positionFunction);
         //Base command
         Command returnedCommand = new AutoAlign(getGetTargetPositionFunction(position, isBackingUp), drive);
         //If we're backing up, add kill conditions
