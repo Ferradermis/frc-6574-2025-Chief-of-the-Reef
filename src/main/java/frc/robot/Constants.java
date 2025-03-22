@@ -67,23 +67,23 @@ public final class Constants {
     public static final double LEVEL_TWO_PIVOT_ANGLE = 0.116;
     public static final double PIVOT_LOWER_ANGLE = 0.0;
     public static final double LEVEL_ONE_PIVOT_ANGLE = 0.126;
-    public static final double ALGAE_ONE_PIVOT_ANGLE = 0.078; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double ALGAE_TWO_PIVOT_ANGLE = 0.081; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double ALGAE_ONE_PIVOT_ANGLE = 0.078;
+    public static final double ALGAE_TWO_PIVOT_ANGLE = 0.081;
     public static final double GROUND_PIVOT_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double CHUTE_PIVOT_ANGLE = 0.156;
     public static final double HOME_PIVOT_ANGLE = 0.182;
     public static final double ALGAE_HOME_PIVOT_ANGLE = 0.137;
     public static final double ALGAE_NET_PIVOT_ANGLE = 0.190;
-    //0.190
-    //24.305
+    public static final double CLIMB_PIVOT_ANGLE = 0.039;
+    //0.310
 
     // Turret Constants
     public static final double VERTICAL_TURRET_ANGLE = 2.225;
     public static final double HORIZONTAL_TURRET_ANGLE = 0.0;
 
     // Climber Constants
-    public static final double CLIMBER_UP_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double CLIMBER_DOWN_ANGLE = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double CLIMBER_UP_ANGLE = -60.0;
+    public static final double CLIMBER_DOWN_ANGLE = 56.358;
 
   }
 }

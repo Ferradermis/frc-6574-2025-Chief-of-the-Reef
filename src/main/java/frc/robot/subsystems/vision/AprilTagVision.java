@@ -69,31 +69,33 @@ public class AprilTagVision extends Vision {
     }
 
     /** Sets the robot position based on the alliance if there is one. */
-  public void setRobotPositionBasedOnAlliance() {
-    Pose2d temp;
-    Pose2d pose;
-    Optional<Alliance> optionalAlliance = DriverStation.getAlliance();
-    if (optionalAlliance.isPresent()) {
-      Alliance alliance = optionalAlliance.get();
-      if (alliance == Alliance.Red) {
-        temp = aprilTagLayout.getTagPose(7).get().toPose2d();
-        pose =
-            new Pose2d(
-                temp.getX() + 2.0,
-                temp.getY(),
-                temp.getRotation().plus(Rotation2d.fromDegrees(180.0)));
-      } else {
-        temp = aprilTagLayout.getTagPose(18).get().toPose2d();
-        pose =
-            new Pose2d(
-                temp.getX() - 2.0,
-                temp.getY(),
-                temp.getRotation().plus(Rotation2d.fromDegrees(180.0)));
-      }
+    public void setRobotPositionBasedOnAlliance() {
+      Pose2d temp;
+      Pose2d pose;
+      Optional<Alliance> optionalAlliance = DriverStation.getAlliance();
+      if (optionalAlliance.isPresent()) {
+        Alliance alliance = optionalAlliance.get();
+        if (alliance == Alliance.Red) {
+          temp = aprilTagLayout.getTagPose(7).get().toPose2d();
+          pose =
+              new Pose2d(
+                  temp.getX() + 2.0,
+                  temp.getY(),
+                  temp.getRotation().plus(Rotation2d.fromDegrees(180.0)));
+        } else {
+          temp = aprilTagLayout.getTagPose(18).get().toPose2d();
+          pose =
+              new Pose2d(
+                  temp.getX() - 2.0,
+                  temp.getY(),
+                  temp.getRotation().plus(Rotation2d.fromDegrees(180.0)));
+        }
 
-      resetPose.accept(pose);
-    }
+        resetPose.accept(pose);
+      }
   }
+
+  
 
   /** Create a trigger and waits to update the alliance position when it is available */
   public void createTriggerForSimulation() {

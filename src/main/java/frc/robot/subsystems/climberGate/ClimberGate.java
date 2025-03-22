@@ -1,26 +1,23 @@
-package frc.robot.subsystems.climber;
+package frc.robot.subsystems.climberGate;
 
 import static edu.wpi.first.units.Units.*;
-
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotState;
 import org.littletonrobotics.junction.Logger;
 
-public class Climber extends SubsystemBase {
-  private ClimberIO climberIO;
-  ClimberInputsAutoLogged loggedClimber = new ClimberInputsAutoLogged();
+public class ClimberGate extends SubsystemBase {
+  private ClimberGateIO climberIO;
+  ClimberGateInputsAutoLogged loggedClimber = new ClimberGateInputsAutoLogged();
 
   // Create a new instance of the Climber subsystem
   // Grabs the IO layer for the Climber subsystem, could be a simulation or real hardware
-  public Climber(ClimberIO io) {
+  public ClimberGate(ClimberGateIO io) {
     climberIO = io;
-    loggedClimber.climberAngle = 0;
-    loggedClimber.climberAngularVelocity = DegreesPerSecond.mutable(0);
-    loggedClimber.climberSetpoint = 0;
+    loggedClimber.angle = 0;
+    loggedClimber.angularVelocity = DegreesPerSecond.mutable(0);
+    loggedClimber.setpoint = 0;
     loggedClimber.supplyCurrent = Amps.mutable(0);
     loggedClimber.torqueCurrent = Amps.mutable(0);
     loggedClimber.voltageSetpoint = Volts.mutable(0);
@@ -33,14 +30,6 @@ public class Climber extends SubsystemBase {
   public void setAngle(double climbAngle) {
     climberIO.setClimberTarget(climbAngle);
     System.out.println("Setting Climber Target");
-  }
-
-  public boolean isClimberDeployed() {
-    return loggedClimber.isClimberDeployed;
-  }
-
-  public void setIsClimberDeployed(boolean isDeployed) {
-    loggedClimber.isClimberDeployed = isDeployed;
   }
 
   // Create a new command to set the angle of the climber
@@ -65,7 +54,7 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     climberIO.updateInputs(loggedClimber);
-    Logger.processInputs("RobotState/Climber", loggedClimber);
-    SmartDashboard.putNumber("Climber Angle", loggedClimber.climberAngle);
+    Logger.processInputs("RobotState/ClimberGate", loggedClimber);
+    SmartDashboard.putNumber("Climber Angle", loggedClimber.angle);
   }
 }

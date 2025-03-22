@@ -11,7 +11,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.units.measure.Angle;
 
 public class ClimberIONEO implements ClimberIO {
     public SparkMax m_climberMotor;
@@ -25,21 +24,21 @@ public class ClimberIONEO implements ClimberIO {
         m_climberMotor = new SparkMax(motorId, SparkMax.MotorType.kBrushless);
         m_controller = m_climberMotor.getClosedLoopController();
         m_climberConfig = new SparkMaxConfig();
+        configureNEO();
+        m_climberMotor.getEncoder().setPosition(0);
     }
 
     /** Configures the NEO motor */
     public void configureNEO() {
-        m_climberMotor.configure(
-            m_climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_climberConfig.inverted(false).idleMode(IdleMode.kBrake);
         m_climberConfig.encoder
-            .positionConversionFactor(360/675) // TODO: Find correct conversion factor
-            .velocityConversionFactor(360/675/60); // TODO: Find correct conversion factor
+            .positionConversionFactor(1) // TODO: Find correct conversion factor
+            .velocityConversionFactor(1); // TODO: Find correct conversion factor
         m_climberConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder) // TODO: Find correct feedback sensor - defaulted at primary encoder for now :)
-                .pid(0.1, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
+                .pid(2.0, 0, 0) // using default slot 0 for this NEO - we will probably not use this slot much or at all
                 .outputRange(-1, 1) // same thing here, will probably not use this
-                .pid(0.5, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values
+                .pid(2.0, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values
                 .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
                 .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
@@ -49,6 +48,9 @@ public class ClimberIONEO implements ClimberIO {
             .softLimit
             .forwardSoftLimit(20000)
             .reverseSoftLimit(-20000); // TODO: Find correct soft limits - both set to zero for now :)
+
+        m_climberMotor.configure(
+            m_climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     // Gets the encoder position of the NEO motor

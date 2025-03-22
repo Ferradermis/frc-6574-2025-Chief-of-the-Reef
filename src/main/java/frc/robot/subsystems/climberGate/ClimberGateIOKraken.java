@@ -1,4 +1,4 @@
-package frc.robot.subsystems.climber;
+package frc.robot.subsystems.climberGate;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -13,14 +13,14 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.util.PhoenixUtil;
 
-public class ClimberIOKraken implements ClimberIO{
+public class ClimberGateIOKraken implements ClimberGateIO{
     public TalonFX motor;
     public MotionMagicVoltage request;
     private double angleSetpoint = 0;
     
     // Create a new instance of the TurretIOKraken subsystem
     // Creates a new TalonFX motor controller for the turret and a new voltage output request
-    public ClimberIOKraken (int motorid) {
+    public ClimberGateIOKraken (int motorid) {
         motor = new TalonFX(motorid);
         request = new MotionMagicVoltage(0);
         configureKrakens();
@@ -73,7 +73,7 @@ public class ClimberIOKraken implements ClimberIO{
 
     // Updates the inputs of the turret
     @Override
-    public void updateInputs(ClimberInputs inputs) {
+    public void updateInputs(ClimberGateInputs inputs) {
         Logger.recordOutput("RobotState/ClimberGate/Position/", motor.getPosition().getValueAsDouble());
         Logger.recordOutput("RobotState/ClimberGate/Voltage/", motor.getMotorVoltage().getValueAsDouble());
     }

@@ -15,7 +15,7 @@ public class AlgaeReturnToHome extends SequentialCommandGroup {
             new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE).withTimeout(0.3),
             new SetPivotAngle(Constants.PositionConstants.ALGAE_HOME_PIVOT_ANGLE).withTimeout(0.3),
             new ParallelCommandGroup(
-              new SetElevatorPosition(Constants.PositionConstants.HOME_ELEVATOR_HEIGHT)
+              new SetElevatorPosition(Constants.PositionConstants.HOME_ELEVATOR_HEIGHT).withTimeout(0.3)
         )
     );
   }   
