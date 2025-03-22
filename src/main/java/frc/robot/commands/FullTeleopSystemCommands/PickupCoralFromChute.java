@@ -13,9 +13,9 @@ public class PickupCoralFromChute extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+        new SetPivotAngle(Constants.PositionConstants.CHUTE_PIVOT_ANGLE).withTimeout(0.3),
         new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.CHUTE_ELEVATOR_HEIGHT),
-            new SetPivotAngle(Constants.PositionConstants.CHUTE_PIVOT_ANGLE),
             new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE)
         )
     );

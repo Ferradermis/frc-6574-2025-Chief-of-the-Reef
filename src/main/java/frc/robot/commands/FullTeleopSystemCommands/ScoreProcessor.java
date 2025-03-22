@@ -15,8 +15,8 @@ public class ScoreProcessor extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.PROCESSOR_ELEVATOR_HEIGHT),
-            new SetPivotAngle(0.0),
-            new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE)
+            new SetPivotAngle(Constants.PositionConstants.PROCESSOR_PIVOT_ANGLE),
+            new SetTurretAngle(Constants.PositionConstants.ALGAE_HORIZONTAL_TURRET_ANGLE)
         )
     );
   }

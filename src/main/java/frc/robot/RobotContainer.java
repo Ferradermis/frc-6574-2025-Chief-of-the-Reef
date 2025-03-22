@@ -323,6 +323,8 @@ public class RobotContainer {
     //driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
     driverController.povDown().onTrue(new Climb());
     driverController.y().onTrue(new ScoreCoral());
+    driverController.rightTrigger().onTrue(new PickupAlgaeFromGround()).onFalse(new AlgaeReturnToHome());
+    driverController.leftTrigger().onTrue(new PickupCoralFromGround()).onFalse(new PickupCoralFromChute());
     // driverController.povLeft()
     // .and(() -> reefPositions.getIsAutoAligning())
     // .and(() -> {return reefPositions.getAutoAlignSide() == AutoAlignSide.Left;})
@@ -343,6 +345,8 @@ public class RobotContainer {
     operatorController.b().onTrue(new ScoreLevelTwo());
     operatorController.x().onTrue(new ScoreLevelThree());
     operatorController.y().onTrue(new ScoreLevelFour());
+
+
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
     operatorController.povLeft().onTrue(new Tomfoolery());

@@ -95,7 +95,7 @@ public class VisionIOLimelight implements VisionIO {
     List<PoseObservation> poseObservations = new LinkedList<>();
     // Added booleans to control which pases we will use for debugging purpose and may want to
     // control in code
-    boolean useMega1 = false;
+    boolean useMega1 = true;
     boolean useBoth = false;
     int closestTag = 0;
     double closedDist = 9999.0;

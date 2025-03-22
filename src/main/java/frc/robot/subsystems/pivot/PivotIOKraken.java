@@ -43,8 +43,8 @@ public class PivotIOKraken implements PivotIO{
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        config.Voltage.PeakForwardVoltage = 5.0; //TODO: Probably need to change this value
-        config.Voltage.PeakReverseVoltage = -5.0; //TODO: Probably need to change this value
+        config.Voltage.PeakForwardVoltage = 12.0; //TODO: Probably need to change this value
+        config.Voltage.PeakReverseVoltage = -12.0; //TODO: Probably need to change this value
         config.CurrentLimits.StatorCurrentLimit = 80.0;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimit = 40.0;
@@ -60,19 +60,19 @@ public class PivotIOKraken implements PivotIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
 
         Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = 60.0;
+        slot0Configs.kP = 25.0;
         slot0Configs.kI = 0.0;
-        slot0Configs.kD = 0.5;
+        slot0Configs.kD = 0.0;
         slot0Configs.kS = 0.0;
-        slot0Configs.kG = 0.6;
+        slot0Configs.kG = 0.3;
         slot0Configs.kV = 0.0;
         slot0Configs.kA = 0.0;
         slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(slot0Configs));
 
         MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = 4.0;
-        motionMagicConfigs.MotionMagicAcceleration = 1.0;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 100.0;
+        motionMagicConfigs.MotionMagicAcceleration = 200.0;
         motionMagicConfigs.MotionMagicJerk = 0.0;
         motionMagicConfigs.MotionMagicExpo_kV = 0.0;
         motionMagicConfigs.MotionMagicExpo_kA = 0.0;

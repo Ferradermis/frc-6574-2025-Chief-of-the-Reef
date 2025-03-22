@@ -13,7 +13,19 @@
 
 package frc.robot.subsystems.vision;
 
-import static frc.robot.subsystems.vision.VisionConstants.*;
+import static frc.robot.subsystems.vision.VisionConstants.angularStdDevBaseline;
+import static frc.robot.subsystems.vision.VisionConstants.angularStdDevMegatag2Factor;
+import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
+import static frc.robot.subsystems.vision.VisionConstants.cameraStdDevFactors;
+import static frc.robot.subsystems.vision.VisionConstants.linearStdDevBaseline;
+import static frc.robot.subsystems.vision.VisionConstants.linearStdDevMegatag2Factor;
+import static frc.robot.subsystems.vision.VisionConstants.maxAmbiguity;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -28,29 +40,21 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.LimelightHelpers;
-import frc.robot.RobotContainer;
-import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.VisionIO.PoseObservation;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import org.littletonrobotics.junction.Logger;
-
 public class Vision extends SubsystemBase {
   private final VisionConsumer consumer;
-  private final VisionConsumer consumerAutoAlign;
+  private final VisionConsumer consumerAA;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
+
   private double targetDistance = 0;
 
-  public Vision(VisionConsumer consumer, VisionConsumer consumerAutoAlign, VisionIO... io) {
+  public Vision(VisionConsumer consumer, VisionConsumer consumerAA, VisionIO... io) {
     this.consumer = consumer;
-    this.consumerAutoAlign = consumerAutoAlign;
+    this.consumerAA = consumerAA;
     this.io = io;
 
     // Initialize inputs
@@ -101,7 +105,7 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
-      Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
+      Logger.processInputs("Vision/Camera/" + inputs[i].cameraName, inputs[i]);
     }
 
     // Initialize logging values
@@ -127,17 +131,20 @@ public class Vision extends SubsystemBase {
         if (tagPose.isPresent()) {
           tagPoses.add(tagPose.get());
         }
+        
       }
 
       // Loop over pose observations
       for (var observation : inputs[cameraIndex].poseObservations) {
         // Check whether to reject pose
         boolean rejectPose =
-            observation.tagCount() == 0 // Must have at least one tag
+            rejectPose(observation)
+                || observation.tagCount() == 0 // Must have at least one tag
                 || (observation.tagCount() == 1
                     && observation.ambiguity() > maxAmbiguity) // Cannot be high ambiguity
-                || Math.abs(observation.pose().getZ())
-                    > maxZError // Must have realistic Z coordinate
+                // TODO Determine why they want about 2.4 ft off ground???
+                // || Math.abs(observation.pose().getZ())
+                //   > maxZError // Must have realistic Z coordinate
 
                 // Must be within the field boundaries
                 || observation.pose().getX() < 0.0
@@ -181,16 +188,16 @@ public class Vision extends SubsystemBase {
 
       // Log camera datadata
       Logger.recordOutput(
-          "Vision/Camera" + Integer.toString(cameraIndex) + "/TagPoses",
+          "Vision/Camera/" + inputs[cameraIndex].cameraName + "/TagPoses",
           tagPoses.toArray(new Pose3d[tagPoses.size()]));
       Logger.recordOutput(
-          "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPoses",
+          "Vision/Camera/" + inputs[cameraIndex].cameraName + "/RobotPoses",
           robotPoses.toArray(new Pose3d[robotPoses.size()]));
       Logger.recordOutput(
-          "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesAccepted",
+          "Vision/Camera/" + inputs[cameraIndex].cameraName + "/RobotPosesAccepted",
           robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
       Logger.recordOutput(
-          "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesRejected",
+          "Vision/Camera/" + inputs[cameraIndex].cameraName + "/RobotPosesRejected",
           robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
       allTagPoses.addAll(tagPoses);
       allRobotPoses.addAll(robotPoses);
@@ -209,13 +216,13 @@ public class Vision extends SubsystemBase {
     Logger.recordOutput(
         "Vision/Summary/RobotPosesRejected",
         allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
-
+  
     for(int i = 0; i < inputs.length; i++){
       Logger.recordOutput("Vision/Auto_Align/TX" + i, getTargetX(i).getDegrees());
       Logger.recordOutput("Vision/Auto_Align/TY" + i, getTargetY(i).getDegrees());
     }
   }
-
+// accepts the poses, timestamp, and vision measurements deviations.
   @FunctionalInterface
   public static interface VisionConsumer {
     public void accept(
@@ -228,13 +235,14 @@ public class Vision extends SubsystemBase {
   public boolean rejectPose(PoseObservation observation) {
     return false;
   }
+  
   // accepts the vision measurements
   public void addVisionMeasurement(Pose2d pose, double timestamp, Vector<N3> fill) {
     consumer.accept(pose, timestamp, fill);
   }
 
   public void addVisionMeasurementAA(Pose2d pose, double timestamp, Vector<N3> fill){
-    consumerAutoAlign.accept(pose, timestamp, fill);
+    consumerAA.accept(pose, timestamp, fill);
   }
 
   public Command setTagFilterCommand(int[] filter) {
@@ -257,5 +265,4 @@ public class Vision extends SubsystemBase {
   public void setDefaultTagFilter() {
     Arrays.stream(io).forEach((e) -> {e.setDefaultTagFilter();});
   }
-
 }
