@@ -12,6 +12,9 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import static edu.wpi.first.units.Units.*;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.util.PhoenixUtil;
 
@@ -44,7 +47,7 @@ public class ElevatorIOKraken implements ElevatorIO {
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimit = 40;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.Slot0.kP = 8.0;
+    config.Slot0.kP = 14.0;
     config.Slot0.kG = 0.0;
     config.Slot0.kS = 0.3;
     config.Slot0.kV = 0.0;
@@ -53,13 +56,13 @@ public class ElevatorIOKraken implements ElevatorIO {
 
     TalonFXConfiguration config2 = new TalonFXConfiguration();
     config2.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    config2.Voltage.PeakForwardVoltage = 11; //TODO: Probably need to change this value
-    config2.Voltage.PeakReverseVoltage = -11; //TODO: Probably need to change this value
+    config2.Voltage.PeakForwardVoltage = 12; //TODO: Probably need to change this value
+    config2.Voltage.PeakReverseVoltage = -12; //TODO: Probably need to change this value
     config2.CurrentLimits.StatorCurrentLimit = 80;
     config2.CurrentLimits.StatorCurrentLimitEnable = true;
     config2.CurrentLimits.SupplyCurrentLimit = 40;
     config2.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config2.Slot0.kP = 4;  
+    config2.Slot0.kP = 14.0;  
     config2.Slot0.kG = 0.0;
     config2.Slot0.kS = 0.3;
     config2.Slot0.kV = 0.0;
@@ -70,8 +73,8 @@ public class ElevatorIOKraken implements ElevatorIO {
     PhoenixUtil.tryUntilOk(5, () -> followerMotor.getConfigurator().apply(config2));
 
     MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-    motionMagicConfigs.MotionMagicCruiseVelocity = 100.0;
-    motionMagicConfigs.MotionMagicAcceleration = 200;
+    motionMagicConfigs.MotionMagicCruiseVelocity = 300.0;
+    motionMagicConfigs.MotionMagicAcceleration = 600.0;
     motionMagicConfigs.MotionMagicJerk = 0.0;
     motionMagicConfigs.MotionMagicExpo_kV = 0.0;
     motionMagicConfigs.MotionMagicExpo_kA = 0.0;
@@ -89,6 +92,7 @@ public class ElevatorIOKraken implements ElevatorIO {
     inputs.supplyCurrent.mut_replace(leaderMotor.getSupplyCurrent().getValue());
     inputs.statorCurrent.mut_replace(leaderMotor.getStatorCurrent().getValue());
     inputs.voltageSetpoint.mut_replace(leaderMotor.getMotorVoltage().getValue());
+    Logger.recordOutput("RobotState/Elevator/" + "RPM", leaderMotor.getRotorVelocity().getValue());
   }
 
   @Override

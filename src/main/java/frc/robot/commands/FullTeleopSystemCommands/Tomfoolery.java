@@ -14,10 +14,11 @@ public class Tomfoolery extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.ALGAE_NET_ELEVATOR_HEIGHT).withTimeout(0.3),
-            new WaitCommand(1),
             new SetPivotAngle(Constants.PositionConstants.ALGAE_NET_PIVOT_ANGLE).withTimeout(0.3),
             new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3)
+      )
     );
   } 
 }

@@ -14,10 +14,11 @@ public class ScoreLevelFour extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.LEVEL_FOUR_ELEVATOR_HEIGHT).withTimeout(0.3),
-            new WaitCommand(1),
             new SetPivotAngle(Constants.PositionConstants.LEVEL_FOUR_PIVOT_ANGLE).withTimeout(0.3),
             new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3)
+      )
     );
   } 
 }

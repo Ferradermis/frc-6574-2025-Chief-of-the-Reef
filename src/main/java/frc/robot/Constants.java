@@ -53,8 +53,8 @@ public final class Constants {
     public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 12 * 39.37;
     public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 4.765 * 39.37;
     public static final double LEVEL_ONE_ELEVATOR_HEIGHT = 0.0; 
-    public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 2.978 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
-    public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 9.628 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 7 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 13.0 * 39.37; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double GROUND_ELEVATOR_HEIGHT = 0.0; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double PROCESSOR_ELEVATOR_HEIGHT = 2.3825 * 39.87;
     public static final double CHUTE_ELEVATOR_HEIGHT = 4.720 * 39.37;
@@ -80,6 +80,7 @@ public final class Constants {
     // Turret Constants
     public static final double VERTICAL_TURRET_ANGLE = 2.225;
     public static final double HORIZONTAL_TURRET_ANGLE = 0.0;
+    public static final double ALGAE_HORIZONTAL_TURRET_ANGLE = 4.487;
 
     // Climber Constants
     public static final double CLIMBER_UP_ANGLE = -60.0;

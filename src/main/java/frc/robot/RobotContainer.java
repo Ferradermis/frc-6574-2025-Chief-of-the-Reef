@@ -61,6 +61,7 @@ import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.ReturnToHome;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreCoral;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelFour;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelOne;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
@@ -315,10 +316,13 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new Intake(13)).whileFalse(new Intake(0));
     driverController.leftBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
     driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
-    driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0));
+
+
+    driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0.0));
     //driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
     //driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
     driverController.povDown().onTrue(new Climb());
+    driverController.y().onTrue(new ScoreCoral());
     // driverController.povLeft()
     // .and(() -> reefPositions.getIsAutoAligning())
     // .and(() -> {return reefPositions.getAutoAlignSide() == AutoAlignSide.Left;})
@@ -347,7 +351,6 @@ public class RobotContainer {
     operatorController.leftBumper().onTrue(new AlgaeReturnToHome());
     //operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0)); //down
     operatorController.rightTrigger().onTrue(new LowerClimber());
-    operatorController.leftTrigger().onTrue(new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE));
     //operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
   }
 
