@@ -1,12 +1,9 @@
 package frc.robot.subsystems.vision;
 
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,9 +12,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import frc.robot.subsystems.vision.VisionIO.PoseObservation;
-import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 
 public class AprilTagVision extends Vision {
 
@@ -27,6 +24,7 @@ public class AprilTagVision extends Vision {
     private boolean hasSeenTags = false;
     private Trigger checkAllianceChangeTrigger = null;
     private boolean isFirstTime = true;
+    private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
 
     public AprilTagVision(Consumer<Pose2d> reset, VisionConsumer consumer, VisionConsumer consumerAA, VisionIO... io) {
         super(consumer, consumerAA, io);
@@ -95,7 +93,11 @@ public class AprilTagVision extends Vision {
       }
   }
 
-  
+  public void setPoseUsingTags() {
+    Pose2d pose;
+    pose = LimelightHelpers.getBotPose2d(inputs.cameraName);
+    resetPose.accept(pose);
+  }
 
   /** Create a trigger and waits to update the alliance position when it is available */
   public void createTriggerForSimulation() {

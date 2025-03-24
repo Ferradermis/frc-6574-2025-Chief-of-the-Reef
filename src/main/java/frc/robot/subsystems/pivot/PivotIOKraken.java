@@ -36,7 +36,7 @@ public class PivotIOKraken implements PivotIO{
     // Configures the TalonFX motor controller for the pivot
     public void configureKrakens() {
         CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
-        cancoderConfig.MagnetSensor.MagnetOffset = 0.312; //-0.088;
+        cancoderConfig.MagnetSensor.MagnetOffset = 0.3125; //-0.088;
         cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
  
         PhoenixUtil.tryUntilOk(5, () -> encoder.getConfigurator().apply(cancoderConfig));
@@ -60,9 +60,9 @@ public class PivotIOKraken implements PivotIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
 
         Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = 25.0;
+        slot0Configs.kP = 60.0;
         slot0Configs.kI = 0.0;
-        slot0Configs.kD = 0.0;
+        slot0Configs.kD = 8.0;
         slot0Configs.kS = 0.0;
         slot0Configs.kG = 0.3;
         slot0Configs.kV = 0.0;

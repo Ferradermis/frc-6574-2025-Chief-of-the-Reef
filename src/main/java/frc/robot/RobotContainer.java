@@ -341,12 +341,13 @@ public class RobotContainer {
     //driverController.povLeft().whileTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive));
 
     // Operator buttons
-    operatorController.a().onTrue(new ScoreLevelOne());
-    operatorController.b().onTrue(new ScoreLevelTwo());
-    operatorController.x().onTrue(new ScoreLevelThree());
+    //operatorController.a().onTrue(new ScoreLevelOne());
+    operatorController.a().onTrue(new SetPivotAngle(0));
+    //operatorController.b().onTrue(new ScoreLevelTwo());
+    operatorController.b().onTrue(new SetPivotAngle(-0.082));
+    //operatorController.x().onTrue(new ScoreLevelThree());
+    operatorController.x().onTrue(new SetPivotAngle(0.103));
     operatorController.y().onTrue(new ScoreLevelFour());
-
-
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
     operatorController.povLeft().onTrue(new Tomfoolery());
@@ -369,7 +370,7 @@ public class RobotContainer {
 
   public void teleopInit() {
     if (!this.teleopInitialized) {
-      vision.setRobotPositionBasedOnAlliance();
+      vision.setPoseUsingTags();
       vision.enableUpdateOdometryBasedOnApriltags();
       teleopInitialized = true;
     }
