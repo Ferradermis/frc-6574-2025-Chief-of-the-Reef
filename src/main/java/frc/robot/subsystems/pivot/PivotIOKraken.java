@@ -60,11 +60,11 @@ public class PivotIOKraken implements PivotIO{
         PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));
 
         Slot0Configs slot0Configs = new Slot0Configs();
-        slot0Configs.kP = 60.0;
+        slot0Configs.kP = 40.0;
         slot0Configs.kI = 0.0;
-        slot0Configs.kD = 8.0;
+        slot0Configs.kD = 4.0;
         slot0Configs.kS = 0.0;
-        slot0Configs.kG = 0.3;
+        slot0Configs.kG = 0.7;
         slot0Configs.kV = 0.0;
         slot0Configs.kA = 0.0;
         slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
