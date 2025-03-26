@@ -24,7 +24,6 @@ public class AprilTagVision extends Vision {
     private boolean hasSeenTags = false;
     private Trigger checkAllianceChangeTrigger = null;
     private boolean isFirstTime = true;
-    private VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
 
     public AprilTagVision(Consumer<Pose2d> reset, VisionConsumer consumer, VisionConsumer consumerAA, VisionIO... io) {
         super(consumer, consumerAA, io);
@@ -95,8 +94,10 @@ public class AprilTagVision extends Vision {
 
   public void setPoseUsingTags() {
     Pose2d pose;
-    pose = LimelightHelpers.getBotPose2d(inputs.cameraName);
-    resetPose.accept(pose);
+    if (LimelightHelpers.getTV("limelight")) {
+      pose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+      resetPose.accept(pose);
+    }
   }
 
   /** Create a trigger and waits to update the alliance position when it is available */

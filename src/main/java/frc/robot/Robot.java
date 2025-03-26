@@ -117,7 +117,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     super.robotInit();
-      AlignToReef.refreshAlliance();
+    AlignToReef.refreshAlliance();
   }
 
   /** This function is called periodically during all modes. */
