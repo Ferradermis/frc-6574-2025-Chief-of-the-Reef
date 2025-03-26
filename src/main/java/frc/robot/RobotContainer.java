@@ -51,7 +51,9 @@ import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL1InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL3InAuto;
-import frc.robot.commands.FullAutoSystemCommands.TomfooleryInAuto;
+import frc.robot.commands.FullAutoSystemCommands.ScoreL4InAuto;
+import frc.robot.commands.FullAutoSystemCommands.ScoreBargeInAuto;
+import frc.robot.commands.FullTeleopSystemCommands.AlgaeGroundPickupReturnToHome;
 import frc.robot.commands.FullTeleopSystemCommands.AlgaeReturnToHome;
 import frc.robot.commands.FullTeleopSystemCommands.AlignToReef;
 import frc.robot.commands.FullTeleopSystemCommands.Climb;
@@ -67,7 +69,7 @@ import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelOne;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
-import frc.robot.commands.FullTeleopSystemCommands.Tomfoolery;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreAlgaeInBarge;
 import frc.robot.commands.FullTeleopSystemCommands.AlignToReef.ReefPosition;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.LockingServo;
@@ -226,11 +228,11 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Release", new ReleaseInAuto());
     NamedCommands.registerCommand("ScoreLevelOne", new ScoreL1InAuto());
-    NamedCommands.registerCommand("ScoreLevelThree", new ScoreL3InAuto());
+    NamedCommands.registerCommand("ScoreLevelFour", new ScoreL4InAuto());
     NamedCommands.registerCommand("ReturnToHome", new ReturnToHome());
-    NamedCommands.registerCommand("ScoreBarge", new TomfooleryInAuto());
+    NamedCommands.registerCommand("ScoreBarge", new ScoreBargeInAuto());
     NamedCommands.registerCommand("GrabAlgae", new GrabAlgaeInAuto());
-    NamedCommands.registerCommand("ReleaseAlage", new ReleaseAlgaeInAuto());
+    NamedCommands.registerCommand("ReleaseAlgae", new ReleaseAlgaeInAuto());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -316,14 +318,12 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new Intake(13)).whileFalse(new Intake(0));
     driverController.leftBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
     driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
-
-
     driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0.0));
     //driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
     //driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
     driverController.povDown().onTrue(new Climb());
     driverController.y().onTrue(new ScoreCoral());
-    driverController.rightTrigger().onTrue(new PickupAlgaeFromGround()).onFalse(new AlgaeReturnToHome());
+    driverController.rightTrigger().onTrue(new PickupAlgaeFromGround()).onFalse(new AlgaeGroundPickupReturnToHome());
     driverController.leftTrigger().onTrue(new PickupCoralFromGround()).onFalse(new PickupCoralFromChute());
     // driverController.povLeft()
     // .and(() -> reefPositions.getIsAutoAligning())
@@ -341,22 +341,23 @@ public class RobotContainer {
     //driverController.povLeft().whileTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive));
 
     // Operator buttons
-    //operatorController.a().onTrue(new ScoreLevelOne());
-    operatorController.a().onTrue(new SetPivotAngle(0));
-    //operatorController.b().onTrue(new ScoreLevelTwo());
-    operatorController.b().onTrue(new SetPivotAngle(-0.082));
-    //operatorController.x().onTrue(new ScoreLevelThree());
-    operatorController.x().onTrue(new SetPivotAngle(0.103));
+    operatorController.a().onTrue(new ScoreLevelOne());
+    operatorController.b().onTrue(new ScoreLevelTwo());
+    operatorController.x().onTrue(new ScoreLevelThree());
     operatorController.y().onTrue(new ScoreLevelFour());
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
-    operatorController.povLeft().onTrue(new Tomfoolery());
+    operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());
     operatorController.povRight().onTrue(new ScoreProcessor());
     operatorController.rightBumper().onTrue(new PickupCoralFromChute());
     operatorController.leftBumper().onTrue(new AlgaeReturnToHome());
     //operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0)); //down
     operatorController.rightTrigger().onTrue(new LowerClimber());
     //operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
+
+    // operatorController.a().onTrue(new SetPivotAngle(0));
+    // operatorController.b().onTrue(new SetPivotAngle(-0.082));
+    // operatorController.x().onTrue(new SetPivotAngle(0.103));
   }
 
   /**
@@ -369,10 +370,11 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    if (!this.teleopInitialized) {
-      vision.setPoseUsingTags();
-      vision.enableUpdateOdometryBasedOnApriltags();
-      teleopInitialized = true;
-    }
+    // TODO: reimpliment this after phantom
+    // if (!this.teleopInitialized) {
+    //   vision.updateStartingPosition();
+    //   vision.enableUpdateOdometryBasedOnApriltags();
+    //   teleopInitialized = true;
+    // }
   }
 }

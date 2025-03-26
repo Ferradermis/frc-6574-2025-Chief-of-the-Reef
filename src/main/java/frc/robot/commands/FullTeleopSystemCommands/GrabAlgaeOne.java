@@ -14,10 +14,10 @@ public class GrabAlgaeOne extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
-          new SetPivotAngle(Constants.PositionConstants.ALGAE_ONE_PIVOT_ANGLE),
-            new SetElevatorPosition(Constants.PositionConstants.ALGAE_ONE_ELEVATOR_HEIGHT),
-            new SetTurretAngle(Constants.PositionConstants.ALGAE_HORIZONTAL_TURRET_ANGLE)
-        )
+            new SetElevatorPosition(Constants.PositionConstants.ALGAE_ONE_ELEVATOR_HEIGHT).withTimeout(0.3),
+            new SetTurretAngle(Constants.PositionConstants.ALGAE_HORIZONTAL_TURRET_ANGLE).withTimeout(0.3)
+        ).withTimeout(0.3),
+        new SetPivotAngle(Constants.PositionConstants.ALGAE_ONE_PIVOT_ANGLE)
     );
   } 
 }

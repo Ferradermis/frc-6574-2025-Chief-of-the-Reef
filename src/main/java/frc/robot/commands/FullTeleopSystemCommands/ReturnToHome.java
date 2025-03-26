@@ -15,9 +15,7 @@ public class ReturnToHome extends SequentialCommandGroup {
     addCommands(
             new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE).withTimeout(0.3),
             new SetPivotAngle(Constants.PositionConstants.HOME_PIVOT_ANGLE).withTimeout(0.3),
-            new ParallelCommandGroup(
-              new SetElevatorPosition(Constants.PositionConstants.HOME_ELEVATOR_HEIGHT)
-        )
+            new SetElevatorPosition(Constants.PositionConstants.HOME_ELEVATOR_HEIGHT)
     );
   }   
 }

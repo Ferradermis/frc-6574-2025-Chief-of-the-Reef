@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreLevelFour"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score L4"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Release"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Grab Algae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GrabAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drive To Barge"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreBarge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ReleaseAlgae"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": true
+}

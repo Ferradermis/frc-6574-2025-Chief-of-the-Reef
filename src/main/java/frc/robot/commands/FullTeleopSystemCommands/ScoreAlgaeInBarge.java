@@ -9,16 +9,14 @@ import frc.robot.commands.SetPivotAngle;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetTurretAngle;
 
-public class Tomfoolery extends SequentialCommandGroup {
-  public Tomfoolery() {
+public class ScoreAlgaeInBarge extends SequentialCommandGroup {
+  public ScoreAlgaeInBarge() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(
-            new SetElevatorPosition(Constants.PositionConstants.ALGAE_NET_ELEVATOR_HEIGHT).withTimeout(0.3),
-            new SetPivotAngle(Constants.PositionConstants.ALGAE_NET_PIVOT_ANGLE).withTimeout(0.3),
-            new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3)
-      )
+            new SetElevatorPosition(Constants.PositionConstants.ALGAE_NET_ELEVATOR_HEIGHT).withTimeout(1),
+            new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3),
+            new SetPivotAngle(Constants.PositionConstants.ALGAE_NET_PIVOT_ANGLE).withTimeout(0.3)
     );
   } 
 }
