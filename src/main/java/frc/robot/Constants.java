@@ -49,11 +49,11 @@ public final class Constants {
 
   public static final class PositionConstants {
     // Elevator Constants
-    public static final double LEVEL_FOUR_ELEVATOR_HEIGHT = 23.165 * 39.37;
-    public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 12 * 39.37;
+    public static final double LEVEL_FOUR_ELEVATOR_HEIGHT = 23.0 * 39.37;
+    public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 12.3 * 39.37;
     public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 4.765 * 39.37;
     public static final double LEVEL_ONE_ELEVATOR_HEIGHT = 0.0; 
-    public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 17.588 * 39.37; 
+    public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 17.188 * 39.37; 
     public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 23.3 * 39.37;
     public static final double ALGAE_GROUND_ELEVATOR_HEIGHT = 2.8825 * 39.87; 
     public static final double CORAL_GROUND_ELEVATOR_HEIGHT = 2.940 * 39.87;
@@ -66,6 +66,7 @@ public final class Constants {
     public static final double LEVEL_FOUR_PIVOT_ANGLE = 0.094;
     public static final double LEVEL_THREE_PIVOT_ANGLE = 0.103;
     public static final double LEVEL_TWO_PIVOT_ANGLE = 0.116;
+    public static final double LEVEL_THREE_LOWER_ANGLE = 0.050;
     public static final double PIVOT_LOWER_ANGLE = 0.025;
     public static final double LEVEL_ONE_PIVOT_ANGLE = 0.126;
     public static final double ALGAE_ONE_PIVOT_ANGLE = -0.080;

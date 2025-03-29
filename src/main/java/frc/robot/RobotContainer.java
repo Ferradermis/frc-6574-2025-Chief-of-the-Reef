@@ -49,6 +49,7 @@ import frc.robot.commands.SetTurretAngle;
 import frc.robot.commands.FullAutoSystemCommands.GrabAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
+import frc.robot.commands.FullAutoSystemCommands.ReleaseL4InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL1InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL3InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL4InAuto;
@@ -64,6 +65,7 @@ import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
 import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
 import frc.robot.commands.FullTeleopSystemCommands.ReturnToHome;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreCoral;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreCoralL3;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelFour;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelOne;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
@@ -229,10 +231,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("Release", new ReleaseInAuto());
     NamedCommands.registerCommand("ScoreLevelOne", new ScoreL1InAuto());
     NamedCommands.registerCommand("ScoreLevelFour", new ScoreL4InAuto());
-    NamedCommands.registerCommand("ReturnToHome", new ReturnToHome());
+    NamedCommands.registerCommand("ReturnToHome", new AlgaeReturnToHome());
     NamedCommands.registerCommand("ScoreBarge", new ScoreBargeInAuto());
     NamedCommands.registerCommand("GrabAlgae", new GrabAlgaeInAuto());
     NamedCommands.registerCommand("ReleaseAlgae", new ReleaseAlgaeInAuto());
+    NamedCommands.registerCommand("ReleaseL4", new ReleaseL4InAuto());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -323,6 +326,7 @@ public class RobotContainer {
     //driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
     driverController.povDown().onTrue(new Climb());
     driverController.y().onTrue(new ScoreCoral());
+    driverController.b().onTrue(new ScoreCoralL3());
     driverController.rightTrigger().onTrue(new PickupAlgaeFromGround()).onFalse(new AlgaeGroundPickupReturnToHome());
     driverController.leftTrigger().onTrue(new PickupCoralFromGround()).onFalse(new PickupCoralFromChute());
     // driverController.povLeft()
