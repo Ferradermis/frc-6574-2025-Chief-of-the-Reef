@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Score L4"
+            "pathName": "Drive To Barge"
           }
         },
         {
@@ -30,21 +30,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Grab Algae"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "GrabAlgae"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Drive To Barge"
           }
         },
         {

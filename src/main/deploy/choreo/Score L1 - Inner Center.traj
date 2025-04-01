@@ -1,5 +1,5 @@
 {
- "name":"Score L1 Left",
+ "name":"Score L1 - Inner Center",
  "version":1,
  "snapshot":{
   "waypoints":[
@@ -14,8 +14,8 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"7.148942375183106 m", "val":7.148942375183106}, "y":{"exp":"2.026000022888184 m", "val":2.026000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":30, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"5.208662509918213 m", "val":5.208662509918213}, "y":{"exp":"2.8719022274017334 m", "val":2.8719022274017334}, "heading":{"exp":"120 deg", "val":2.0943951023931953}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":{"exp":"7.148942375183106 m", "val":7.148942375183106}, "y":{"exp":"4.026000022888184 m", "val":4.026000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":22, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"5.763453243255615 m", "val":5.763453243255615}, "y":{"exp":"4.026000022888184 m", "val":4.026000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},

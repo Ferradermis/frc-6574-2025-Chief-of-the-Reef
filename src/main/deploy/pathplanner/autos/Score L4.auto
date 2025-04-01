@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Score L4"
+            "pathName": "Drive To Barge"
           }
         },
         {
@@ -36,12 +36,6 @@
                 "type": "named",
                 "data": {
                   "name": "Release"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L4 Drive Back"
                 }
               }
             ]

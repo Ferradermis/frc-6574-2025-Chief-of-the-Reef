@@ -13,7 +13,7 @@ public class ScoreCoral extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE).withTimeout(0.5),
-        new Release(10).withTimeout(0.25),
+        new Release(10).withTimeout(0.5),
         new PickupCoralFromChute()
     );
   }

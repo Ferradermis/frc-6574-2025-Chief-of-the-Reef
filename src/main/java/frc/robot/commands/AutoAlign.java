@@ -30,14 +30,15 @@ public class AutoAlign extends Command {
     private final Function<Pose2d, Pose2d> getTargetPoseFn;
 
     //#region TODO get accurate values
-    private LoggedTunableGainsBuilder throttleGains = new LoggedTunableGainsBuilder("AutoAlign/strafeGains/", 6.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    private LoggedTunableGainsBuilder throttleGains = new LoggedTunableGainsBuilder("AutoAlign/strafeGains/", 4.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     private LoggedTunableGainsBuilder strafeGains = new LoggedTunableGainsBuilder("AutoAlign/throttleGains/", 4.0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0);
     private LoggedTunableNumber maxStrafeTune = new LoggedTunableNumber("AutoAlign/strafeGains/maxVelMetersPerSecond",1.0);
     private LoggedTunableNumber maxThrottleTune = new LoggedTunableNumber("AutoAlign/throttleGains/maxVelMetersPerSecond",1.0);
     private LoggedTunableNumber maxAccelStrafeTune = new LoggedTunableNumber("AutoAlign/strafeGains/maxAccMetersPerSecond",10.0);
     private LoggedTunableNumber maxAccelDistanceTune = new LoggedTunableNumber("AutoAlign/throttleGains/maxAccMetersPerSecond",10.0);
     private LoggedTunableNumber toleranceB = new LoggedTunableNumber("AutoAlign/toleranceB", 0.01);
-    private LoggedTunableNumber toleranceR = new LoggedTunableNumber("AutoAlign/toleranceR", 0.02);
+    private LoggedTunableNumber toleranceR = new LoggedTunableNumber("AutoAlign/toleranceR", 0.05);
+    private LoggedTunableNumber toleranceTr = new LoggedTunableNumber("AutoAlign/toleranceTr", 0.02);
     //#endregion
 
     private LinearVelocity maxStrafe = MetersPerSecond.of(maxStrafeTune.getAsDouble()); 
@@ -56,7 +57,8 @@ public class AutoAlign extends Command {
     private double tr;
     private ProfiledPIDController strafePID = new ProfiledPIDController(strafeGains.build().kP, strafeGains.build().kI ,strafeGains.build().kD, new Constraints(maxStrafe.in(MetersPerSecond), maxAccelStrafe.in(MetersPerSecondPerSecond)));
     private ProfiledPIDController throttlePID = new ProfiledPIDController(throttleGains.build().kP, throttleGains.build().kI ,throttleGains.build().kD, new Constraints(maxThrottle.in(MetersPerSecond), maxAccelThrottle.in(MetersPerSecondPerSecond)));
-    private PIDController spinPID = new PIDController(5.0, 0.0, 0.0);
+    private PIDController spinPID = new PIDController(0.1, 0.0, 0.0);
+    
 
     /**
      * This command utilitzes the swerve drive while it isn't field relative.
@@ -122,7 +124,7 @@ public class AutoAlign extends Command {
 
         tx = -targetPose_R.getY();
         ty = -targetPose_R.getX();
-        tr = targetPose_R.getRotation().unaryMinus().getRadians();
+        tr = targetPose_R.getRotation().getRadians();
         vx = drivetrain.getChassisSpeeds().vxMetersPerSecond;
         vy = drivetrain.getChassisSpeeds().vyMetersPerSecond;
 
@@ -143,7 +145,7 @@ public class AutoAlign extends Command {
 
         tx = 0.0 - targetPose_r.getY();
         ty = 0.0 - targetPose_r.getX();
-        tr = targetPose_r.getRotation().unaryMinus().getRadians();
+        tr = targetPose_r.getRotation().getRadians();
 
         strafe = strafePID.calculate(tx, 0.0); 
         throttle = throttlePID.calculate(ty, 0.0);
@@ -157,7 +159,7 @@ public class AutoAlign extends Command {
         drivetrain.runVelocity(speeds);
 
         Logger.recordOutput("AutoAlign/TX", tx);
-        Logger.recordOutput("AutoAlign/TZ", ty);
+        Logger.recordOutput("AutoAlign/TY", ty);
         Logger.recordOutput("AutoAlign/TR", tr);
         Logger.recordOutput("AutoAlign/strafe", strafe);
         Logger.recordOutput("AutoAlign/throttle", throttle);
@@ -171,7 +173,7 @@ public class AutoAlign extends Command {
      */
     @Override
     public boolean isFinished() {
-        return MathUtil.isNear(tx, 0.0,toleranceR.getAsDouble()) && MathUtil.isNear(ty, 0.0,toleranceB.getAsDouble()) && MathUtil.isNear(tr, 0.0,(toleranceB.getAsDouble()+toleranceR.getAsDouble())/2.0);
+        return MathUtil.isNear(tx, 0.0,toleranceR.getAsDouble()) && MathUtil.isNear(ty, 0.0,toleranceB.getAsDouble()) && MathUtil.isNear(tr, 3.12, Math.abs(toleranceTr.getAsDouble()));
     }
 
     @Override

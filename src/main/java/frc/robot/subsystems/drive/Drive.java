@@ -157,7 +157,8 @@ public class Drive extends SubsystemBase {
         this::getChassisSpeeds,
         this::runVelocity,
         new PPHolonomicDriveController(
-            new PIDConstants(30.0, 0.0, 0.0), new PIDConstants(8.0, 0.0, 0.0)),
+            new PIDConstants(30.0, 0.0, 0.0), 
+            new PIDConstants(8.0, 0.0, 0.0)),
         PP_CONFIG,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         this
@@ -250,14 +251,14 @@ public class Drive extends SubsystemBase {
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
-    // TODO: reimpliment this after phantom
-    // LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    // Limelight pose estimation
     // if (LimelightHelpers.getTV("limelight")) {
-    //     poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
-    //     poseEstimator.addVisionMeasurement(
-    //         limelightMeasurement.pose,
-    //         limelightMeasurement.timestampSeconds
-    //     );
+    //   LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    //   poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 2 * Math.PI));
+    //   poseEstimator.addVisionMeasurement(
+    //       limelightMeasurement.pose,
+    //       limelightMeasurement.timestampSeconds
+    //   );
     // }
   }
 

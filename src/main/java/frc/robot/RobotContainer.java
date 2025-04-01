@@ -320,8 +320,8 @@ public class RobotContainer {
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
     driverController.rightBumper().whileTrue(new Intake(13)).whileFalse(new Intake(0));
     driverController.leftBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
-    driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
-    driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0.0));
+    // driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
+    // driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0.0));
     //driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
     //driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
     driverController.povDown().onTrue(new Climb());
@@ -342,7 +342,8 @@ public class RobotContainer {
     //      drive)
     // ).onFalse(
     //   new ReturnToHome());
-    //driverController.povLeft().whileTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive));
+    driverController.povLeft().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive));
+    driverController.povRight().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive));
 
     // Operator buttons
     operatorController.a().onTrue(new ScoreLevelOne());
@@ -374,11 +375,10 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    // TODO: reimpliment this after phantom
-    // if (!this.teleopInitialized) {
-    //   vision.updateStartingPosition();
-    //   vision.enableUpdateOdometryBasedOnApriltags();
-    //   teleopInitialized = true;
-    // }
+    if (!this.teleopInitialized) {
+      //vision.updateStartingPosition();
+      vision.enableUpdateOdometryBasedOnApriltags();
+      teleopInitialized = true;
+    }
   }
 }
