@@ -75,7 +75,7 @@ public final class Constants {
     public static final double CORAL_GROUND_PIVOT_ANGLE = -0.082; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double PROCESSOR_PIVOT_ANGLE = 0.025;
     public static final double CHUTE_PIVOT_ANGLE = 0.156;
-    public static final double HOME_PIVOT_ANGLE = 0.182;
+    public static final double HOME_PIVOT_ANGLE = 0.152;
     public static final double ALGAE_HOME_PIVOT_ANGLE = 0.137;
     public static final double ALGAE_NET_PIVOT_ANGLE = 0.190;
     public static final double CLIMB_PIVOT_ANGLE = 0.039;
@@ -83,6 +83,7 @@ public final class Constants {
 
     // Turret Constants
     public static final double VERTICAL_TURRET_ANGLE = 2.225;
+    public static final double AUTO_ALIGN_VERTICAL_TURRET_ANGLE = -2.284;
     public static final double HORIZONTAL_TURRET_ANGLE = 0.0;
     public static final double ALGAE_HORIZONTAL_TURRET_ANGLE = 4.487;
 

@@ -46,6 +46,8 @@ import frc.robot.commands.RaiseClimber;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetPivotAngle;
 import frc.robot.commands.SetTurretAngle;
+import frc.robot.commands.FullAutoSystemCommands.AutoAlignInAutoLeft;
+import frc.robot.commands.FullAutoSystemCommands.AutoAlignInAutoRight;
 import frc.robot.commands.FullAutoSystemCommands.GrabAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
@@ -53,6 +55,7 @@ import frc.robot.commands.FullAutoSystemCommands.ReleaseL4InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL1InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL3InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL4InAuto;
+import frc.robot.commands.FullAutoSystemCommands.ScoreL4InAutoNoAA;
 import frc.robot.commands.FullAutoSystemCommands.ScoreBargeInAuto;
 import frc.robot.commands.FullTeleopSystemCommands.AlgaeGroundPickupReturnToHome;
 import frc.robot.commands.FullTeleopSystemCommands.AlgaeReturnToHome;
@@ -228,14 +231,18 @@ public class RobotContainer {
         break;
     }
 
+    // Pathplanner named commands
     NamedCommands.registerCommand("Release", new ReleaseInAuto());
     NamedCommands.registerCommand("ScoreLevelOne", new ScoreL1InAuto());
-    NamedCommands.registerCommand("ScoreLevelFour", new ScoreL4InAuto());
+    NamedCommands.registerCommand("ScoreLevelFour", new ScoreL4InAutoNoAA());
+    NamedCommands.registerCommand("ScoreL4AutoAlign", new ScoreL4InAuto());
     NamedCommands.registerCommand("ReturnToHome", new AlgaeReturnToHome());
     NamedCommands.registerCommand("ScoreBarge", new ScoreBargeInAuto());
     NamedCommands.registerCommand("GrabAlgae", new GrabAlgaeInAuto());
     NamedCommands.registerCommand("ReleaseAlgae", new ReleaseAlgaeInAuto());
     NamedCommands.registerCommand("ReleaseL4", new ReleaseL4InAuto());
+    NamedCommands.registerCommand("AutoAlignLeft", new AutoAlignInAutoLeft());
+    NamedCommands.registerCommand("AutoAlignRight", new AutoAlignInAutoRight());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
