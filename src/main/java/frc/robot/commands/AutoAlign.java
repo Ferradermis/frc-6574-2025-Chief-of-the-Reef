@@ -17,6 +17,7 @@ import java.util.function.Function;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.LoggedTunableGainsBuilder;
 import frc.robot.util.LoggedTunableNumber;
@@ -156,6 +157,7 @@ public class AutoAlign extends Command {
             throttle,
             strafe,
             spin);
+
         drivetrain.runVelocity(speeds);
 
         Logger.recordOutput("AutoAlign/TX", tx);
@@ -173,7 +175,7 @@ public class AutoAlign extends Command {
      */
     @Override
     public boolean isFinished() {
-        return MathUtil.isNear(tx, 0.0,toleranceR.getAsDouble()) && MathUtil.isNear(ty, 0.0,toleranceB.getAsDouble()) && MathUtil.isNear(tr, 3.12, Math.abs(toleranceTr.getAsDouble()));
+        return (MathUtil.isNear(tx, 0.0,toleranceR.getAsDouble()) && MathUtil.isNear(ty, 0.0,toleranceB.getAsDouble()) && MathUtil.isNear(tr, 3.12, Math.abs(toleranceTr.getAsDouble())));
     }
 
     @Override
