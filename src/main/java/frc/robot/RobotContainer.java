@@ -404,7 +404,7 @@ public class RobotContainer {
 
   public void teleopInit() {
     if (!this.teleopInitialized) {
-      //vision.updateStartingPosition();
+      vision.updateStartingPosition();
       vision.enableUpdateOdometryBasedOnApriltags();
       teleopInitialized = true;
     }

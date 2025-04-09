@@ -125,7 +125,7 @@ public class AutoAlign extends Command {
 
         tx = -targetPose_R.getY();
         ty = -targetPose_R.getX();
-        tr = targetPose_R.getRotation().getRadians();
+        tr = targetPose_R.getRotation().unaryMinus().getRadians();
         vx = drivetrain.getChassisSpeeds().vxMetersPerSecond;
         vy = drivetrain.getChassisSpeeds().vyMetersPerSecond;
 
@@ -146,7 +146,7 @@ public class AutoAlign extends Command {
 
         tx = 0.0 - targetPose_r.getY();
         ty = 0.0 - targetPose_r.getX();
-        tr = targetPose_r.getRotation().getRadians();
+        tr = targetPose_r.getRotation().unaryMinus().getRadians();
 
         strafe = strafePID.calculate(tx, 0.0); 
         throttle = throttlePID.calculate(ty, 0.0);
@@ -175,7 +175,7 @@ public class AutoAlign extends Command {
      */
     @Override
     public boolean isFinished() {
-        return (MathUtil.isNear(tx, 0.0,toleranceR.getAsDouble()) && MathUtil.isNear(ty, 0.0,toleranceB.getAsDouble()) && MathUtil.isNear(tr, 3.12, Math.abs(toleranceTr.getAsDouble())));
+        return (MathUtil.isNear(tx, 0.0,toleranceR.getAsDouble()) && MathUtil.isNear(ty, 0.0,toleranceB.getAsDouble()) && MathUtil.isNear(tr, 0.0, Math.abs(toleranceTr.getAsDouble())));
     }
 
     @Override

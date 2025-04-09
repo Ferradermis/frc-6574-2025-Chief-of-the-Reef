@@ -133,7 +133,8 @@ public class AprilTagVision extends Vision {
   public void updateStartingPosition() {
     if (hasRunAuto == false && hasSeenTags == false) {
       if (Robot.isReal()) {
-        setPoseUsingTags();
+        //setPoseUsingTags();
+        setRobotPositionBasedOnAlliance();
       } else {
         createTriggerForSimulation();
       }
