@@ -70,6 +70,7 @@ import frc.robot.commands.FullTeleopSystemCommands.ReturnToHome;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreCoral;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreCoralL3;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelFour;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelFourNoAA;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelOne;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
@@ -313,6 +314,25 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
+    driverController.leftStick().whileTrue(DriveCommands.joystickDriveSlowed(
+    drive,
+    () -> -driverController.getLeftY(), 
+    () -> -driverController.getLeftX(), 
+    () -> -driverController.getRightX()));
+
+    // TODO: test one second delay to account for accidental release of the stick
+    driverController.rightStick().whileTrue(DriveCommands.joystickDriveSlowed(
+    drive,
+    () -> -driverController.getLeftY(), 
+    () -> -driverController.getLeftX(), 
+    () -> -driverController.getRightX()))
+    .whileFalse(
+      DriveCommands.joystickDriveSlowed(
+      drive,
+      () -> -driverController.getLeftY(), 
+      () -> -driverController.getLeftX(), 
+      () -> -driverController.getRightX()).withTimeout(1));
+
     // Reset gyro to 0° when Y button is pressed
     driverController
         .povUp()
@@ -349,14 +369,14 @@ public class RobotContainer {
     //      drive)
     // ).onFalse(
     //   new ReturnToHome());
-    driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive));
-    driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive));
+    driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive).withTimeout(3));
+    driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
     operatorController.a().onTrue(new ScoreLevelOne());
     operatorController.b().onTrue(new ScoreLevelTwo());
     operatorController.x().onTrue(new ScoreLevelThree());
-    operatorController.y().onTrue(new ScoreLevelFour());
+    operatorController.y().onTrue(new ScoreLevelFourNoAA());
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
     operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());
@@ -365,6 +385,7 @@ public class RobotContainer {
     operatorController.leftBumper().onTrue(new AlgaeReturnToHome());
     //operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0)); //down
     operatorController.rightTrigger().onTrue(new LowerClimber());
+    operatorController.leftTrigger().onTrue(new ScoreLevelFour());
     //operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
 
     // operatorController.a().onTrue(new SetPivotAngle(0));

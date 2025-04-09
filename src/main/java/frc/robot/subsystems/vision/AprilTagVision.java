@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import frc.robot.subsystems.vision.VisionIO.PoseObservation;
+import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 
 public class AprilTagVision extends Vision {
 
@@ -36,11 +37,11 @@ public class AprilTagVision extends Vision {
             return true;
         }
 
-        // if (observation.type() == PoseObservationType.MEGATAG_1) {
-        //     if (DriverStation.isAutonomousEnabled() || DriverStation.isTeleopEnabled()) {
-        //         return true;
-        //     }
-        // }
+        if (observation.type() == PoseObservationType.MEGATAG_1) {
+            if (DriverStation.isAutonomousEnabled() || DriverStation.isTeleopEnabled()) {
+                return true;
+            }
+        }
         return super.rejectPose(observation);
     }
 

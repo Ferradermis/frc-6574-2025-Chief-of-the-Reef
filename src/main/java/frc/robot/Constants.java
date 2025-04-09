@@ -56,7 +56,7 @@ public final class Constants {
     public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 17.188 * 39.37; 
     public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 23.3 * 39.37;
     public static final double ALGAE_GROUND_ELEVATOR_HEIGHT = 2.8825 * 39.87; 
-    public static final double CORAL_GROUND_ELEVATOR_HEIGHT = 2.940 * 39.87;
+    public static final double CORAL_GROUND_ELEVATOR_HEIGHT = 2.640 * 39.87;
     public static final double PROCESSOR_ELEVATOR_HEIGHT = 3.3825 * 39.87;
     public static final double CHUTE_ELEVATOR_HEIGHT = 4.720 * 39.37;
     public static final double HOME_ELEVATOR_HEIGHT = 0.0;

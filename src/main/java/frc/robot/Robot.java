@@ -91,7 +91,6 @@ public class Robot extends LoggedRobot {
 
     // Start AdvantageKit logger
     Logger.start();
-    DataLogManager.start();
 
     // Check for valid swerve config
     var modules =

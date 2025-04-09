@@ -2,6 +2,8 @@ package frc.robot.subsystems.climber;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -41,6 +43,7 @@ public class ClimberIONEO implements ClimberIO {
                 .pid(2.0, 0, 0, ClosedLoopSlot.kSlot1) // TODO: Find correct PID values
                 .velocityFF(0, ClosedLoopSlot.kSlot1) // TODO: Find correct velocity feedforward value - defaulted at 0 for now  :)
                 .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+        //m_climberConfig.closedLoop.maxMotion.maxVelocity(4000).maxVelocity(4000, ClosedLoopSlot.kSlot1); // TODO: maybe look at adding other maxmotion parameters idk
 
         m_climberConfig.smartCurrentLimit(40);
 
@@ -85,6 +88,7 @@ public class ClimberIONEO implements ClimberIO {
         inputs.climberAngle = m_climberMotor.getEncoder().getPosition();
         inputs.climberAngularVelocity.mut_replace(
             DegreesPerSecond.of(m_climberMotor.getEncoder().getVelocity()));
+        Logger.recordOutput("Climber/Velocity/", m_climberMotor.getEncoder().getVelocity());
         // inputs.climberSetPoint.mut_replace(
         //     Degrees.of(m_climberMotor.getAppliedOutput()));
         inputs.climberSetpoint = setpoint;

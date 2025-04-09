@@ -36,6 +36,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -179,11 +180,20 @@ public class Vision extends SubsystemBase {
           angularStdDev *= cameraStdDevFactors[cameraIndex];
         }
 
+        // TODO: test if auto align works with both poses being updated??? I dont know man everything else looks okay :,)
         // Send vision observation
         addVisionMeasurementAA(
             observation.pose().toPose2d(),
             observation.timestamp(),
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+
+        if (!DriverStation.isAutonomousEnabled()) {
+          addVisionMeasurement(
+            observation.pose().toPose2d(), 
+            observation.timestamp(), 
+            VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+        }
+        
       }
 
       // Log camera datadata
