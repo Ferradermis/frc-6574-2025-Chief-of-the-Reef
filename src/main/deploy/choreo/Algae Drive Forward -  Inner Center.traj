@@ -2,13 +2,19 @@
  "name":"Algae Drive Forward -  Inner Center",
  "version":1,
  "snapshot":{
-  "waypoints":[],
-  "constraints":[],
+  "waypoints":[
+    {"x":6.063453243255615, "y":4.006000022888184, "heading":3.141592653589793, "intervals":10, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":5.753453243255615, "y":4.006000022888184, "heading":3.141592653589793, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "constraints":[
+    {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":0.0, "y":0.0, "w":17.548, "h":8.052}}, "enabled":true},
+    {"from":"first", "to":"last", "data":{"type":"MaxAcceleration", "props":{"max":5.0}}, "enabled":true}],
   "targetDt":0.05
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"6.063453243255615 m", "val":6.063453243255615}, "y":{"exp":"4.006000022888184 m", "val":4.006000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6.063453243255615 m", "val":6.063453243255615}, "y":{"exp":"4.006000022888184 m", "val":4.006000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":10, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"5.753453243255615 m", "val":5.753453243255615}, "y":{"exp":"4.006000022888184 m", "val":4.006000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -21,10 +27,21 @@
   }
  },
  "trajectory":{
-  "sampleType":null,
-  "waypoints":[],
-  "samples":[],
-  "splits":[]
+  "sampleType":"Swerve",
+  "waypoints":[0.0,0.49811],
+  "samples":[
+    {"t":0.0, "x":6.06345, "y":4.006, "heading":3.14159, "vx":0.0, "vy":0.0, "omega":0.0, "ax":-4.99778, "ay":0.0, "alpha":0.00576, "fx":[-77.05338,-77.05338,-77.09962,-77.09962], "fy":[-0.01856,0.01967,0.01756,-0.01856]},
+    {"t":0.04981, "x":6.05725, "y":4.006, "heading":3.14159, "vx":-0.24894, "vy":0.0, "omega":0.00029, "ax":-4.99858, "ay":0.0, "alpha":0.00299, "fx":[-77.0765,-77.0765,-77.101,-77.101], "fy":[-0.00939,0.01,0.00885,-0.00939]},
+    {"t":0.09962, "x":6.03865, "y":4.006, "heading":-3.14158, "vx":-0.49792, "vy":0.0, "omega":0.00044, "ax":-4.99801, "ay":0.0, "alpha":0.00111, "fx":[-77.07536,-77.07536,-77.08473,-77.08473], "fy":[-0.00334,0.00324,0.00348,-0.00334]},
+    {"t":0.14943, "x":6.00765, "y":4.006, "heading":-3.14156, "vx":-0.74688, "vy":0.0, "omega":0.00049, "ax":-4.99671, "ay":0.0, "alpha":-0.00041, "fx":[-77.06145,-77.06144,-77.0584,-77.0584], "fy":[0.00145,-0.00241,-0.00054,0.00145]},
+    {"t":0.19924, "x":5.96425, "y":4.006, "heading":-3.14153, "vx":-0.99577, "vy":0.0, "omega":0.00047, "ax":-4.99042, "ay":0.0, "alpha":-0.00189, "fx":[-76.97053,-76.97053,-76.95541,-76.95541], "fy":[0.00613,-0.00798,-0.00429,0.00613]},
+    {"t":0.24905, "x":5.90846, "y":4.006, "heading":-3.14151, "vx":-1.24434, "vy":0.0, "omega":0.00038, "ax":4.98948, "ay":-0.00001, "alpha":-0.00358, "fx":[76.93387,76.93387,76.96318,76.96318], "fy":[0.01118,-0.01322,-0.00957,0.01118]},
+    {"t":0.29886, "x":5.85267, "y":4.006, "heading":-3.14149, "vx":-0.99581, "vy":0.0, "omega":0.0002, "ax":4.9966, "ay":0.0, "alpha":-0.00608, "fx":[77.03331,77.03332,77.08333,77.08332], "fy":[0.01906,-0.01989,-0.01815,0.01907]},
+    {"t":0.34867, "x":5.80926, "y":4.006, "heading":-3.14148, "vx":-0.74693, "vy":0.0, "omega":-0.0001, "ax":4.99797, "ay":0.0, "alpha":-0.01035, "fx":[77.03753,77.03754,77.12141,77.12139], "fy":[0.03303,-0.03265,-0.03339,0.03304]},
+    {"t":0.39848, "x":5.77826, "y":4.006, "heading":-3.14149, "vx":-0.49798, "vy":0.0, "omega":-0.00062, "ax":4.99856, "ay":0.0, "alpha":-0.01833, "fx":[77.01622,77.01624,77.16068,77.16067], "fy":[0.06049,-0.05894,-0.06199,0.0605]},
+    {"t":0.4483, "x":5.75965, "y":4.006, "heading":-3.14152, "vx":-0.249, "vy":0.0, "omega":-0.00153, "ax":4.99888, "ay":0.0, "alpha":0.03079, "fx":[77.43611,77.43613,77.67183,75.8296], "fy":[0.12223,-0.11973,-0.11971,0.11731]},
+    {"t":0.49811, "x":5.75345, "y":4.006, "heading":3.14159, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
+  "splits":[0]
  },
  "events":[]
 }

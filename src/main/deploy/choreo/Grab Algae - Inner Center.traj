@@ -2,13 +2,18 @@
  "name":"Grab Algae - Inner Center",
  "version":1,
  "snapshot":{
-  "waypoints":[],
-  "constraints":[],
+  "waypoints":[
+    {"x":7.148942375183106, "y":4.006000022888184, "heading":3.141592653589793, "intervals":7, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":6.063453243255615, "y":4.006000022888184, "heading":3.141592653589793, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "constraints":[
+    {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":0.0, "y":0.0, "w":17.548, "h":8.052}}, "enabled":true}],
   "targetDt":0.05
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"7.148942375183106 m", "val":7.148942375183106}, "y":{"exp":"4.006000022888184 m", "val":4.006000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"7.148942375183106 m", "val":7.148942375183106}, "y":{"exp":"4.006000022888184 m", "val":4.006000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":7, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.063453243255615 m", "val":6.063453243255615}, "y":{"exp":"4.006000022888184 m", "val":4.006000022888184}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -20,10 +25,18 @@
   }
  },
  "trajectory":{
-  "sampleType":null,
-  "waypoints":[],
-  "samples":[],
-  "splits":[]
+  "sampleType":"Swerve",
+  "waypoints":[0.0,0.32505],
+  "samples":[
+    {"t":0.0, "x":7.14894, "y":4.006, "heading":3.14159, "vx":0.0, "vy":0.0, "omega":0.0, "ax":-55.82373, "ay":0.00007, "alpha":0.0, "fx":[-860.92135,-860.92135,-860.92135,-860.92135], "fy":[0.00111,0.00111,0.00111,0.00111]},
+    {"t":0.04644, "x":7.08875, "y":4.006, "heading":3.14159, "vx":-2.59225, "vy":0.0, "omega":0.0, "ax":-42.11275, "ay":0.0, "alpha":0.0, "fx":[-649.46875,-649.46875,-649.46875,-649.46875], "fy":[0.00006,0.00006,0.00006,0.00006]},
+    {"t":0.09287, "x":6.92298, "y":4.006, "heading":3.14159, "vx":-4.54782, "vy":0.0, "omega":0.0, "ax":-0.00036, "ay":-0.00005, "alpha":0.0, "fx":[-0.00556,-0.00556,-0.00556,-0.00556], "fy":[-0.00079,-0.00079,-0.00079,-0.00079]},
+    {"t":0.13931, "x":6.71179, "y":4.006, "heading":3.14159, "vx":-4.54784, "vy":0.0, "omega":0.0, "ax":0.0, "ay":-0.00005, "alpha":0.0, "fx":[-0.00001,-0.00001,-0.00001,-0.00001], "fy":[-0.00078,-0.00078,-0.00078,-0.00078]},
+    {"t":0.18575, "x":6.50061, "y":4.006, "heading":3.14159, "vx":-4.54784, "vy":0.0, "omega":0.0, "ax":0.00036, "ay":-0.00005, "alpha":0.0, "fx":[0.00553,0.00553,0.00553,0.00553], "fy":[-0.00079,-0.00079,-0.00079,-0.00079]},
+    {"t":0.23218, "x":6.28942, "y":4.006, "heading":3.14159, "vx":-4.54782, "vy":0.0, "omega":0.0, "ax":42.11275, "ay":0.0, "alpha":0.0, "fx":[649.46872,649.46872,649.46872,649.46872], "fy":[0.00006,0.00006,0.00006,0.00006]},
+    {"t":0.27862, "x":6.12364, "y":4.006, "heading":3.14159, "vx":-2.59225, "vy":0.0, "omega":0.0, "ax":55.82373, "ay":0.00007, "alpha":0.0, "fx":[860.92142,860.92142,860.92142,860.92142], "fy":[0.00111,0.00111,0.00111,0.00111]},
+    {"t":0.32505, "x":6.06345, "y":4.006, "heading":3.14159, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
+  "splits":[0]
  },
  "events":[]
 }
