@@ -16,7 +16,7 @@ public class PickupAlgaeFromGround extends SequentialCommandGroup {
         new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.ALGAE_GROUND_ELEVATOR_HEIGHT),
             new SetPivotAngle(Constants.PositionConstants.ALGAE_GROUND_PIVOT_ANGLE),
-            new SetTurretAngle(Constants.PositionConstants.ALGAE_HORIZONTAL_TURRET_ANGLE),
+            new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE), // Coral EE: ALGAE_HORIZONTAL_TURRET_ANGLE
             new Release(10)
         )
     );

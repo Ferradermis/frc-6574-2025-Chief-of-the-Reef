@@ -31,8 +31,8 @@ public class AutoAlign extends Command {
     private final Function<Pose2d, Pose2d> getTargetPoseFn;
 
     //#region TODO get accurate values
-    private LoggedTunableGainsBuilder throttleGains = new LoggedTunableGainsBuilder("AutoAlign/strafeGains/", 4.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    private LoggedTunableGainsBuilder strafeGains = new LoggedTunableGainsBuilder("AutoAlign/throttleGains/", 4.0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0);
+    private LoggedTunableGainsBuilder throttleGains = new LoggedTunableGainsBuilder("AutoAlign/strafeGains/", 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    private LoggedTunableGainsBuilder strafeGains = new LoggedTunableGainsBuilder("AutoAlign/throttleGains/", 1.0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0);
     private LoggedTunableNumber maxStrafeTune = new LoggedTunableNumber("AutoAlign/strafeGains/maxVelMetersPerSecond",1.0);
     private LoggedTunableNumber maxThrottleTune = new LoggedTunableNumber("AutoAlign/throttleGains/maxVelMetersPerSecond",1.0);
     private LoggedTunableNumber maxAccelStrafeTune = new LoggedTunableNumber("AutoAlign/strafeGains/maxAccMetersPerSecond",10.0);
@@ -58,7 +58,7 @@ public class AutoAlign extends Command {
     private double tr;
     private ProfiledPIDController strafePID = new ProfiledPIDController(strafeGains.build().kP, strafeGains.build().kI ,strafeGains.build().kD, new Constraints(maxStrafe.in(MetersPerSecond), maxAccelStrafe.in(MetersPerSecondPerSecond)));
     private ProfiledPIDController throttlePID = new ProfiledPIDController(throttleGains.build().kP, throttleGains.build().kI ,throttleGains.build().kD, new Constraints(maxThrottle.in(MetersPerSecond), maxAccelThrottle.in(MetersPerSecondPerSecond)));
-    private PIDController spinPID = new PIDController(0.1, 0.0, 0.0);
+    private PIDController spinPID = new PIDController(0.5, 0.0, 0.0);
     
 
     /**
@@ -125,7 +125,7 @@ public class AutoAlign extends Command {
 
         tx = -targetPose_R.getY();
         ty = -targetPose_R.getX();
-        tr = targetPose_R.getRotation().unaryMinus().getRadians();
+        tr = targetPose_R.getRotation().getRadians();
         vx = drivetrain.getChassisSpeeds().vxMetersPerSecond;
         vy = drivetrain.getChassisSpeeds().vyMetersPerSecond;
 
@@ -144,9 +144,9 @@ public class AutoAlign extends Command {
 
         double distance = getCurrentPose().getTranslation().getDistance(targetPose.getTranslation());
 
-        tx = 0.0 - targetPose_r.getY();
-        ty = 0.0 - targetPose_r.getX();
-        tr = targetPose_r.getRotation().unaryMinus().getRadians();
+        tx = targetPose_r.getY();
+        ty = targetPose_r.getX();
+        tr = targetPose_r.getRotation().getRadians();
 
         strafe = strafePID.calculate(tx, 0.0); 
         throttle = throttlePID.calculate(ty, 0.0);
