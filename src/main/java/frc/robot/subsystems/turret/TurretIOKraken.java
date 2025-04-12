@@ -1,5 +1,7 @@
 package frc.robot.subsystems.turret;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;

@@ -13,48 +13,28 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
 import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants.PositionConstants;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
-import frc.robot.commands.SelectorCommandFactory;
 import frc.robot.commands.LowerClimber;
-import frc.robot.commands.RaiseClimber;
-import frc.robot.commands.SetElevatorPosition;
-import frc.robot.commands.SetPivotAngle;
-import frc.robot.commands.SetTurretAngle;
-import frc.robot.commands.FullAutoSystemCommands.AutoAlignInAutoLeft;
-import frc.robot.commands.FullAutoSystemCommands.AutoAlignInAutoRight;
 import frc.robot.commands.FullAutoSystemCommands.GrabAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseL4InAuto;
-import frc.robot.commands.FullAutoSystemCommands.ScoreL1InAuto;
-import frc.robot.commands.FullAutoSystemCommands.ScoreL3InAuto;
-import frc.robot.commands.FullAutoSystemCommands.ScoreL4InAuto;
 import frc.robot.commands.FullAutoSystemCommands.ScoreL4InAutoNoAA;
 import frc.robot.commands.FullAutoSystemCommands.ScoreBargeInAuto;
 import frc.robot.commands.FullTeleopSystemCommands.AlgaeGroundPickupReturnToHome;
@@ -64,21 +44,12 @@ import frc.robot.commands.FullTeleopSystemCommands.Climb;
 import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeOne;
 import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeTwo;
 import frc.robot.commands.FullTeleopSystemCommands.PickupAlgaeFromGround;
-import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromChute;
-import frc.robot.commands.FullTeleopSystemCommands.PickupCoralFromGround;
-import frc.robot.commands.FullTeleopSystemCommands.ReturnToHome;
-import frc.robot.commands.FullTeleopSystemCommands.ScoreCoral;
-import frc.robot.commands.FullTeleopSystemCommands.ScoreCoralL3;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelFour;
-import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelFourNoAA;
-import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelOne;
-import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
-import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreAlgaeInBarge;
+import frc.robot.commands.FullTeleopSystemCommands.ScoreCoral;
 import frc.robot.commands.FullTeleopSystemCommands.AlignToReef.ReefPosition;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.LockingServo;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIONEO;
@@ -112,13 +83,9 @@ import frc.robot.subsystems.turret.TurretIO;
 import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.vision.AprilTagVision;
-import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.ReefPositionsUtil;
-import frc.robot.util.ReefPositionsUtil.AutoAlignSide;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 //TODO: go back and actually document all classes in the project (putting this here cuz we'll see this the most)
@@ -234,16 +201,12 @@ public class RobotContainer {
 
     // Pathplanner named commands
     NamedCommands.registerCommand("Release", new ReleaseInAuto());
-    NamedCommands.registerCommand("ScoreLevelOne", new ScoreL1InAuto());
     NamedCommands.registerCommand("ScoreLevelFour", new ScoreL4InAutoNoAA());
-    NamedCommands.registerCommand("ScoreL4AutoAlign", new ScoreL4InAuto());
     NamedCommands.registerCommand("ReturnToHome", new AlgaeReturnToHome());
     NamedCommands.registerCommand("ScoreBarge", new ScoreBargeInAuto());
     NamedCommands.registerCommand("GrabAlgae", new GrabAlgaeInAuto());
     NamedCommands.registerCommand("ReleaseAlgae", new ReleaseAlgaeInAuto());
     NamedCommands.registerCommand("ReleaseL4", new ReleaseL4InAuto());
-    NamedCommands.registerCommand("AutoAlignLeft", new AutoAlignInAutoLeft());
-    NamedCommands.registerCommand("AutoAlignRight", new AutoAlignInAutoRight());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -352,10 +315,7 @@ public class RobotContainer {
     //driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
     //driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
     driverController.povDown().onTrue(new Climb());
-    driverController.y().onTrue(new ScoreCoral());
-    driverController.b().onTrue(new ScoreCoralL3());
     driverController.rightTrigger().onTrue(new PickupAlgaeFromGround()).onFalse(new AlgaeGroundPickupReturnToHome());
-    driverController.leftTrigger().onTrue(new PickupCoralFromGround()).onFalse(new PickupCoralFromChute());
     // driverController.povLeft()
     // .and(() -> reefPositions.getIsAutoAligning())
     // .and(() -> {return reefPositions.getAutoAlignSide() == AutoAlignSide.Left;})
@@ -373,19 +333,15 @@ public class RobotContainer {
     driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
-    operatorController.a().onTrue(new ScoreLevelOne());
-    operatorController.b().onTrue(new ScoreLevelTwo());
-    operatorController.x().onTrue(new ScoreLevelThree());
-    operatorController.y().onTrue(new ScoreLevelFourNoAA());
+    operatorController.y().onTrue(new ScoreLevelFour());
+    operatorController.b().onTrue(new ScoreCoral());
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
     operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());
     operatorController.povRight().onTrue(new ScoreProcessor());
-    operatorController.rightBumper().onTrue(new PickupCoralFromChute());
     operatorController.leftBumper().onTrue(new AlgaeReturnToHome());
     //operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0)); //down
     operatorController.rightTrigger().onTrue(new LowerClimber());
-    operatorController.leftTrigger().onTrue(new ScoreLevelFour());
     //operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
 
     // operatorController.a().onTrue(new SetPivotAngle(0));

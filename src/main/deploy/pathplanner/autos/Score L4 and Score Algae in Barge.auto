@@ -1,0 +1,98 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score L4 - Inner Center Right.0"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreLevelFour"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Drive Forward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Drive Back Center.0"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GrabAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Grab Algae - Inner Center"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Algae Drive Forward -  Inner Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Release"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drive To Barge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreBarge"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseAlgae"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": true
+}

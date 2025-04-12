@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.FullTeleopSystemCommands.AlignToReef;
+import frc.robot.commands.FullTeleopSystemCommands.ReturnToHome;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.VirtualSubsystem;
 
@@ -175,6 +176,7 @@ public class Robot extends LoggedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.teleopInit();
+    new ReturnToHome();
   }
 
   /** This function is called periodically during operator control. */

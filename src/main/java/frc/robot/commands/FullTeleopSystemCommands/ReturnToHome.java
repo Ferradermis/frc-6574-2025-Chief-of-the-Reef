@@ -17,5 +17,6 @@ public class ReturnToHome extends SequentialCommandGroup {
             new SetPivotAngle(Constants.PositionConstants.HOME_PIVOT_ANGLE).withTimeout(0.3),
             new SetElevatorPosition(Constants.PositionConstants.HOME_ELEVATOR_HEIGHT)
     );
+    System.out.println("ReturnToHome Command Initialized");
   }   
 }
