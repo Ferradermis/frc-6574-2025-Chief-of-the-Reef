@@ -11,7 +11,7 @@ public class AlgaeGroundPickupReturnToHome extends SequentialCommandGroup {
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
             new ParallelCommandGroup(
-                new Release(16).withTimeout(1.5),
+                // new Release(16).withTimeout(1.5),
                 new AlgaeReturnToHome().withTimeout(1)
             ),
             new Intake(0).withTimeout(0.1)

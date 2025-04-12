@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "L4 Drive Forward"
@@ -68,6 +74,18 @@
         {
           "type": "path",
           "data": {
+            "pathName": "Algae Drive Back Inner Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReturnToHome"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "Drive To Barge"
           }
         },
@@ -87,6 +105,12 @@
           "type": "named",
           "data": {
             "name": "ReleaseAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReturnToHome"
           }
         }
       ]

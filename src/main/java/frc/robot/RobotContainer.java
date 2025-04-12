@@ -145,11 +145,6 @@ public class RobotContainer {
               drive::addVisionMeasurement, 
               drive::addVisionMeasurementAutoAlign, 
               new VisionIOLimelight(camera1Name, drive::getRotation));
-        // vision =
-        //     new Vision(
-        //         demoDrive::addVisionMeasurement,
-        //         new VisionIOPhotonVision(camera0Name, robotToCamera0),
-        
         break;
 
       case SIM:
@@ -333,8 +328,6 @@ public class RobotContainer {
     driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
-    operatorController.y().onTrue(new ScoreLevelFour());
-    operatorController.b().onTrue(new ScoreCoral());
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
     operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());

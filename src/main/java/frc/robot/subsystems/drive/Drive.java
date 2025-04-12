@@ -250,16 +250,6 @@ public class Drive extends SubsystemBase {
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
-
-    // Limelight pose estimation
-    // if (LimelightHelpers.getTV("limelight")) {
-    //   LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-    //   poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 2 * Math.PI));
-    //   poseEstimator.addVisionMeasurement(
-    //       limelightMeasurement.pose,
-    //       limelightMeasurement.timestampSeconds
-    //   );
-    // }
   }
 
   /**
