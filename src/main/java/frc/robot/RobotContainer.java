@@ -30,6 +30,7 @@ import frc.robot.commands.AutoAlign;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
+import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.LowerClimber;
 import frc.robot.commands.FullAutoSystemCommands.GrabAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
@@ -328,6 +329,7 @@ public class RobotContainer {
     driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
+    operatorController.y().onTrue(new SetElevatorPosition(Constants.PositionConstants.LEVEL_FOUR_ELEVATOR_HEIGHT));
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
     operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());

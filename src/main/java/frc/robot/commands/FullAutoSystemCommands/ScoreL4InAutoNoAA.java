@@ -8,7 +8,7 @@ public class ScoreL4InAutoNoAA extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-            new ScoreLevelFour().withTimeout(3)
+            new ScoreLevelFour().withTimeout(2.5)
         );
     }
 }

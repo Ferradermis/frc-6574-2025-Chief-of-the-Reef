@@ -5,21 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Score L4 - Inner Center Right.0"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreLevelFour"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score L4 - Inner Center Right.0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreLevelFour"
+                }
+              }
+            ]
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.75
           }
         },
         {
@@ -93,12 +100,6 @@
           "type": "named",
           "data": {
             "name": "ScoreBarge"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
           }
         },
         {
