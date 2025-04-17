@@ -31,7 +31,7 @@ public class EndEffectorIOKraken implements EndEffectorIO {
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     config.CurrentLimits.StatorCurrentLimit = 40; // Coral EE: 20
     config.CurrentLimits.StatorCurrentLimitEnable = true;
-    config.CurrentLimits.SupplyCurrentLimit = 40; // Coral EE: 20
+    config.CurrentLimits.SupplyCurrentLimit = 80; // Coral EE: 20
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     PhoenixUtil.tryUntilOk(5, () -> motor.getConfigurator().apply(config));

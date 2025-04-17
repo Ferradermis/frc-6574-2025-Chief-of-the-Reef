@@ -8,7 +8,7 @@ public class ReleaseAlgaeInAuto extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new Intake(12).withTimeout(1.5)
+                new Intake(16).withTimeout(1.5)
         );
     }
 }

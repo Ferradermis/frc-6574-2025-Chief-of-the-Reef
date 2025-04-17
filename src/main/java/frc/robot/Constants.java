@@ -49,7 +49,7 @@ public final class Constants {
 
   public static final class PositionConstants {
     // Elevator Constants
-    public static final double LEVEL_FOUR_ELEVATOR_HEIGHT = 20.0 * 39.37;
+    public static final double LEVEL_FOUR_ELEVATOR_HEIGHT = 20.0 * 39.37; //20
     public static final double LOWER_L4_ELEVATOR_HEIGHT = 12.5 * 39.37;
     public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 12.3 * 39.37;
     public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 4.765 * 39.37;
@@ -61,7 +61,7 @@ public final class Constants {
     public static final double PROCESSOR_ELEVATOR_HEIGHT = 3.3825 * 39.87; // Coral EE: 3.3825
     public static final double CHUTE_ELEVATOR_HEIGHT = 4.720 * 39.37;
     public static final double HOME_ELEVATOR_HEIGHT = 0.0;
-    public static final double ALGAE_NET_ELEVATOR_HEIGHT = 22.305 * 39.37;
+    public static final double ALGAE_NET_ELEVATOR_HEIGHT = 24.5 * 39.37;
 
     // Pivot Constants
     public static final double LEVEL_FOUR_PIVOT_ANGLE = 0.094;
@@ -74,16 +74,16 @@ public final class Constants {
     public static final double ALGAE_TWO_PIVOT_ANGLE = -0.080;
     public static final double ALGAE_GROUND_PIVOT_ANGLE = -0.060;
     public static final double CORAL_GROUND_PIVOT_ANGLE = -0.082; 
-    public static final double PROCESSOR_PIVOT_ANGLE = 0.0;
+    public static final double PROCESSOR_PIVOT_ANGLE = -0.015;
     public static final double CHUTE_PIVOT_ANGLE = 0.156;
     public static final double HOME_PIVOT_ANGLE = 0.173;
     public static final double ALGAE_HOME_PIVOT_ANGLE = 0.137;
-    public static final double ALGAE_NET_PIVOT_ANGLE = 0.184;
+    public static final double ALGAE_NET_PIVOT_ANGLE = 0.137;
     public static final double CLIMB_PIVOT_ANGLE = 0.039;
     //0.310
 
     // Turret Constants
-    public static final double VERTICAL_TURRET_ANGLE = 2.156;
+    public static final double VERTICAL_TURRET_ANGLE = 2.225;
     public static final double AUTO_ALIGN_VERTICAL_TURRET_ANGLE = -2.284;
     public static final double HORIZONTAL_TURRET_ANGLE = 0.0;
     public static final double ALGAE_HORIZONTAL_TURRET_ANGLE = 4.487;

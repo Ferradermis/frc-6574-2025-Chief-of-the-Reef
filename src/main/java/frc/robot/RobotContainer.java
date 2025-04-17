@@ -305,7 +305,7 @@ public class RobotContainer {
 
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
     driverController.rightBumper().whileTrue(new Intake(13)).whileFalse(new Intake(0));
-    driverController.leftBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
+    driverController.leftBumper().whileTrue(new Release(16)).whileFalse(new Intake(0));
     driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
     driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0.0));
     //driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
@@ -329,7 +329,8 @@ public class RobotContainer {
     driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
-    operatorController.y().onTrue(new SetElevatorPosition(Constants.PositionConstants.LEVEL_FOUR_ELEVATOR_HEIGHT));
+    // operatorController.y().onTrue(new ScoreLevelFour()); // TODO: remove
+    // operatorController.b().onTrue(new SetElevatorPosition(Constants.PositionConstants.LEVEL_THREE_ELEVATOR_HEIGHT)); //TODO: remove
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
     operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());
