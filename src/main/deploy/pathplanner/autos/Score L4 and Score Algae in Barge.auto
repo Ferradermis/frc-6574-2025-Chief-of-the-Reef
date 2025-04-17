@@ -85,21 +85,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ReturnToHome"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Drive To Barge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreBarge"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Drive To Barge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Release"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreBarge"
+                }
+              }
+            ]
           }
         },
         {
@@ -109,9 +116,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ReturnToHome"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Drive Back From Barge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ReturnToHome"
+                }
+              }
+            ]
           }
         }
       ]
