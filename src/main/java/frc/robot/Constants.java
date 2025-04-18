@@ -54,8 +54,10 @@ public final class Constants {
     public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 12.3 * 39.37;
     public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 4.765 * 39.37;
     public static final double LEVEL_ONE_ELEVATOR_HEIGHT = 0.0; 
-    public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 17.188 * 39.37; // Coral EE: 17.188
-    public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 23.3 * 39.37; // Coral EE: 23.3
+    public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 3.792 * 39.37; // TODO: change
+    public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 9.842  * 39.37; // TODO: change
+    public static final double ALGAE_ONE_AUTO_ELEVATOR_HEIGHT = 17.188 * 39.37; // Coral EE: 17.188
+    public static final double ALGAE_TWO_AUTO_ELEVATOR_HEIGHT = 23.3 * 39.37; // Coral EE: 23.3
     public static final double ALGAE_GROUND_ELEVATOR_HEIGHT = 2.8825 * 39.87; // Coral EE: 2.8825
     public static final double CORAL_GROUND_ELEVATOR_HEIGHT = 2.640 * 39.87;
     public static final double PROCESSOR_ELEVATOR_HEIGHT = 3.3825 * 39.87; // Coral EE: 3.3825
@@ -70,8 +72,10 @@ public final class Constants {
     public static final double LEVEL_THREE_LOWER_ANGLE = 0.050;
     public static final double PIVOT_LOWER_ANGLE = 0.025;
     public static final double LEVEL_ONE_PIVOT_ANGLE = 0.126;
-    public static final double ALGAE_ONE_PIVOT_ANGLE = -0.080;
-    public static final double ALGAE_TWO_PIVOT_ANGLE = -0.080;
+    public static final double ALGAE_ONE_PIVOT_ANGLE = 0.095; // TODO: change
+    public static final double ALGAE_TWO_PIVOT_ANGLE = 0.095; // TODO: change
+    public static final double ALGAE_ONE_AUTO_PIVOT_ANGLE = -0.080;
+    public static final double ALGAE_TWO_AUTO_PIVOT_ANGLE = -0.080;
     public static final double ALGAE_GROUND_PIVOT_ANGLE = -0.060;
     public static final double CORAL_GROUND_PIVOT_ANGLE = -0.082; 
     public static final double PROCESSOR_PIVOT_ANGLE = -0.015;

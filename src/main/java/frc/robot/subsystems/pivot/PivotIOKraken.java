@@ -42,7 +42,7 @@ public class PivotIOKraken implements PivotIO{
         PhoenixUtil.tryUntilOk(5, () -> encoder.getConfigurator().apply(cancoderConfig));
 
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.Voltage.PeakForwardVoltage = 12.0; //TODO: Probably need to change this value
         config.Voltage.PeakReverseVoltage = -12.0; //TODO: Probably need to change this value
         config.CurrentLimits.StatorCurrentLimit = 80.0;
