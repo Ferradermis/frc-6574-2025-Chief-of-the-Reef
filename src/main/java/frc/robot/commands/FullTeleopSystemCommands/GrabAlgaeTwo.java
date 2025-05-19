@@ -16,7 +16,7 @@ public class GrabAlgaeTwo extends SequentialCommandGroup {
         new ParallelCommandGroup(
             new SetPivotAngle(Constants.PositionConstants.ALGAE_TWO_PIVOT_ANGLE),
             new SetElevatorPosition(Constants.PositionConstants.ALGAE_TWO_ELEVATOR_HEIGHT),
-            new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE) // Coral EE: ALGAE_HORIZONTAL_TURRET_ANGLE
+            new SetTurretAngle(Constants.PositionConstants.ALGAE_HORIZONTAL_TURRET_ANGLE) // Coral EE: ALGAE_HORIZONTAL_TURRET_ANGLE
         )
     );
   } 

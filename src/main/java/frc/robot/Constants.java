@@ -43,7 +43,7 @@ public final class Constants {
     public static final int PIVOT_ID = 18;
     public static final int PIVOT_CANCODER_ID = 19;
     public static final int TURRET_ID = 20;
-    public static final int END_EFFECTOR_ID = 23; // Coral EE: 21
+    public static final int END_EFFECTOR_ID = 21;
     public static final int LOCKING_SERVO_ID = 1;
   }
 
@@ -53,8 +53,8 @@ public final class Constants {
     public static final double LEVEL_THREE_ELEVATOR_HEIGHT = 12.3 * 39.37;
     public static final double LEVEL_TWO_ELEVATOR_HEIGHT = 4.765 * 39.37;
     public static final double LEVEL_ONE_ELEVATOR_HEIGHT = 0.0; 
-    public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 4.133 * 39.37; // Coral EE: 17.188
-    public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 9.3 * 39.37; // Coral EE: 23.3
+    public static final double ALGAE_ONE_ELEVATOR_HEIGHT = 3.933 * 39.37; // Coral EE: 17.188
+    public static final double ALGAE_TWO_ELEVATOR_HEIGHT = 9.1 * 39.37; // Coral EE: 23.3
     public static final double ALGAE_GROUND_ELEVATOR_HEIGHT = 6.780 * 39.87; // Coral EE: 2.8825
     public static final double CORAL_GROUND_ELEVATOR_HEIGHT = 2.640 * 39.87;
     public static final double PROCESSOR_ELEVATOR_HEIGHT = 0 * 39.87; // Coral EE: 3.3825
@@ -72,7 +72,7 @@ public final class Constants {
     public static final double ALGAE_ONE_PIVOT_ANGLE = 0.102; // Coral EE: -0.080
     public static final double ALGAE_TWO_PIVOT_ANGLE = 0.102; // Coral EE: -0.080
     public static final double ALGAE_GROUND_PIVOT_ANGLE = -0.100; // Coral EE: -0.080
-    public static final double CORAL_GROUND_PIVOT_ANGLE = -0.082; // TODO: Find correct value, defaulted at 0 for now :)
+    public static final double CORAL_GROUND_PIVOT_ANGLE = -0.090; // TODO: Find correct value, defaulted at 0 for now :)
     public static final double PROCESSOR_PIVOT_ANGLE = 0.039; // Coral EE: 0.025
     public static final double CHUTE_PIVOT_ANGLE = 0.156;
     public static final double HOME_PIVOT_ANGLE = 0.152;
@@ -85,7 +85,7 @@ public final class Constants {
     public static final double VERTICAL_TURRET_ANGLE = 2.225;
     public static final double AUTO_ALIGN_VERTICAL_TURRET_ANGLE = -2.284;
     public static final double HORIZONTAL_TURRET_ANGLE = 0.0;
-    public static final double ALGAE_HORIZONTAL_TURRET_ANGLE = 0.0; // Coral EE: 4.487
+    public static final double ALGAE_HORIZONTAL_TURRET_ANGLE = -4.521; // Coral EE: 4.487
 
     // Climber Constants
     public static final double CLIMBER_UP_ANGLE = -60.0;

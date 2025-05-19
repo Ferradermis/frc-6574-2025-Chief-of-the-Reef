@@ -369,8 +369,8 @@ public class RobotContainer {
     //      drive)
     // ).onFalse(
     //   new ReturnToHome());
-    driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive).withTimeout(3));
-    driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
+    // driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive).withTimeout(3));
+    // driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
     operatorController.a().onTrue(new ScoreLevelOne());
