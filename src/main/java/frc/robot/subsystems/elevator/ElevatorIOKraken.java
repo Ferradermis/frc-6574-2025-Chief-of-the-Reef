@@ -56,8 +56,8 @@ public class ElevatorIOKraken implements ElevatorIO {
 
     TalonFXConfiguration config2 = new TalonFXConfiguration();
     config2.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    config2.Voltage.PeakForwardVoltage = 12; //TODO: Probably need to change this value
-    config2.Voltage.PeakReverseVoltage = -12; //TODO: Probably need to change this value
+    config2.Voltage.PeakForwardVoltage = 12;
+    config2.Voltage.PeakReverseVoltage = -12; 
     config2.CurrentLimits.StatorCurrentLimit = 80;
     config2.CurrentLimits.StatorCurrentLimitEnable = true;
     config2.CurrentLimits.SupplyCurrentLimit = 40;

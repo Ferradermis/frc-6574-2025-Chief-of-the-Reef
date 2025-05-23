@@ -349,8 +349,6 @@ public class RobotContainer {
     driverController.leftBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
     driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
     driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0.0));
-    //driverController.b().onTrue(climberGate.getNewPivotTurnCommand(0));
-    //driverController.povDown().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
     driverController.povDown().onTrue(new Climb());
     driverController.y().onTrue(new ScoreCoral());
     driverController.b().onTrue(new ScoreCoralL3());
@@ -369,8 +367,8 @@ public class RobotContainer {
     //      drive)
     // ).onFalse(
     //   new ReturnToHome());
-    // driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive).withTimeout(3));
-    // driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
+    driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive).withTimeout(3));
+    driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
     operatorController.a().onTrue(new ScoreLevelOne());
@@ -383,14 +381,8 @@ public class RobotContainer {
     operatorController.povRight().onTrue(new ScoreProcessor());
     operatorController.rightBumper().onTrue(new PickupCoralFromChute());
     operatorController.leftBumper().onTrue(new AlgaeReturnToHome());
-    //operatorController.rightTrigger().whileTrue(climber.setVoltageTest(6)).onFalse(climber.setVoltageTest(0)); //down
     operatorController.rightTrigger().onTrue(new LowerClimber());
     operatorController.leftTrigger().onTrue(new ScoreLevelFour());
-    //operatorController.leftTrigger().whileTrue(climber.setVoltageTest(-4)).onFalse(climber.setVoltageTest(0)); //up
-
-    // operatorController.a().onTrue(new SetPivotAngle(0));
-    // operatorController.b().onTrue(new SetPivotAngle(-0.082));
-    // operatorController.x().onTrue(new SetPivotAngle(0.103));
   }
 
   /**
