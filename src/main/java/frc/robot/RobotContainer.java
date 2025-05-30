@@ -49,6 +49,7 @@ import frc.robot.commands.SetTurretAngle;
 import frc.robot.commands.FullAutoSystemCommands.AutoAlignInAutoLeft;
 import frc.robot.commands.FullAutoSystemCommands.AutoAlignInAutoRight;
 import frc.robot.commands.FullAutoSystemCommands.GrabAlgaeInAuto;
+import frc.robot.commands.FullAutoSystemCommands.IntakeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseL4InAuto;
@@ -75,6 +76,7 @@ import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelOne;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelThree;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
+import frc.robot.commands.FullTeleopSystemCommands.VerticalCoralIntake;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreAlgaeInBarge;
 import frc.robot.commands.FullTeleopSystemCommands.AlignToReef.ReefPosition;
 import frc.robot.generated.TunerConstants;
@@ -244,6 +246,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("ReleaseL4", new ReleaseL4InAuto());
     NamedCommands.registerCommand("AutoAlignLeft", new AutoAlignInAutoLeft());
     NamedCommands.registerCommand("AutoAlignRight", new AutoAlignInAutoRight());
+    NamedCommands.registerCommand("VerticalIntake", new VerticalCoralIntake());
+    NamedCommands.registerCommand("Intake", new IntakeInAuto());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -367,11 +371,12 @@ public class RobotContainer {
     //      drive)
     // ).onFalse(
     //   new ReturnToHome());
-    driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive).withTimeout(3));
-    driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
+    // driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive).withTimeout(3));
+    // driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
-    operatorController.a().onTrue(new ScoreLevelOne());
+    //operatorController.a().onTrue(new ScoreLevelOne());
+    operatorController.a().onTrue(new VerticalCoralIntake());
     operatorController.b().onTrue(new ScoreLevelTwo());
     operatorController.x().onTrue(new ScoreLevelThree());
     operatorController.y().onTrue(new ScoreLevelFourNoAA());

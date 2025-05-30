@@ -61,6 +61,7 @@ public final class Constants {
     public static final double CHUTE_ELEVATOR_HEIGHT = 4.720 * 39.37;
     public static final double HOME_ELEVATOR_HEIGHT = 0.0;
     public static final double ALGAE_NET_ELEVATOR_HEIGHT = 22.305 * 39.37;
+    public static final double VERTICAL_GROUND_CORAL_INTAKE_ELEVATOR_HEIGHT = 2.804 * 39.37;
 
     // Pivot Constants
     public static final double LEVEL_FOUR_PIVOT_ANGLE = 0.094;
@@ -79,6 +80,7 @@ public final class Constants {
     public static final double ALGAE_HOME_PIVOT_ANGLE = 0.137;
     public static final double ALGAE_NET_PIVOT_ANGLE = 0.180; // Coral EE: .190
     public static final double CLIMB_PIVOT_ANGLE = 0.039;
+    public static final double VERTICAL_GROUND_CORAL_INTAKE_PIVOT_ANGLE = -0.071;
     //0.310
 
     // Turret Constants

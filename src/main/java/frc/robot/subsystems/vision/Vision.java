@@ -182,7 +182,7 @@ public class Vision extends SubsystemBase {
 
         // TODO: test if auto align works with both poses being updated??? I dont know man everything else looks okay :,)
         // Send vision observation
-        addVisionMeasurement(
+        addVisionMeasurementAA(
             observation.pose().toPose2d(),
             observation.timestamp(),
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
