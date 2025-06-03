@@ -8,7 +8,7 @@ public class IntakeInAuto extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new Intake(13).withTimeout(3)
+                new Intake(13).withTimeout(6)
         );
         System.out.println("IntakeInAuto");
     }
