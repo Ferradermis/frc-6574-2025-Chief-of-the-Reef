@@ -15,7 +15,7 @@ public class ScoreAlgaeInBarge extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
             new SetElevatorPosition(Constants.PositionConstants.ALGAE_NET_ELEVATOR_HEIGHT).withTimeout(1),
-            new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE).withTimeout(0.3), // Coral EE: VERTICAL_TURRET_ANGLE
+            new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3), // Coral EE: VERTICAL_TURRET_ANGLE
             new SetPivotAngle(Constants.PositionConstants.ALGAE_NET_PIVOT_ANGLE).withTimeout(0.3)
     );
   } 

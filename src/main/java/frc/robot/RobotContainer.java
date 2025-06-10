@@ -375,8 +375,8 @@ public class RobotContainer {
     // driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
-    //operatorController.a().onTrue(new ScoreLevelOne());
-    operatorController.a().onTrue(new VerticalCoralIntake());
+    //operatorController.a().onTrue(new VerticalCoralIntake());
+    operatorController.a().onTrue(new ScoreLevelOne());
     operatorController.b().onTrue(new ScoreLevelTwo());
     operatorController.x().onTrue(new ScoreLevelThree());
     operatorController.y().onTrue(new ScoreLevelFourNoAA());
