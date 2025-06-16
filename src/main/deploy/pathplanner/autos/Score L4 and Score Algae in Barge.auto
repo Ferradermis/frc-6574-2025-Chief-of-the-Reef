@@ -1,0 +1,143 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score L4 - Inner Center Right.0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreLevelFour"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Drive Forward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Drive Back Center.0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drive To Algae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GrabAlgae"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Algae Drive Forward -  Inner Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Release"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae Drive Back Inner Center"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Drive To Barge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Release"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreBarge"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseAlgae"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Drive Back From Barge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ReturnToHome"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": true
+}
