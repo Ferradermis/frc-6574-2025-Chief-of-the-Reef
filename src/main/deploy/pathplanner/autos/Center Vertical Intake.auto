@@ -34,6 +34,36 @@
               }
             ]
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReturnToHome"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score L4 - From Vertical Coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreLevelFour"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 drive forward vertical"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseL4"
+          }
         }
       ]
     }
