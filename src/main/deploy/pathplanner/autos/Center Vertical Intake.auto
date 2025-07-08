@@ -15,12 +15,6 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Vertical Ground Intake"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "VerticalIntake"
@@ -30,6 +24,12 @@
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Vertical Ground Intake"
                 }
               }
             ]
@@ -63,6 +63,31 @@
           "type": "named",
           "data": {
             "name": "ReleaseL4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Release"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Vertical ground Back up"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReturnToHome"
           }
         }
       ]
