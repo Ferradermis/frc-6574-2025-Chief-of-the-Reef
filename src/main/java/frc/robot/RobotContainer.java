@@ -28,26 +28,26 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.PositionConstants;
-import frc.robot.commands.AutoAlign;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Release;
-import frc.robot.commands.SelectorCommandFactory;
 import frc.robot.commands.LowerClimber;
 import frc.robot.commands.RaiseClimber;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.SetPivotAngle;
 import frc.robot.commands.SetTurretAngle;
-import frc.robot.commands.FullAutoSystemCommands.AutoAlignInAutoLeft;
-import frc.robot.commands.FullAutoSystemCommands.AutoAlignInAutoRight;
+import frc.robot.commands.TestCommand;
+import frc.robot.commands.AutoAlignCommands.AutoAlignAndScore;
 import frc.robot.commands.FullAutoSystemCommands.GrabAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.IntakeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
@@ -60,7 +60,6 @@ import frc.robot.commands.FullAutoSystemCommands.ScoreL4InAutoNoAA;
 import frc.robot.commands.FullAutoSystemCommands.ScoreBargeInAuto;
 import frc.robot.commands.FullTeleopSystemCommands.AlgaeGroundPickupReturnToHome;
 import frc.robot.commands.FullTeleopSystemCommands.AlgaeReturnToHome;
-import frc.robot.commands.FullTeleopSystemCommands.AlignToReef;
 import frc.robot.commands.FullTeleopSystemCommands.Climb;
 import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeOne;
 import frc.robot.commands.FullTeleopSystemCommands.GrabAlgaeTwo;
@@ -78,7 +77,6 @@ import frc.robot.commands.FullTeleopSystemCommands.ScoreLevelTwo;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreProcessor;
 import frc.robot.commands.FullTeleopSystemCommands.VerticalCoralIntake;
 import frc.robot.commands.FullTeleopSystemCommands.ScoreAlgaeInBarge;
-import frc.robot.commands.FullTeleopSystemCommands.AlignToReef.ReefPosition;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.LockingServo;
 import frc.robot.subsystems.climber.Climber;
@@ -113,13 +111,10 @@ import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIO;
 import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretIOSim;
-import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.util.ReefPositionsUtil;
-import frc.robot.util.ReefPositionsUtil.AutoAlignSide;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -133,7 +128,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  public static AprilTagVision vision;
+  public static Vision vision;
   public static Drive drive;
   public static Elevator elevator;
   public static Pivot pivot;
@@ -148,9 +143,6 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
-
-  private ReefPositionsUtil reefPositions;
-  private boolean teleopInitialized = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -175,11 +167,10 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         vision =
-            new AprilTagVision(
-              drive::setPose, 
-              drive::addVisionMeasurement, 
-              drive::addVisionMeasurementAutoAlign, 
-              new VisionIOLimelight(camera1Name, drive::getRotation));
+                new Vision(
+                    drive::addVisionMeasurement,
+                    new VisionIOLimelight(camera0Name, drive::getRotation),
+                    new VisionIOLimelight(camera1Name, drive::getRotation));
         // vision =
         //     new Vision(
         //         demoDrive::addVisionMeasurement,
@@ -202,12 +193,11 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        vision = 
-            new AprilTagVision(
-              drive::setPose, 
-              drive::addVisionMeasurement, 
-              drive::addVisionMeasurementAutoAlign, 
-              new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose));
+      vision =
+                new Vision(
+                    drive::addVisionMeasurement,
+                    new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+                    new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         // vision =
         //     new Vision(
         //         drive::addVisionMeasurement,
@@ -230,7 +220,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        //vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
     }
 
@@ -244,8 +234,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("GrabAlgae", new GrabAlgaeInAuto());
     NamedCommands.registerCommand("ReleaseAlgae", new ReleaseAlgaeInAuto());
     NamedCommands.registerCommand("ReleaseL4", new ReleaseL4InAuto());
-    NamedCommands.registerCommand("AutoAlignLeft", new AutoAlignInAutoLeft());
-    NamedCommands.registerCommand("AutoAlignRight", new AutoAlignInAutoRight());
     NamedCommands.registerCommand("VerticalIntake", new VerticalCoralIntake());
     NamedCommands.registerCommand("Intake", new IntakeInAuto());
 
@@ -268,8 +256,6 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-    reefPositions = ReefPositionsUtil.getInstance();
-    AlignToReef.initialize();
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -358,28 +344,14 @@ public class RobotContainer {
     driverController.b().onTrue(new ScoreCoralL3());
     driverController.rightTrigger().onTrue(new PickupAlgaeFromGround()).onFalse(new AlgaeGroundPickupReturnToHome());
     driverController.leftTrigger().onTrue(new PickupCoralFromGround()).onFalse(new PickupCoralFromChute());
-    // driverController.povLeft()
-    // .and(() -> reefPositions.getIsAutoAligning())
-    // .and(() -> {return reefPositions.getAutoAlignSide() == AutoAlignSide.Left;})
-    // .whileTrue(
-    //   AlignToReef.getNewReefCoralScoreSequence(
-    //     ReefPosition.Left, 
-    //     tru
-    //     SelectorCommandFactory.getCoralLevelPrepCommandSelector(), 
-    //     SelectorCommandFactory.getCoralLevelScoreCommandSelector(), 
-    //     SelectorCommandFactory.getCoralLevelStopScoreCommandSelector(),
-    //      drive)
-    // ).onFalse(
-    //   new ReturnToHome());
-    // driverController.x().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Left, false), drive).withTimeout(3));
-    // driverController.a().onTrue(new AutoAlign(AlignToReef.getGetTargetPositionFunction(ReefPosition.Right, false), drive).withTimeout(3));
 
     // Operator buttons
-    //operatorController.a().onTrue(new VerticalCoralIntake());
-    operatorController.a().onTrue(new ScoreLevelOne());
-    operatorController.b().onTrue(new ScoreLevelTwo());
-    operatorController.x().onTrue(new ScoreLevelThree());
-    operatorController.y().onTrue(new ScoreLevelFourNoAA());
+    // operatorController.a().onTrue(new ScoreLevelOne());
+    // operatorController.b().onTrue(new ScoreLevelTwo());
+    operatorController.a().onTrue(new AutoAlignAndScore(drive, false, 21));
+    operatorController.b().onTrue(new AutoAlignAndScore(drive, true, 21));
+    // operatorController.x().onTrue(new ScoreLevelThree());
+    // operatorController.y().onTrue(new ScoreLevelFourNoAA());
     operatorController.povDown().onTrue(new GrabAlgaeOne());
     operatorController.povUp().onTrue(new GrabAlgaeTwo());
     operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());
@@ -397,13 +369,5 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.get();
-  }
-
-  public void teleopInit() {
-    if (!this.teleopInitialized) {
-      vision.updateStartingPosition();
-      vision.enableUpdateOdometryBasedOnApriltags();
-      teleopInitialized = true;
-    }
   }
 }

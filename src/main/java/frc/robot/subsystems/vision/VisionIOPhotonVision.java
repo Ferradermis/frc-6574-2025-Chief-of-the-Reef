@@ -53,10 +53,9 @@ public class VisionIOPhotonVision implements VisionIO {
         inputs.latestTargetObservation =
             new TargetObservation(
                 Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
-                Rotation2d.fromDegrees(result.getBestTarget().getPitch()),
-                0);
+                Rotation2d.fromDegrees(result.getBestTarget().getPitch()));
       } else {
-        inputs.latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d(), 0);
+        inputs.latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d());
       }
 
       // Add pose observation
@@ -80,12 +79,12 @@ public class VisionIOPhotonVision implements VisionIO {
         // Add observation
         poseObservations.add(
             new PoseObservation(
-                null, result.getTimestampSeconds(), // Timestamp
-                                robotPose, // 3D pose estimate
-                                multitagResult.estimatedPose.ambiguity, // Ambiguity
-                                multitagResult.fiducialIDsUsed.size(), // Tag count
-                                totalTagDistance / result.targets.size(), // Average tag distance
-                                PoseObservationType.PHOTONVISION, 0, totalTagDistance)); // Observation type
+                result.getTimestampSeconds(), // Timestamp
+                robotPose, // 3D pose estimate
+                multitagResult.estimatedPose.ambiguity, // Ambiguity
+                multitagResult.fiducialIDsUsed.size(), // Tag count
+                totalTagDistance / result.targets.size(), // Average tag distance
+                PoseObservationType.PHOTONVISION)); // Observation type
 
       } else if (!result.targets.isEmpty()) { // Single tag result
         var target = result.targets.get(0);
@@ -106,12 +105,12 @@ public class VisionIOPhotonVision implements VisionIO {
           // Add observation
           poseObservations.add(
               new PoseObservation(
-                  null, result.getTimestampSeconds(), // Timestamp
-                                    robotPose, // 3D pose estimate
-                                    target.poseAmbiguity, // Ambiguity
-                                    1, // Tag count
-                                    cameraToTarget.getTranslation().getNorm(), // Average tag distance
-                                    PoseObservationType.PHOTONVISION, 0, 0)); // Observation type
+                  result.getTimestampSeconds(), // Timestamp
+                  robotPose, // 3D pose estimate
+                  target.poseAmbiguity, // Ambiguity
+                  1, // Tag count
+                  cameraToTarget.getTranslation().getNorm(), // Average tag distance
+                  PoseObservationType.PHOTONVISION)); // Observation type
         }
       }
     }
@@ -128,11 +127,5 @@ public class VisionIOPhotonVision implements VisionIO {
     for (int id : tagIds) {
       inputs.tagIds[i++] = id;
     }
-  }
-
-  @Override
-  public void setTagIdFilter(int[] filter) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setTagIdFilter'");
   }
 }

@@ -13,49 +13,31 @@
 
 package frc.robot.subsystems.vision;
 
-import static frc.robot.subsystems.vision.VisionConstants.angularStdDevBaseline;
-import static frc.robot.subsystems.vision.VisionConstants.angularStdDevMegatag2Factor;
-import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
-import static frc.robot.subsystems.vision.VisionConstants.cameraStdDevFactors;
-import static frc.robot.subsystems.vision.VisionConstants.linearStdDevBaseline;
-import static frc.robot.subsystems.vision.VisionConstants.linearStdDevMegatag2Factor;
-import static frc.robot.subsystems.vision.VisionConstants.maxAmbiguity;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
+import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.vision.VisionIO.PoseObservation;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
+import java.util.LinkedList;
+import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
   private final VisionConsumer consumer;
-  private final VisionConsumer consumerAA;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
 
-  private double targetDistance = 0;
-
-  public Vision(VisionConsumer consumer, VisionConsumer consumerAA, VisionIO... io) {
+  public Vision(VisionConsumer consumer, VisionIO... io) {
     this.consumer = consumer;
-    this.consumerAA = consumerAA;
     this.io = io;
 
     // Initialize inputs
@@ -82,31 +64,11 @@ public class Vision extends SubsystemBase {
     return inputs[cameraIndex].latestTargetObservation.tx();
   }
 
-  /**
-   * Returns the Y angle to the best target, which can be used for simple servoing with vision.
-   *
-   * @param cameraIndex The index of the camera to use.
-   */
-  public Rotation2d getTargetY(int cameraIndex) {
-    return inputs[cameraIndex].latestTargetObservation.ty();
-  }
-
-  public Double getTargetDistance(int cameraIndex) {
-    if (inputs[cameraIndex].poseObservations.length > 0) {
-      targetDistance = inputs[cameraIndex].poseObservations[0].averageTagDistance();
-    }
-    return targetDistance;
-  }
-
-  public Integer getTargetId(int cameraIndex) {
-    return (int) inputs[cameraIndex].latestTargetObservation.tagId();
-  }
-
   @Override
   public void periodic() {
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
-      Logger.processInputs("Vision/Camera/" + inputs[i].cameraName, inputs[i]);
+      Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
     }
 
     // Initialize logging values
@@ -132,20 +94,17 @@ public class Vision extends SubsystemBase {
         if (tagPose.isPresent()) {
           tagPoses.add(tagPose.get());
         }
-        
       }
 
       // Loop over pose observations
       for (var observation : inputs[cameraIndex].poseObservations) {
         // Check whether to reject pose
         boolean rejectPose =
-            rejectPose(observation)
-                || observation.tagCount() == 0 // Must have at least one tag
+            observation.tagCount() == 0 // Must have at least one tag
                 || (observation.tagCount() == 1
                     && observation.ambiguity() > maxAmbiguity) // Cannot be high ambiguity
-                // TODO Determine why they want about 2.4 ft off ground???
-                // || Math.abs(observation.pose().getZ())
-                //   > maxZError // Must have realistic Z coordinate
+                || Math.abs(observation.pose().getZ())
+                    > maxZError // Must have realistic Z coordinate
 
                 // Must be within the field boundaries
                 || observation.pose().getX() < 0.0
@@ -180,34 +139,25 @@ public class Vision extends SubsystemBase {
           angularStdDev *= cameraStdDevFactors[cameraIndex];
         }
 
-        // TODO: test if auto align works with both poses being updated??? I dont know man everything else looks okay :,)
         // Send vision observation
-        addVisionMeasurementAA(
+        consumer.accept(
             observation.pose().toPose2d(),
             observation.timestamp(),
             VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
-
-        if (!DriverStation.isAutonomousEnabled()) {
-          addVisionMeasurement(
-            observation.pose().toPose2d(), 
-            observation.timestamp(), 
-            VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
-        }
-        
       }
 
       // Log camera datadata
       Logger.recordOutput(
-          "Vision/Camera/" + inputs[cameraIndex].cameraName + "/TagPoses",
+          "Vision/Camera" + Integer.toString(cameraIndex) + "/TagPoses",
           tagPoses.toArray(new Pose3d[tagPoses.size()]));
       Logger.recordOutput(
-          "Vision/Camera/" + inputs[cameraIndex].cameraName + "/RobotPoses",
+          "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPoses",
           robotPoses.toArray(new Pose3d[robotPoses.size()]));
       Logger.recordOutput(
-          "Vision/Camera/" + inputs[cameraIndex].cameraName + "/RobotPosesAccepted",
+          "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesAccepted",
           robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
       Logger.recordOutput(
-          "Vision/Camera/" + inputs[cameraIndex].cameraName + "/RobotPosesRejected",
+          "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesRejected",
           robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
       allTagPoses.addAll(tagPoses);
       allRobotPoses.addAll(robotPoses);
@@ -226,53 +176,13 @@ public class Vision extends SubsystemBase {
     Logger.recordOutput(
         "Vision/Summary/RobotPosesRejected",
         allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
-  
-    for(int i = 0; i < inputs.length; i++){
-      Logger.recordOutput("Vision/Auto_Align/TX" + i, getTargetX(i).getDegrees());
-      Logger.recordOutput("Vision/Auto_Align/TY" + i, getTargetY(i).getDegrees());
-    }
   }
-// accepts the poses, timestamp, and vision measurements deviations.
+
   @FunctionalInterface
   public static interface VisionConsumer {
     public void accept(
         Pose2d visionRobotPoseMeters,
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs);
-  }
-
-  // accepts the observation
-  public boolean rejectPose(PoseObservation observation) {
-    return false;
-  }
-  
-  // accepts the vision measurements
-  public void addVisionMeasurement(Pose2d pose, double timestamp, Vector<N3> fill) {
-    consumer.accept(pose, timestamp, fill);
-  }
-
-  public void addVisionMeasurementAA(Pose2d pose, double timestamp, Vector<N3> fill){
-    consumerAA.accept(pose, timestamp, fill);
-  }
-
-  public Command setTagFilterCommand(int[] filter) {
-    return new InstantCommand(() -> {
-      setTagFilter(filter);
-    });
-  }
-
-  public void setTagFilter(int[] filter) {
-    // Creates a stream for array then sets the TagId for each camera.
-    Arrays.stream(io).forEach((e) -> {e.setTagIdFilter(filter);});
-  }
-
-  public Command setDefaultTagFilterCommand() {
-    return new InstantCommand(() -> {
-      setDefaultTagFilter();
-    });
-  }
-
-  public void setDefaultTagFilter() {
-    Arrays.stream(io).forEach((e) -> {e.setDefaultTagFilter();});
   }
 }

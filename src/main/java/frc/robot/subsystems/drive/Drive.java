@@ -27,8 +27,6 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,20 +39,15 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
-import frc.robot.LimelightHelpers;
-import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
@@ -76,9 +69,9 @@ public class Drive extends SubsystemBase {
               Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
 
   // PathPlanner config constants
-  private static final double ROBOT_MASS_KG = 61.689;
-  private static final double ROBOT_MOI = 20;
-  private static final double WHEEL_COF = 1.426;
+  private static final double ROBOT_MASS_KG = 74.088;
+  private static final double ROBOT_MOI = 6.883;
+  private static final double WHEEL_COF = 1.2;
   private static final RobotConfig PP_CONFIG =
       new RobotConfig(
           ROBOT_MASS_KG,
@@ -110,17 +103,8 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
-
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
-  private SwerveDrivePoseEstimator poseEstimatorAutoAlign =
-    new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
-
-  private final Field2d ppField2d = new Field2d();
-  private final Field2d robotField2d = new Field2d();
-
-  PIDController posPID = new PIDController(0.0, 0.0, 0.0);
-  PIDController rotPID = new PIDController(0.0, 0.0, 0.0);
 
   public Drive(
       GyroIO gyroIO,
@@ -134,14 +118,6 @@ public class Drive extends SubsystemBase {
     modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
     modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
 
-    // RobotConfig PP_CONFIG = null;
-    // try {
-    //   PP_CONFIG = RobotConfig.fromGUISettings();
-    // } catch (Exception e) {
-    //   // Handle exception as needed
-    //   e.printStackTrace();
-    // }
-
     // Usage reporting for swerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
 
@@ -149,33 +125,26 @@ public class Drive extends SubsystemBase {
     PhoenixOdometryThread.getInstance().start();
 
     // Configure AutoBuilder for PathPlanner
-    SmartDashboard.putData("pp_field", ppField2d);
-    SmartDashboard.putData("robot_field", robotField2d);
     AutoBuilder.configure(
         this::getPose,
         this::setPose,
         this::getChassisSpeeds,
         this::runVelocity,
         new PPHolonomicDriveController(
-            new PIDConstants(30.0, 0.0, 0.0), 
-            new PIDConstants(8.0, 0.0, 0.0)),
+            new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         PP_CONFIG,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-        this
-    );
+        this);
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
           Logger.recordOutput(
               "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
-        }
-    );
+        });
     PathPlannerLogging.setLogTargetPoseCallback(
         (targetPose) -> {
-          ppField2d.setRobotPose(targetPose);
           Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-        }
-    );
+        });
 
     // Configure SysId
     sysId =
@@ -186,14 +155,11 @@ public class Drive extends SubsystemBase {
                 null,
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
-                (voltage) -> runCharacterization(voltage.in(Volts)), null, this)
-        );
+                (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Pose X", getPose().getTranslation().getX());
-    SmartDashboard.putNumber("Pose Y", getPose().getTranslation().getY());
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
@@ -245,21 +211,10 @@ public class Drive extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
-      poseEstimatorAutoAlign.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
-
-    // Limelight pose estimation
-    // if (LimelightHelpers.getTV("limelight")) {
-    //   LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-    //   poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 2 * Math.PI));
-    //   poseEstimator.addVisionMeasurement(
-    //       limelightMeasurement.pose,
-    //       limelightMeasurement.timestampSeconds
-    //   );
-    // }
   }
 
   /**
@@ -344,7 +299,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  public ChassisSpeeds getChassisSpeeds() {
+  private ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
@@ -369,25 +324,12 @@ public class Drive extends SubsystemBase {
   /** Returns the current odometry pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
-    Pose2d pose = poseEstimator.getEstimatedPosition();
-    robotField2d.setRobotPose(pose);
-    return pose;
-  }
-
-  @AutoLogOutput(key = "Odometry/RobotAutoAlign")
-  public Pose2d getAutoAlignPose() {
-    Pose2d pose = poseEstimatorAutoAlign.getEstimatedPosition();
-    robotField2d.setRobotPose(pose);
-    return pose;
+    return poseEstimator.getEstimatedPosition();
   }
 
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
-  }
-
-  public Distance getDistanceTo(Pose2d other) {
-    return Meters.of(this.getPose().getTranslation().getDistance(other.getTranslation()));
   }
 
   /** Resets the current odometry pose. */
@@ -402,14 +344,6 @@ public class Drive extends SubsystemBase {
       Matrix<N3, N1> visionMeasurementStdDevs) {
     poseEstimator.addVisionMeasurement(
         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
-  }
-
-  public void addVisionMeasurementAutoAlign(
-      Pose2d visionRobotPoseMeters,
-      double timestampSeconds,
-      Matrix<N3, N1> visionMeasurementStdDevs){
-        poseEstimatorAutoAlign.addVisionMeasurement(
-          visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
   }
 
   /** Returns the maximum linear speed in meters per sec. */
@@ -430,5 +364,11 @@ public class Drive extends SubsystemBase {
       new Translation2d(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
       new Translation2d(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
     };
+  }
+
+  /** Drive command for auto align */
+  public void setControl(double xSpeed, double ySpeed, double rValue) {
+    ChassisSpeeds speeds = new ChassisSpeeds(xSpeed, ySpeed, rValue);
+    runVelocity(speeds);
   }
 }
