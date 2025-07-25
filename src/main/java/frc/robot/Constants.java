@@ -36,6 +36,39 @@ public final class Constants {
     REPLAY
   }
 
+  public static final class ButtonConstants {
+    // Controller Ports
+    public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
+    public static final int BUTTON_BOARD_PORT = 1;
+
+    // Button Board Buttons
+    public static final int REEF_BUTTON_1 = 1;
+    public static final int REEF_BUTTON_2 = 2;
+    public static final int REEF_BUTTON_3 = 3;
+    public static final int REEF_BUTTON_4 = 4;
+    public static final int REEF_BUTTON_5 = 5;
+    public static final int REEF_BUTTON_6 = 6;
+    public static final int REEF_BUTTON_7 = 7;
+    public static final int REEF_BUTTON_8 = 8;
+    public static final int REEF_BUTTON_9 = 9;
+    public static final int REEF_BUTTON_10 = 10;
+    public static final int REEF_BUTTON_11 = 11;
+    public static final int REEF_BUTTON_12 = 12;
+
+    public static final int L4_BUTTON = 13;
+    public static final int L3_BUTTON = 14;
+    public static final int L2_BUTTON = 15;
+    public static final int L1_BUTTON = 16;
+    public static final int SOURCE_BUTTON = 17;
+    public static final int HIGH_ALGAE_BUTTON = 18;
+    public static final int LOW_ALGAE_BUTTON = 19;
+    public static final int PROCESSOR_BUTTON = 20;
+    public static final int HOME_BUTTON = 21;
+    public static final int BARGE_BUTTON = 22;
+    public static final int CLIMB_BUTTON = 23;
+  }
+
   public static final class CANConstants {
     public static final int CLIMBER_ID = 15;
     public static final int ELEVATOR_RIGHT_ID = 16;

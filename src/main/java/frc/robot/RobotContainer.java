@@ -28,9 +28,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.PixelFormat;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -49,6 +51,7 @@ import frc.robot.commands.SetPivotAngle;
 import frc.robot.commands.SetTurretAngle;
 import frc.robot.commands.TestCommand;
 import frc.robot.commands.AutoAlignCommands.AutoAlignAndScore;
+import frc.robot.commands.AutoAlignCommands.SelectReefLevel;
 import frc.robot.commands.FullAutoSystemCommands.GrabAlgaeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.IntakeInAuto;
 import frc.robot.commands.FullAutoSystemCommands.ReleaseAlgaeInAuto;
@@ -116,6 +119,8 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.util.ReefPositions;
+import frc.robot.util.ReefPositions.ReefLevel;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -140,10 +145,13 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final CommandGenericHID buttonBoard = new CommandGenericHID(1);
+  //private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  public static ReefPositions reefPositions;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -223,7 +231,10 @@ public class RobotContainer {
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
+
     }
+
+    reefPositions = ReefPositions.getInstance();
 
     // Pathplanner named commands
     NamedCommands.registerCommand("Release", new ReleaseInAuto());
@@ -341,7 +352,7 @@ public class RobotContainer {
     driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
     driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0.0));
     driverController.povDown().onTrue(new Climb());
-    driverController.y().onTrue(new ScoreCoral());
+    //driverController.y().onTrue(new ScoreCoral());
     driverController.b().onTrue(new ScoreCoralL3());
     driverController.rightTrigger().onTrue(new PickupAlgaeFromGround()).onFalse(new AlgaeGroundPickupReturnToHome());
     driverController.leftTrigger().onTrue(new PickupCoralFromGround()).onFalse(new PickupCoralFromChute());
@@ -349,18 +360,63 @@ public class RobotContainer {
     // Operator buttons
     // operatorController.a().onTrue(new ScoreLevelOne());
     // operatorController.b().onTrue(new ScoreLevelTwo());
-    operatorController.a().onTrue(new AutoAlignAndScore(drive, false, 21));
-    operatorController.b().onTrue(new AutoAlignAndScore(drive, true, 21));
     // operatorController.x().onTrue(new ScoreLevelThree());
     // operatorController.y().onTrue(new ScoreLevelFourNoAA());
-    operatorController.povDown().onTrue(new GrabAlgaeOne());
-    operatorController.povUp().onTrue(new GrabAlgaeTwo());
-    operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());
-    operatorController.povRight().onTrue(new ScoreProcessor());
-    operatorController.rightBumper().onTrue(new PickupCoralFromChute());
-    operatorController.leftBumper().onTrue(new AlgaeReturnToHome());
-    operatorController.rightTrigger().onTrue(new LowerClimber());
-    operatorController.leftTrigger().onTrue(new ScoreLevelFour());
+    // operatorController.povDown().onTrue(new GrabAlgaeOne());
+    // operatorController.povUp().onTrue(new GrabAlgaeTwo());
+    // operatorController.povLeft().onTrue(new ScoreAlgaeInBarge());
+    // operatorController.povRight().onTrue(new ScoreProcessor());
+    // operatorController.rightBumper().onTrue(new PickupCoralFromChute());
+    // operatorController.leftBumper().onTrue(new AlgaeReturnToHome());
+    // operatorController.rightTrigger().onTrue(new LowerClimber());
+    // operatorController.leftTrigger().onTrue(new ScoreLevelFour());
+
+    // Button board buttons (NOTE: very messy will probably redo later)
+
+    // Auto Align Buttons
+    if (DriverStation.getAlliance().get() == Alliance.Blue) {
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_1).onTrue(new AutoAlignAndScore(drive, false, 21));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_2).onTrue(new AutoAlignAndScore(drive, true, 21));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_3).onTrue(new AutoAlignAndScore(drive, false, 22));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_4).onTrue(new AutoAlignAndScore(drive, true, 22));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_5).onTrue(new AutoAlignAndScore(drive, false, 17));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_6).onTrue(new AutoAlignAndScore(drive, true, 17));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_7).onTrue(new AutoAlignAndScore(drive, false, 18));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_8).onTrue(new AutoAlignAndScore(drive, true, 18));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_9).onTrue(new AutoAlignAndScore(drive, false, 19));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_10).onTrue(new AutoAlignAndScore(drive, true, 19));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_11).onTrue(new AutoAlignAndScore(drive, false, 20));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_12).onTrue(new AutoAlignAndScore(drive, true, 20));
+    }
+
+    else if (DriverStation.getAlliance().get() == Alliance.Red) {
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_1).onTrue(new AutoAlignAndScore(drive, false, 10));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_2).onTrue(new AutoAlignAndScore(drive, true, 10));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_3).onTrue(new AutoAlignAndScore(drive, false, 9));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_4).onTrue(new AutoAlignAndScore(drive, true, 9));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_5).onTrue(new AutoAlignAndScore(drive, false, 8));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_6).onTrue(new AutoAlignAndScore(drive, true, 8));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_7).onTrue(new AutoAlignAndScore(drive, false, 7));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_8).onTrue(new AutoAlignAndScore(drive, true, 7));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_9).onTrue(new AutoAlignAndScore(drive, false, 6));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_10).onTrue(new AutoAlignAndScore(drive, true, 6));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_11).onTrue(new AutoAlignAndScore(drive, false, 11));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_12).onTrue(new AutoAlignAndScore(drive, true, 11));
+    }
+
+    // Operator Buttons
+    buttonBoard.button(Constants.ButtonConstants.L4_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_FOUR));
+    buttonBoard.button(Constants.ButtonConstants.L3_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_THREE));
+    buttonBoard.button(Constants.ButtonConstants.L2_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_TWO));
+    buttonBoard.button(Constants.ButtonConstants.L1_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_ONE));
+    buttonBoard.button(Constants.ButtonConstants.SOURCE_BUTTON).onTrue(new PickupCoralFromChute());
+
+    buttonBoard.button(Constants.ButtonConstants.HIGH_ALGAE_BUTTON).onTrue(new GrabAlgaeTwo());
+    buttonBoard.button(Constants.ButtonConstants.LOW_ALGAE_BUTTON).onTrue(new GrabAlgaeOne());
+    buttonBoard.button(Constants.ButtonConstants.PROCESSOR_BUTTON).onTrue(new ScoreProcessor());
+    buttonBoard.button(Constants.ButtonConstants.HOME_BUTTON).onTrue(new AlgaeReturnToHome());
+    buttonBoard.button(Constants.ButtonConstants.BARGE_BUTTON).onTrue(new ScoreAlgaeInBarge());
+    buttonBoard.button(Constants.ButtonConstants.CLIMB_BUTTON).onTrue(new LowerClimber());
   }
 
   /**
