@@ -14,36 +14,35 @@ public class ScoreLevel extends SequentialCommandGroup {
   public ScoreLevel(ReefLevel level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-      switch (level) {
-        case LEVEL_ONE:
+    System.out.println("Scoring at level: " + level);
+      if (level == ReefLevel.LEVEL_ONE) {
         addCommands(
         new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.LEVEL_ONE_ELEVATOR_HEIGHT).withTimeout(0.3),
             new SetPivotAngle(Constants.PositionConstants.LEVEL_ONE_PIVOT_ANGLE).withTimeout(0.3),
             new SetTurretAngle(Constants.PositionConstants.HORIZONTAL_TURRET_ANGLE).withTimeout(0.3)
         ));
-        break;
-        case LEVEL_TWO:
+      }
+      if (level == ReefLevel.LEVEL_TWO) {
         addCommands(new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.LEVEL_TWO_ELEVATOR_HEIGHT).withTimeout(0.3),
             new SetPivotAngle(Constants.PositionConstants.LEVEL_TWO_PIVOT_ANGLE).withTimeout(0.3),
             new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3)
         ));
-        break;
-        case LEVEL_THREE:
+      }
+      if (level == ReefLevel.LEVEL_THREE) {
         addCommands(new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.LEVEL_THREE_ELEVATOR_HEIGHT).withTimeout(0.3),
             new SetPivotAngle(Constants.PositionConstants.LEVEL_THREE_PIVOT_ANGLE).withTimeout(0.3),
             new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3)
         ));
-        break;
-        case LEVEL_FOUR:
+      }
+      if (level == ReefLevel.LEVEL_FOUR) {
           addCommands(new ParallelCommandGroup(
             new SetElevatorPosition(Constants.PositionConstants.LEVEL_FOUR_ELEVATOR_HEIGHT).withTimeout(0.3),
             new SetPivotAngle(Constants.PositionConstants.LEVEL_FOUR_PIVOT_ANGLE).withTimeout(0.3),
             new SetTurretAngle(Constants.PositionConstants.VERTICAL_TURRET_ANGLE).withTimeout(0.3)
           ));
-        break;
+      }
       }
   } 
-}

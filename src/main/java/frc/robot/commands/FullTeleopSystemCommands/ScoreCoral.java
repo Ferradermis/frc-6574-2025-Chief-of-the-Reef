@@ -11,35 +11,40 @@ import frc.robot.commands.SetTurretAngle;
 import frc.robot.util.ReefPositions.ReefLevel;
 
 public class ScoreCoral extends SequentialCommandGroup {
-  public ScoreCoral(ReefLevel level) {
+  public ScoreCoral() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      switch (level) {
-        case LEVEL_ONE:
-        yield new SequentialCommandGroup(
-          new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE).withTimeout(0.5),
-          new Release(10).withTimeout(0.5),
-          new PickupCoralFromChute()
-        );
-        case LEVEL_TWO:
-        yield new SequentialCommandGroup(
-          new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE).withTimeout(0.5),
-          new Release(10).withTimeout(0.5),
-          new PickupCoralFromChute()
-        );
-        case LEVEL_THREE:
-        yield new SequentialCommandGroup(
-          new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE).withTimeout(0.5),
-          new Release(10).withTimeout(0.5),
-          new PickupCoralFromChute()
-        );
-        case LEVEL_FOUR:
-          yield new SequentialCommandGroup(
-            new Release(10).withTimeout(0.5)
-          );
-      }
-    );
+        new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE).withTimeout(0.5),
+        new Release(10).withTimeout(0.5),
+        new PickupCoralFromChute()
+      );
+    // Unused code for scoring at different levels - remake this after MROC
+    // System.out.println("Scoring at level: " + level);
+    // if (level == ReefLevel.LEVEL_ONE) {
+    //   addCommands(
+    //     new Release(10).withTimeout(0.5));
+    // }
+    // if (level == ReefLevel.LEVEL_TWO) {
+    //   addCommands(
+    //     new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE).withTimeout(0.5),
+    //     new Release(10).withTimeout(0.5),
+    //     new PickupCoralFromChute()
+    //   );
+    // }
+    // if (level == ReefLevel.LEVEL_THREE) {
+    //   addCommands(
+    //     new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE).withTimeout(0.5),
+    //     new Release(10).withTimeout(0.5),
+    //     new PickupCoralFromChute()
+    //   );
+    // }
+    // if (level == ReefLevel.LEVEL_FOUR) {
+    //     addCommands(
+    //       new SetPivotAngle(Constants.PositionConstants.PIVOT_LOWER_ANGLE).withTimeout(0.5),
+    //       new Release(10).withTimeout(0.5),
+    //       new PickupCoralFromChute()
+    //     );
+    // }
   }
-    
 }

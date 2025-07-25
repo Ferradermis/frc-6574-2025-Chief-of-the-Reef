@@ -31,7 +31,7 @@ public class AutoAlignAndScore extends SequentialCommandGroup {
           new WaitCommand(0.25),
           new ScoringAutoAlign(driveSubsystem, isRtScore, tag),
           new ParallelCommandGroup(
-            new ScoreCoral(reefPositions.getSelectedLevel()),
+            //new ScoreCoral(reefPositions.getSelectedLevel()),
             new RunCommand(() -> driveSubsystem.setControl(-0.2, 0, 0), driveSubsystem)
                 .withTimeout(0.5)).withTimeout(1.0),
           new RunCommand(() -> driveSubsystem.setControl(0, 0, 0), driveSubsystem).withTimeout(0.1),
