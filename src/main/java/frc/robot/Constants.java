@@ -102,7 +102,7 @@ public final class Constants {
     public static final double LEVEL_TWO_PIVOT_ANGLE = 0.116;
     public static final double LEVEL_THREE_LOWER_ANGLE = 0.050;
     public static final double PIVOT_LOWER_ANGLE = 0.025;
-    public static final double LEVEL_ONE_PIVOT_ANGLE = 0.126;
+    public static final double LEVEL_ONE_PIVOT_ANGLE = 0.116;
     public static final double ALGAE_ONE_PIVOT_ANGLE = 0.059;
     public static final double ALGAE_TWO_PIVOT_ANGLE = 0.059;
     public static final double ALGAE_GROUND_PIVOT_ANGLE = -0.100;

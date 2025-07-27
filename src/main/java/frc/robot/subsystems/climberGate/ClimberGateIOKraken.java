@@ -75,6 +75,7 @@ public class ClimberGateIOKraken implements ClimberGateIO{
     @Override
     public void updateInputs(ClimberGateInputs inputs) {
         Logger.recordOutput("RobotState/ClimberGate/Position/", motor.getPosition().getValueAsDouble());
+        inputs.angle = motor.getPosition().getValueAsDouble();
         Logger.recordOutput("RobotState/ClimberGate/Voltage/", motor.getMotorVoltage().getValueAsDouble());
     }
 

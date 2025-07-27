@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import org.littletonrobotics.junction.Logger;
 
 public class ClimberGate extends SubsystemBase {
@@ -56,5 +58,11 @@ public class ClimberGate extends SubsystemBase {
     climberIO.updateInputs(loggedClimber);
     Logger.processInputs("RobotState/ClimberGate", loggedClimber);
     SmartDashboard.putNumber("Climber Angle", loggedClimber.angle);
+    if (loggedClimber.angle >= 1.6) {
+      SmartDashboard.putBoolean("Climber Gate Fully Closed", true);
+    }
+    else if (loggedClimber.angle <= 1.6) {
+      SmartDashboard.putBoolean("Climber Gate Fully Closed", false);
+    }
   }
 }

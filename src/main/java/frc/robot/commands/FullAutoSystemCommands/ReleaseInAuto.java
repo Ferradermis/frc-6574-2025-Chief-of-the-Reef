@@ -8,7 +8,7 @@ public class ReleaseInAuto extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new Release(3.5).withTimeout(3)
+                new Release(3.5).withTimeout(1.0)
         );
         System.out.println("ReleaseInAuto");
     }
