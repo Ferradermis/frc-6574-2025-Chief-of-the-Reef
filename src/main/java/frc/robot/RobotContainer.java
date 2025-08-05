@@ -376,44 +376,44 @@ public class RobotContainer {
 
     // Auto Align Buttons
     if (DriverStation.getAlliance().get() == Alliance.Blue) {
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_1).onTrue(new ReefAutoAlign(drive, true, 21));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_2).onTrue(new ReefAutoAlign(drive, false, 21));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_3).onTrue(new ReefAutoAlign(drive, true, 22));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_4).onTrue(new ReefAutoAlign(drive, false, 22));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_5).onTrue(new ReefAutoAlign(drive, true, 17));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_6).onTrue(new ReefAutoAlign(drive, false, 17));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_7).onTrue(new ReefAutoAlign(drive, true, 18));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_8).onTrue(new ReefAutoAlign(drive, false, 18));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_9).onTrue(new ReefAutoAlign(drive, true, 19));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_10).onTrue(new ReefAutoAlign(drive, false, 19));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_11).onTrue(new ReefAutoAlign(drive, true, 20));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_12).onTrue(new ReefAutoAlign(drive, false, 20));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_1).onTrue(new AutoAlignAndScore(drive, true, 21));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_2).onTrue(new AutoAlignAndScore(drive, false, 21));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_3).onTrue(new AutoAlignAndScore(drive, true, 22));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_4).onTrue(new AutoAlignAndScore(drive, false, 22));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_5).onTrue(new AutoAlignAndScore(drive, true, 17));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_6).onTrue(new AutoAlignAndScore(drive, false, 17));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_7).onTrue(new AutoAlignAndScore(drive, true, 18));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_8).onTrue(new AutoAlignAndScore(drive, false, 18));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_9).onTrue(new AutoAlignAndScore(drive, true, 19));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_10).onTrue(new AutoAlignAndScore(drive, false, 19));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_11).onTrue(new AutoAlignAndScore(drive, true, 20));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_12).onTrue(new AutoAlignAndScore(drive, false, 20));
     }
 
     else if (DriverStation.getAlliance().get() == Alliance.Red) {
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_1).onTrue(new ReefAutoAlign(drive, true, 10));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_2).onTrue(new ReefAutoAlign(drive, false, 10));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_3).onTrue(new ReefAutoAlign(drive, true, 9));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_4).onTrue(new ReefAutoAlign(drive, false, 9));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_5).onTrue(new ReefAutoAlign(drive, true, 8));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_6).onTrue(new ReefAutoAlign(drive, false, 8));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_7).onTrue(new ReefAutoAlign(drive, true, 7));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_8).onTrue(new ReefAutoAlign(drive, false, 7));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_9).onTrue(new ReefAutoAlign(drive, true, 6));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_10).onTrue(new ReefAutoAlign(drive, false, 6));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_11).onTrue(new ReefAutoAlign(drive, true, 11));
-      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_12).onTrue(new ReefAutoAlign(drive, false, 11));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_1).onTrue(new AutoAlignAndScore(drive, true, 10));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_2).onTrue(new AutoAlignAndScore(drive, false, 10));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_3).onTrue(new AutoAlignAndScore(drive, true, 9));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_4).onTrue(new AutoAlignAndScore(drive, false, 9));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_5).onTrue(new AutoAlignAndScore(drive, true, 8));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_6).onTrue(new AutoAlignAndScore(drive, false, 8));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_7).onTrue(new AutoAlignAndScore(drive, true, 7));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_8).onTrue(new AutoAlignAndScore(drive, false, 7));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_9).onTrue(new AutoAlignAndScore(drive, true, 6));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_10).onTrue(new AutoAlignAndScore(drive, false, 6));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_11).onTrue(new AutoAlignAndScore(drive, true, 11));
+      buttonBoard.button(Constants.ButtonConstants.REEF_BUTTON_12).onTrue(new AutoAlignAndScore(drive, false, 11));
     }
 
     // Operator Buttons
-    // buttonBoard.button(Constants.ButtonConstants.L4_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_FOUR));
-    // buttonBoard.button(Constants.ButtonConstants.L3_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_THREE));
-    // buttonBoard.button(Constants.ButtonConstants.L2_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_TWO));
-    // buttonBoard.button(Constants.ButtonConstants.L1_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_ONE));
-    buttonBoard.button(Constants.ButtonConstants.L4_BUTTON).onTrue(new ScoreL4InAutoNoAA());
-    buttonBoard.button(Constants.ButtonConstants.L3_BUTTON).onTrue(new ScoreLevelThree());
-    buttonBoard.button(Constants.ButtonConstants.L2_BUTTON).onTrue(new ScoreLevelTwo());
-    buttonBoard.button(Constants.ButtonConstants.L1_BUTTON).onTrue(new ScoreLevelOne());
+    buttonBoard.button(Constants.ButtonConstants.L4_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_FOUR));
+    buttonBoard.button(Constants.ButtonConstants.L3_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_THREE));
+    buttonBoard.button(Constants.ButtonConstants.L2_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_TWO));
+    buttonBoard.button(Constants.ButtonConstants.L1_BUTTON).onTrue(new SelectReefLevel(ReefLevel.LEVEL_ONE));
+    // buttonBoard.button(Constants.ButtonConstants.L4_BUTTON).onTrue(new ScoreL4InAutoNoAA());
+    // buttonBoard.button(Constants.ButtonConstants.L3_BUTTON).onTrue(new ScoreLevelThree());
+    // buttonBoard.button(Constants.ButtonConstants.L2_BUTTON).onTrue(new ScoreLevelTwo());
+    // buttonBoard.button(Constants.ButtonConstants.L1_BUTTON).onTrue(new ScoreLevelOne());
     buttonBoard.button(Constants.ButtonConstants.SOURCE_BUTTON).onTrue(new PickupCoralFromChute());
 
     buttonBoard.button(Constants.ButtonConstants.HIGH_ALGAE_BUTTON).onTrue(new GrabAlgaeTwo());

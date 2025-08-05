@@ -9,8 +9,8 @@ import frc.robot.util.LimelightHelpers;
 
 public class ScoringAutoAlign extends Command {
   public double xP = 2.0; // Working value: 2.0
-  public double yP = 1.0; // Working value: 1.2
-  public double rotationP = 0.04; // Working value: 0.08
+  public double yP = 1.5; // Working value: 1.2
+  public double rotationP = 0.02; // Working value: 0.08
 
   private PIDController xController, yController, rotController;
   public boolean isRightScore;

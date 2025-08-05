@@ -135,18 +135,18 @@ public final class Constants {
 
     // Left Scoring Setpoints
     public static final double yLeftScoringSetpoint = -0.13;
-    public static final double xLeftScoringSetpoint = -0.52;
+    public static final double xLeftScoringSetpoint = -0.44;
     public static final double rotLeftScoringSetpoint = 1.91;
 
     // Right Setpoints
-    public static final double yRightSetpoint = 0.22;
+    public static final double yRightSetpoint = 0.20;
     public static final double xRightSetpoint = -0.84;
-    public static final double rotRightSetpoint = -5.13;
+    public static final double rotRightSetpoint = 0.85;
 
     // Right Scoring Setpoints
-    public static final double yRightScoringSetpoint = 0.23;
-    public static final double xRightScoringSetpoint = -0.52;
-    public static final double rotRightScoringSetpoint = -4.98;
+    public static final double yRightScoringSetpoint = 0.20;
+    public static final double xRightScoringSetpoint = -0.47;
+    public static final double rotRightScoringSetpoint = 0.85;
 
     // Timer values (in seconds)
     public static final double dontSeeTagTime = 1.0;

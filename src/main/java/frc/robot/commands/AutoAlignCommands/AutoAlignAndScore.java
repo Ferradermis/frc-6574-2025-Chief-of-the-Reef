@@ -34,7 +34,7 @@ public class AutoAlignAndScore extends SequentialCommandGroup {
         addCommands(
           new ReefAutoAlign(driveSubsystem, isRtScore, tag),
           reefPositions.getReefLevelSelector(reefLevelCommands),
-          new WaitCommand(0.25),
+          new WaitCommand(0.4),
           new ScoringAutoAlign(driveSubsystem, isRtScore, tag),
           new ParallelCommandGroup(
             reefPositions.getReefLevelSelector(reefScoringCommands),
