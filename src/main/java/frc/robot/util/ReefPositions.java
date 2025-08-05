@@ -1,7 +1,11 @@
 package frc.robot.util;
 
+import java.util.Map;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 
 public class ReefPositions {
     
@@ -55,5 +59,9 @@ public class ReefPositions {
     public InstantCommand getNewSetReefLevelCommand(ReefLevel level) {
         System.out.println("Setting reef level to: " + level);
         return new InstantCommand(() -> setReefLevel(level));
+    }
+
+    public Command getReefLevelSelector(Map<ReefLevel, Command> bindings) {
+        return new SelectCommand<>(bindings, this::getSelectedLevel);
     }
 }

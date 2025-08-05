@@ -350,7 +350,6 @@ public class RobotContainer {
     // driverController.x().onTrue(new ReturnToHome()); - not used currently
     driverController.rightBumper().whileTrue(new Intake(13)).whileFalse(new Intake(0));
     driverController.leftBumper().whileTrue(new Release(10)).whileFalse(new Intake(0));
-    +
     driverController.povRight().onTrue(climberGate.getNewPivotTurnCommand(1.9));
     driverController.povLeft().onTrue(climberGate.getNewPivotTurnCommand(0.0));
     driverController.povDown().onTrue(new Climb());
