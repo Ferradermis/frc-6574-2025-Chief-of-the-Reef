@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Drive To Barge"
+            "pathName": "Score L4 - Inner Center Right"
           }
         },
         {
@@ -19,7 +19,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Drive Forward Inner Center.0"
           }
         },
         {
@@ -32,6 +38,12 @@
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L4 Drive Back Center"
+                }
+              },
               {
                 "type": "named",
                 "data": {
