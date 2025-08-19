@@ -19,6 +19,9 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,6 +47,9 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   public DigitalInput limitSwitch = new DigitalInput(0);
+  private RobotTelemetryServer telemetryServer;
+  private int callCount = 0;
+  private PowerDistribution pdp;
 
   public Robot() {
     // Record metadata
@@ -115,6 +121,35 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     super.robotInit();
+    telemetryServer = new RobotTelemetryServer(6574);
+    pdp = new PowerDistribution(25, PowerDistribution.ModuleType.kRev);
+
+    // Configure real data suppliers (replace with your actual subsystems)
+        telemetryServer.setBatteryVoltageSupplier(() -> {
+            // Replace with actual battery reading
+            return pdp.getVoltage(); // or pdp.getVoltage() if you have a PDP
+        });
+        
+        // Example: Connect to real shooter subsystem
+        // telemetryServer.setShooterSuppliers(
+        //     () -> shooter.isReady(),           // Real shooter ready status
+        //     () -> (int) shooter.getSpeed()     // Real shooter speed
+        // );
+        
+        // Example: Connect to real intake subsystem  
+        // telemetryServer.setIntakeSuppliers(
+        //     () -> intake.isDeployed(),         // Real intake deployed status
+        //     () -> intake.getPosition()         // Real intake position
+        // );
+        
+        // Start the server
+        if (telemetryServer.start()) {
+            System.out.println("✅ Telemetry server started successfully");
+        } else {
+            System.out.println("❌ Telemetry server failed to start");
+        }
+        
+        System.out.println("=== Robot Init Complete ===");
   }
 
   /** This function is called periodically during all modes. */
@@ -137,6 +172,13 @@ public class Robot extends LoggedRobot {
     if (limitSwitch.get() == false) {
       RobotContainer.elevator.resetEncoder();
     }
+
+    callCount++;
+        if (callCount % 600 == 0) { // Every minute
+            if (telemetryServer.isRunning()) {
+                System.out.println("UDP Telemetry server: " + telemetryServer.getClientCount() + " clients connected");
+            }
+        }
   }
 
   /** This function is called once when the robot is disabled. */
@@ -196,4 +238,13 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  // Optional: Clean shutdown when robot code stops
+  @Override
+  public void close() {
+      if (telemetryServer != null) {
+          telemetryServer.stop();
+      }
+      super.close();
+  }
 }
