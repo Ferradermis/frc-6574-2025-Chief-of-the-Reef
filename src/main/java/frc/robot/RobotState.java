@@ -2,6 +2,10 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -24,16 +28,16 @@ public class RobotState extends VirtualSubsystem {
   private MutAngle climberAngle = Degrees.mutable(0);
   public MutAngle rotateTwist = Degrees.mutable(0);
 
-  private final Mechanism2d primaryMechanism2d;
-  private final MechanismRoot2d primaryMechanismRoot2d;
-  private final MechanismLigament2d armLigament2d;
-  private final MechanismLigament2d elevatorLigament2d;
-  private final MechanismLigament2d climberMount2d;
-  private final MechanismRoot2d climberMountRoot2d;
-  private final MechanismLigament2d climberLigament2d;
+  private final LoggedMechanism2d primaryMechanism2d;
+  private final LoggedMechanismRoot2d primaryMechanismRoot2d;
+  private final LoggedMechanismLigament2d armLigament2d;
+  private final LoggedMechanismLigament2d elevatorLigament2d;
+  private final LoggedMechanismLigament2d climberMount2d;
+  private final LoggedMechanismRoot2d climberMountRoot2d;
+  private final LoggedMechanismLigament2d climberLigament2d;
 
-  private final MechanismRoot2d robotBaseRoot;
-  private final MechanismLigament2d robotBaseLigament2d = new MechanismLigament2d("RobotBase", 100, 0, 10, new Color8Bit(255, 0, 0));
+  private final LoggedMechanismRoot2d robotBaseRoot;
+  private final LoggedMechanismLigament2d robotBaseLigament2d = new LoggedMechanismLigament2d("RobotBase", 100, 0, 10, new Color8Bit(255, 0, 0));
 
   private final String key;
 
@@ -42,11 +46,11 @@ public class RobotState extends VirtualSubsystem {
     key = k;
 
     // Create the 2d ligaments for each section of the robot
-    primaryMechanism2d = new Mechanism2d(500, 500);
-    elevatorLigament2d = new MechanismLigament2d("ElevatorLigament", elevatorPosition.in(Centimeters), 90, 10, new Color8Bit(255, 0, 255));
-    armLigament2d = new MechanismLigament2d("ArmLigament", Centimeters.convertFrom(10, Inches), armAngle.in(Degrees), 10, new Color8Bit(0, 255, 0));
-    climberLigament2d = new MechanismLigament2d("ClimberLigament", Centimeters.convertFrom(10, Inches), climberAngle.in(Degrees), 10, new Color8Bit(0, 225, 255));
-    climberMount2d = new MechanismLigament2d("ClimberMount2d", Centimeters.convertFrom(5, Inches), 90, 10, new Color8Bit(255, 255, 255));
+    primaryMechanism2d = new LoggedMechanism2d(500, 500);
+    elevatorLigament2d = new LoggedMechanismLigament2d("ElevatorLigament", elevatorPosition.in(Centimeters), 90, 10, new Color8Bit(255, 0, 255));
+    armLigament2d = new LoggedMechanismLigament2d("ArmLigament", Centimeters.convertFrom(10, Inches), armAngle.in(Degrees), 10, new Color8Bit(0, 255, 0));
+    climberLigament2d = new LoggedMechanismLigament2d("ClimberLigament", Centimeters.convertFrom(10, Inches), climberAngle.in(Degrees), 10, new Color8Bit(0, 225, 255));
+    climberMount2d = new LoggedMechanismLigament2d("ClimberMount2d", Centimeters.convertFrom(5, Inches), 90, 10, new Color8Bit(255, 255, 255));
 
     // Create the primary mechanism root and append the ligaments
     // Elevator attaches to the primary mechanism root, arm attaches to the elevator
@@ -66,7 +70,7 @@ public class RobotState extends VirtualSubsystem {
     robotBaseRoot.append(robotBaseLigament2d);
 
     // Add the primary mechanism to the SmartDashboard
-    //SmartDashboard.putData(key, primaryMechanism2d);
+    SmartDashboard.putData(key, primaryMechanism2d);
   }
 
   // If the instance is null, create a new instance
@@ -82,6 +86,7 @@ public class RobotState extends VirtualSubsystem {
   @Override
   public void periodic() {
     visualize();
+    Logger.recordOutput(key, primaryMechanism2d);
   }
 
   // Get the current position of the elevator

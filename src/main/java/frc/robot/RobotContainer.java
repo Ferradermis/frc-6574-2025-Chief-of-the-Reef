@@ -14,8 +14,8 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.leftCameraName;
+import static frc.robot.subsystems.vision.VisionConstants.rightCameraName;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -179,8 +179,8 @@ public class RobotContainer {
         vision =
                 new Vision(
                     drive::addVisionMeasurement,
-                    new VisionIOLimelight(camera0Name, drive::getRotation),
-                    new VisionIOLimelight(camera1Name, drive::getRotation));
+                    new VisionIOLimelight(leftCameraName, drive::getRotation),
+                    new VisionIOLimelight(rightCameraName, drive::getRotation));
         // vision =
         //     new Vision(
         //         demoDrive::addVisionMeasurement,
@@ -206,8 +206,8 @@ public class RobotContainer {
       vision =
                 new Vision(
                     drive::addVisionMeasurement,
-                    new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-                    new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+                    new VisionIOPhotonVisionSim(leftCameraName, robotToCamera0, drive::getPose),
+                    new VisionIOPhotonVisionSim(rightCameraName, robotToCamera1, drive::getPose));
         // vision =
         //     new Vision(
         //         drive::addVisionMeasurement,

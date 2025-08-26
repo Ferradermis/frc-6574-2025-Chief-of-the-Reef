@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.vision.VisionConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 
@@ -85,6 +86,12 @@ public class RobotTelemetryServer {
         int shooterSpeed = -1;
         boolean intakeDeployed = false;
         double intakePosition = -1;
+
+        // Auto Align Status
+        boolean leftCameraSeesTag = false;
+        boolean rightCameraSeesTag = false;
+        double leftCameraTag = -1;
+        double rightCameraTag = -1;
         
         // Auto
         String autoMode = "";
@@ -102,7 +109,8 @@ public class RobotTelemetryServer {
                           boolean enabled, boolean auto, boolean teleop, String mode,
                           String alliance, boolean isRed, double matchTime,
                           boolean shootReady, int shootSpeed, boolean intakeDepl, double intakePos,
-                          String autoMd, int autoNum, String statusMsg, int hb) {
+                          String autoMd, int autoNum, String statusMsg, int hb, boolean lfCamHasTag,
+                          boolean rtCamHasTag, double lfTag, double rtTag) {
             
             return Math.abs(batteryVoltage - batteryVolt) > 0.01 ||
                    batteryIsLow != batteryLow ||
@@ -119,7 +127,11 @@ public class RobotTelemetryServer {
                    Math.abs(intakePosition - intakePos) > 0.01 ||
                    !autoMode.equals(autoMd) ||
                    autoModeNumber != autoNum ||
-                   !statusMessage.equals(statusMsg);
+                   !statusMessage.equals(statusMsg) ||
+                   leftCameraSeesTag != lfCamHasTag ||
+                   rightCameraSeesTag != rtCamHasTag ||
+                   Math.abs(leftCameraTag - lfTag) > 0.01 ||
+                   Math.abs(rightCameraTag - rtTag) > 0.01;
                    // NOTE: Removed timestamp and heartbeat comparisons
         }
         
@@ -131,7 +143,8 @@ public class RobotTelemetryServer {
                    boolean enabled, boolean auto, boolean teleop, String mode,
                    String alliance, boolean isRed, double matchTime,
                    boolean shootReady, int shootSpeed, boolean intakeDepl, double intakePos,
-                   String autoMd, int autoNum, String statusMsg, int hb) {
+                   String autoMd, int autoNum, String statusMsg, int hb, boolean lfCamHasTag, 
+                   boolean rtCamHasTag, double lfTag, double rtTag) {
             
             timestamp = currentTimestamp;
             batteryVoltage = batteryVolt;
@@ -151,8 +164,13 @@ public class RobotTelemetryServer {
             autoModeNumber = autoNum;
             statusMessage = statusMsg;
             heartbeat = hb;
+            leftCameraSeesTag = lfCamHasTag;
+            rightCameraSeesTag = rtCamHasTag;
+            leftCameraTag = lfTag;
+            rightCameraTag = rtTag;
         }
     }
+
     
     /**
      * Start the telemetry server
@@ -333,6 +351,11 @@ public class RobotTelemetryServer {
                 int autoModeNumber = autoModeNumberSupplier.get();
                 String statusMessage = statusMessageSupplier.get();
                 int heartbeat = (int)(Timer.getFPGATimestamp() * 10) % 1000;
+
+                boolean leftCamHasTag = LimelightHelpers.getTV(VisionConstants.leftCameraName);
+                boolean rightCamHasTag = LimelightHelpers.getTV(VisionConstants.rightCameraName);
+                double leftCamTag = LimelightHelpers.getFiducialID(VisionConstants.leftCameraName);
+                double rightCamTag = LimelightHelpers.getFiducialID(VisionConstants.rightCameraName);
                 
                 // Check if we should send
                 boolean hasChanges = previousState.hasChanges(
@@ -340,7 +363,8 @@ public class RobotTelemetryServer {
                     robotEnabled, isAutonomous, isTeleop, robotMode,
                     allianceColor, isRedAlliance, matchTimeRemaining,
                     shooterReady, shooterSpeed, intakeDeployed, intakePosition,
-                    autoMode, autoModeNumber, statusMessage, heartbeat
+                    autoMode, autoModeNumber, statusMessage, heartbeat, 
+                    leftCamHasTag, rightCamHasTag, leftCamTag, rightCamTag
                 );
                 
                 boolean shouldSend = hasChanges || forceNextSend || shouldSendHeartbeat;
@@ -351,7 +375,8 @@ public class RobotTelemetryServer {
                         robotEnabled, isAutonomous, isTeleop, robotMode,
                         allianceColor, isRedAlliance, matchTimeRemaining,
                         shooterReady, shooterSpeed, intakeDeployed, intakePosition,
-                        autoMode, autoModeNumber, statusMessage, heartbeat
+                        autoMode, autoModeNumber, statusMessage, heartbeat,
+                        leftCamHasTag, rightCamHasTag, leftCamTag, rightCamTag
                     );
                     
                     byte[] data = telemetryJson.getBytes();
@@ -386,7 +411,8 @@ public class RobotTelemetryServer {
                         robotEnabled, isAutonomous, isTeleop, robotMode,
                         allianceColor, isRedAlliance, matchTimeRemaining,
                         shooterReady, shooterSpeed, intakeDeployed, intakePosition,
-                        autoMode, autoModeNumber, statusMessage, heartbeat
+                        autoMode, autoModeNumber, statusMessage, heartbeat,
+                        leftCamHasTag, rightCamHasTag, leftCamTag, rightCamTag
                     );
                     
                     String sendReason = forceNextSend ? "FORCED" : 
@@ -421,7 +447,8 @@ public class RobotTelemetryServer {
                                        boolean robotEnabled, boolean isAutonomous, boolean isTeleop, String robotMode,
                                        String allianceColor, boolean isRedAlliance, double matchTimeRemaining,
                                        boolean shooterReady, int shooterSpeed, boolean intakeDeployed, double intakePosition,
-                                       String autoMode, int autoModeNumber, String statusMessage, int heartbeat) {
+                                       String autoMode, int autoModeNumber, String statusMessage, int heartbeat, boolean lfCamHasTag,
+                                       boolean rtCamHasTag, double lfTag, double rtTag) {
         StringBuilder json = new StringBuilder();
         json.append("{");
         
@@ -464,6 +491,12 @@ public class RobotTelemetryServer {
         json.append("\"deployed\":").append(intakeDeployed).append(",");
         json.append("\"position\":").append(intakePosition);
         json.append("},");
+
+        // Auto Align Status
+        json.append("\"LeftCamHasTag\":").append(lfCamHasTag).append(",");
+        json.append("\"RightCamHasTag\":").append(rtCamHasTag).append(",");
+        json.append("\"LeftCamTagID\":").append(lfTag).append(",");
+        json.append("\"RightCamTagID\":").append(rtTag).append(",");
         
         // Auto
         json.append("\"auto\":{");
