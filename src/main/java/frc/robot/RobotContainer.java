@@ -232,7 +232,6 @@ public class RobotContainer {
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
-
     }
 
     reefPositions = ReefPositions.getInstance();
