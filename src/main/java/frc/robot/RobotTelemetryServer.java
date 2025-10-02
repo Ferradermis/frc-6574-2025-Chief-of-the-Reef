@@ -493,11 +493,18 @@ public class RobotTelemetryServer {
         json.append("},");
 
         // Auto Align Status
-        json.append("\"leftCamHasTag\":").append(lfCamHasTag).append(",");
-        json.append("\"rightCamHasTag\":").append(rtCamHasTag).append(",");
-        json.append("\"leftCamTagID\":").append(lfTag).append(",");
-        json.append("\"rightCamTagID\":").append(rtTag).append(",");
-        
+        json.append("\"vision\":{");
+            json.append("\"leftCam\":{");
+                json.append("\"hasTag\":").append(lfCamHasTag).append(",");
+                json.append("\"tagID\":").append(lfTag);
+            json.append("},");
+
+            json.append("\"rightCam\":{");
+                json.append("\"hasTag\":").append(rtCamHasTag).append(",");
+                json.append("\"tagID\":").append(rtTag);
+            json.append("}");
+        json.append("},");
+            
         // Auto
         json.append("\"auto\":{");
         json.append("\"selectedMode\":\"").append(autoMode).append("\",");
