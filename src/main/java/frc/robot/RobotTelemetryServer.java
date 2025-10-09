@@ -354,8 +354,8 @@ public class RobotTelemetryServer {
 
                 boolean leftCamHasTag = LimelightHelpers.getTV(VisionConstants.leftCameraName);
                 boolean rightCamHasTag = LimelightHelpers.getTV(VisionConstants.rightCameraName);
-                double leftCamTag = LimelightHelpers.getFiducialID(VisionConstants.leftCameraName);
-                double rightCamTag = LimelightHelpers.getFiducialID(VisionConstants.rightCameraName);
+                int leftCamTag = LimelightHelpers.getFiducialID(VisionConstants.leftCameraName);
+                int rightCamTag = LimelightHelpers.getFiducialID(VisionConstants.rightCameraName);
                 
                 // Check if we should send
                 boolean hasChanges = previousState.hasChanges(
